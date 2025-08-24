@@ -1,0 +1,33 @@
+# Configurações do Servidor para Desenvolvimento
+server:
+  # Usar uma porta diferente para não conflitar com outros serviços
+  port: 8081
+
+spring:
+  datasource:
+    # URL do banco H2 em memória
+    url: jdbc:h2:mem:penelope_test_db
+    driverClassName: org.h2.Driver
+    username: sa
+    password: penelope123
+  h2:
+    console:
+      # Habilita o console do H2 para acessar o banco pelo navegador
+      enabled: true
+  jpa:
+    # Mostra o SQL gerado pelo Hibernate no console
+    show-sql: true
+    properties:
+      hibernate:
+        # Formata o SQL para melhor legibilidade
+        format_sql: true
+    hibernate:
+      # Cria e destrói o esquema do banco a cada inicialização (útil para testes)
+      ddl-auto: create-drop
+
+logging:
+  level:
+    # Nível de log DEBUG para o nosso pacote, para ver mais detalhes
+    penelope.corretagem.penelopeapirest: DEBUG
+    # Nível de log DEBUG para o Hibernate, para ver detalhes das operações com o banco
+    org.hibernate: DEBUG
