@@ -1,5 +1,6 @@
 package penelope.corretagem.penelopeapirest.controller;
 
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -30,10 +31,8 @@ public class UserController {
         return userService.showAllUser();
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<UserResponse> updateUser(
-            @RequestBody UserRequest userRequestUpdate
-            ,@PathVariable Long id) {
+    @PatchMapping("/{id}")
+    public ResponseEntity<UserResponse> updateUser(@RequestBody UserRequest userRequestUpdate, @PathVariable Long id) {
         UserResponse response = userService.updateUser(id, userRequestUpdate);
         return ResponseEntity.ok(response);
     }
