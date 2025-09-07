@@ -26,7 +26,6 @@ public class UserService {
     public UserResponse addUser(UserRequest user) {
         UserEntity userEntity = userMapper.toUserEntity(user);
         UserEntity savedUser = userRepository.save(userEntity);
-        log.info("Usuário adicionado com sucesso: {}", savedUser.getId());
         return userMapper.toUserResponse(savedUser);
     }
 
@@ -34,7 +33,6 @@ public class UserService {
         List<UserEntity> users = userRepository.findAll();
 
         if (users.isEmpty()) {
-            log.info("Nenhum usuário encontrado.");
             return ResponseEntity.noContent().build();
         }
 
@@ -42,33 +40,28 @@ public class UserService {
                 .map(userMapper::toUserResponse)
                 .toList();
 
-        log.info("Total de usuários retornados: {}", usersResponse.size());
         return ResponseEntity.ok(usersResponse);
     }
 
     public UserResponse updateUser(Long id, UserRequest userRequestUpdate) {
         UserEntity user = userRepository.findById(id).orElseThrow(
                 () -> {
-                    log.warn("Usuário com id {} não encontrado para atualização.", id);
                     return new RuntimeException("Usuário não encontrado");
                 });
 
         applyUserUpdates(user, userRequestUpdate);
 
         UserEntity savedUser = userRepository.save(user);
-        log.info("Usuário atualizado com sucesso (parcial): {}", savedUser.getId());
         return userMapper.toUserResponse(savedUser);
     }
 
 
     public ResponseEntity<Void> deleteUser(Long id) {
         if (!userRepository.existsById(id)) {
-            log.warn("Tentativa de deletar usuário com id inexistente: {}", id);
             return ResponseEntity.notFound().build();
         }
 
         userRepository.deleteById(id);
-        log.info("Usuário deletado com sucesso: {}", id);
         return ResponseEntity.noContent().build();
     }
 
