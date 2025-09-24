@@ -20,23 +20,31 @@ public class UserController {
         this.userService = userService;
     }
 
+    // Cria um novo usuário com os dados fornecidos.
     @PostMapping
-    public ResponseEntity<UserResponse> addUser(@RequestBody UserRequest userRequest) {
+    public ResponseEntity<UserResponse> addUser(@Valid @RequestBody UserRequest userRequest) {
         UserResponse response = userService.addUser(userRequest);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
+    // Retorna a lista de todos os usuários cadastrados.
     @GetMapping
     public ResponseEntity<List<UserResponse>> showAllUsers() {
-        return userService.showAllUser();
+        List<UserResponse> users = userService.showAllUsers();
+        if (users.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(users);
     }
 
+    // Atualiza os dados de um usuário específico pelo ID.
     @PatchMapping("/{id}")
     public ResponseEntity<UserResponse> updateUser(@RequestBody UserRequest userRequestUpdate, @PathVariable Long id) {
         UserResponse response = userService.updateUser(id, userRequestUpdate);
         return ResponseEntity.ok(response);
     }
 
+    // Remove um usuário específico pelo ID.
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
         return userService.deleteUser(id);

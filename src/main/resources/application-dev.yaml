@@ -38,3 +38,8 @@ logging:
 
   pattern:
     file: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
+
+api:
+  security:
+    token:
+      secret: minha-chave-secreta-super-longa-e-aleatoria-para-o-jwt

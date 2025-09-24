@@ -1,9 +1,6 @@
 package penelope.corretagem.penelopeapirest.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 
@@ -17,57 +14,39 @@ public class UserEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    private String nome;
+
+    @Column(nullable = false)
+    private String nomeCompleto;
+
+    @Column(nullable = true)
     private String cpf;
+
+    @Column(nullable = false)
     private String email;
+
+    @Column(nullable = true)
     private Date dtNascimento;
+
+    @Column(nullable = true)
     private Double rendaMensal;
 
-    public Long getId() {
-        return id;
-    }
+    @Column(nullable = false)
+    private String senha;
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+    public Long getId() {   return id;  }
+    public String getNomeCompleto() {   return nomeCompleto;    }
+    public String getCpf() {    return cpf;    }
+    public String getEmail() {  return email;   }
+    public Date getDtNascimento() {  return dtNascimento;    }
+    public Double getRendaMensal() {    return rendaMensal; }
+    public String getSenha() {  return senha;   }
 
-    public String getNome() {
-        return nome;
-    }
 
-    public void setNome(String nome) {
-        this.nome = nome;
-    }
-
-    public String getCpf() {
-        return cpf;
-    }
-
-    public void setCpf(String cpf) {
-        this.cpf = cpf;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public Date getDtNascimento() {
-        return dtNascimento;
-    }
-
-    public void setDtNascimento(Date dtNascimento) {
-        this.dtNascimento = dtNascimento;
-    }
-
-    public Double getRendaMensal() {
-        return rendaMensal;
-    }
-
-    public void setRendaMensal(Double rendaMensal) {
-        this.rendaMensal = rendaMensal;
-    }
+    public void setCpf(String cpf) {    this.cpf = cpf;    }
+    public void setId(Long id) {    this.id = id;   }
+    public void setNomeCompleto(String nomeCompleto) {  this.nomeCompleto = nomeCompleto;   }
+    public void setEmail(String email) {    this.email = email; }
+    public void setDtNascimento(Date dtNascimento) {    this.dtNascimento = dtNascimento;   }
+    public void setRendaMensal(Double rendaMensal) {    this.rendaMensal = rendaMensal; }
+    public void setSenha(String senha) {    this.senha = senha; }
 }
