@@ -5,15 +5,15 @@ meta {
 }
 
 post {
-  url: http://localhost:8081/api/v1/login
+  url: http://localhost:8081/api/v1/auth/login
   body: json
   auth: inherit
 }
 
 body:json {
   {
-    "email": "Paulo@email.com",
-    "senha": "PauloTeste"
+    "email": "rennan.moura@sptech.school",
+    "senha": "novaSenha123"
   }
 }
 

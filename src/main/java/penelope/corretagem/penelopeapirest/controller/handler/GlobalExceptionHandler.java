@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import penelope.corretagem.penelopeapirest.exception.EmailAlreadyExistsException;
+import penelope.corretagem.penelopeapirest.exception.InvalidTokenException;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -36,5 +37,14 @@ public class GlobalExceptionHandler {
         });
 
         return errors;
+    }
+
+    @ExceptionHandler(InvalidTokenException.class)
+    public ResponseEntity<Map<String, String>> handleInvalidToken(InvalidTokenException ex) {
+        Map<String, String> errorResponse = Map.of(
+                "message", ex.getMessage(),
+                "status", String.valueOf(HttpStatus.BAD_REQUEST.value())
+        );
+        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST); // 400 Bad Request
     }
 }

@@ -33,6 +33,12 @@ public class UserEntity {
     @Column(nullable = false)
     private String senha;
 
+    @Column
+    private String passwordResetToken;
+
+    @Column
+    private Date passwordResetTokenExpiry;
+
     public Long getId() {   return id;  }
     public String getNomeCompleto() {   return nomeCompleto;    }
     public String getCpf() {    return cpf;    }
@@ -40,7 +46,8 @@ public class UserEntity {
     public Date getDtNascimento() {  return dtNascimento;    }
     public Double getRendaMensal() {    return rendaMensal; }
     public String getSenha() {  return senha;   }
-
+    public String getPasswordResetToken() {     return passwordResetToken;  }
+    public Date getPasswordResetTokenExpiry() {     return passwordResetTokenExpiry;    }
 
     public void setCpf(String cpf) {    this.cpf = cpf;    }
     public void setId(Long id) {    this.id = id;   }
@@ -49,4 +56,6 @@ public class UserEntity {
     public void setDtNascimento(Date dtNascimento) {    this.dtNascimento = dtNascimento;   }
     public void setRendaMensal(Double rendaMensal) {    this.rendaMensal = rendaMensal; }
     public void setSenha(String senha) {    this.senha = senha; }
+    public void setPasswordResetToken(String passwordResetToken) {  this.passwordResetToken = passwordResetToken;   }
+    public void setPasswordResetTokenExpiry(Date passwordResetTokenExpiry) {    this.passwordResetTokenExpiry = passwordResetTokenExpiry;   }
 }
