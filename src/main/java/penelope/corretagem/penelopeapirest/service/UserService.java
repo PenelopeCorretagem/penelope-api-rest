@@ -1,17 +1,23 @@
 package penelope.corretagem.penelopeapirest.service;
 
+import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import penelope.corretagem.penelopeapirest.dto.UserRequest;
 import penelope.corretagem.penelopeapirest.dto.UserResponse;
+import penelope.corretagem.penelopeapirest.entity.ClientEntity;
 import penelope.corretagem.penelopeapirest.entity.UserEntity;
+import penelope.corretagem.penelopeapirest.event.UserRegisteredEvent;
 import penelope.corretagem.penelopeapirest.exception.EmailAlreadyExistsException;
 import penelope.corretagem.penelopeapirest.exception.InvalidTokenException;
 import penelope.corretagem.penelopeapirest.mapper.UserMapper;
+import penelope.corretagem.penelopeapirest.repository.ClientRepository;
 import penelope.corretagem.penelopeapirest.repository.UserRepository;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -24,26 +30,37 @@ public class UserService {
     private final UserMapper userMapper;
     private final PasswordEncoder passwordEncoder;
     private final EmailService emailService;
+    private final ApplicationEventPublisher eventPublisher;
 
-    public UserService(UserRepository userRepository, UserMapper userMapper, PasswordEncoder passwordEncoder, EmailService emailService) {
+    public UserService(UserRepository userRepository, UserMapper userMapper, PasswordEncoder passwordEncoder, EmailService emailService, ApplicationEventPublisher eventPublisher) {
         this.userRepository = userRepository;
+        this.emailService = emailService;
         this.userMapper = userMapper;
         this.passwordEncoder = passwordEncoder;
-        this.emailService = emailService;
+        this.eventPublisher = eventPublisher;
     }
 
+
     // Adiciona um novo usuário após verificar se o e-mail já está cadastrado.
+    @Transactional
     public UserResponse addUser(UserRequest userRequest) {
         if (userRepository.findByEmail(userRequest.getEmail()).isPresent()) {
             throw new EmailAlreadyExistsException("O e-mail informado já está cadastrado");
         }
 
-        UserEntity userEntity = userMapper.toUserEntity(userRequest);
+        // 4. Cria e prepara a entidade de autenticação
+        UserEntity newUser = new UserEntity();
+        newUser.setNomeCompleto(userRequest.getNomeCompleto());
+        newUser.setEmail(userRequest.getEmail());
+        newUser.setSenha(passwordEncoder.encode(userRequest.getSenha()));
+        newUser.setNivelAcesso(UserEntity.NivelAcesso.Cliente);
+        newUser.setAtivo(true);
+        newUser.setDtCriacao(LocalDate.now());
 
-        String encodedPassword = passwordEncoder.encode(userRequest.getSenha());
-        userEntity.setSenha(encodedPassword);
+        UserEntity savedUser = userRepository.save(newUser);
 
-        UserEntity savedUser = userRepository.save(userEntity);
+        eventPublisher.publishEvent(new UserRegisteredEvent(this, savedUser));
+
         return userMapper.toUserResponse(savedUser);
     }
 
@@ -126,17 +143,11 @@ public class UserService {
         if (updateRequest.getNomeCompleto() != null) {
             user.setNomeCompleto(updateRequest.getNomeCompleto());
         }
-        if (updateRequest.getCpf() != null) {
-            user.setCpf(updateRequest.getCpf());
-        }
         if (updateRequest.getEmail() != null) {
             user.setEmail(updateRequest.getEmail());
         }
         if (updateRequest.getDtNascimento() != null) {
             user.setDtNascimento(updateRequest.getDtNascimento());
-        }
-        if (updateRequest.getRendaMensal() != null) {
-            user.setRendaMensal(updateRequest.getRendaMensal());
         }
     }
 }

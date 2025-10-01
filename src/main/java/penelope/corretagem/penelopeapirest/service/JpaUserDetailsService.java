@@ -12,7 +12,6 @@ import java.util.Collections;
 @Service
 // Serviço responsável por carregar os dados do usuário para autenticação.
 public class JpaUserDetailsService implements UserDetailsService {
-
     private final UserRepository userRepository;
 
     public JpaUserDetailsService(UserRepository userRepository) {

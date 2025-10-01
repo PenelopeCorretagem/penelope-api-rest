@@ -43,8 +43,10 @@ public class SecurityConfig {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers("/auth/**", "/users/**").permitAll()
+                        //.requestMatchers(("/h2-console/**")).permitAll() -> Conseguir acessar console do h2
                         .anyRequest().authenticated()
                 )
+                //.headers(headers -> headers.frameOptions(frameOptions -> frameOptions.sameOrigin())) -> Conseguir acessar console do h2
                 .build();
     }
 
