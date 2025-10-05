@@ -28,9 +28,9 @@ import java.util.List;
                 version = "1.0.0",
                 description = "API REST para gerenciamento de usuários do sistema Penelope.",
                 contact = @Contact(
-                        name = "Neto Remelli",
-                        email = "seuemail@exemplo.com",
-                        url = "https://seusite.com"
+                        name = "Penelope",
+                        email = "penelope@email.com",
+                        url = "https://penelopecharmosa.com"
                 ),
                 license = @License(
                         name = "Apache 2.0",
