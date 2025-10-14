@@ -19,7 +19,7 @@ public class EmailService {
 
     public void sendPasswordResetEmail(String toEmail, String token) {
 
-        String resetUrl = frontendUrl + "/verificar-codigo?token=" + token;
+        String resetUrl = frontendUrl + "/verificacao?token=" + token;
 
         SimpleMailMessage message = new SimpleMailMessage();
         message.setTo(toEmail);
