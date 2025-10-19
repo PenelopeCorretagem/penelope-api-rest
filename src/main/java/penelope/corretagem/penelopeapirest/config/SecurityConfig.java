@@ -22,6 +22,16 @@ import java.util.List;
 @EnableWebSecurity
 public class SecurityConfig {
 
+    private static final String[] AUTH_WHITELIST = {
+            "/auth/**",
+            "/users/**",
+            "/webhooks/**",
+            "/h2-console/**",
+            "/v3/api-docs/**",
+            "/swagger-ui/**",
+            "/swagger-ui.html"
+    };
+
     // Define o algoritmo de criptografia de senhas usando BCrypt
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -42,12 +52,8 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/auth/**", "/users/**").permitAll()
-                        //.requestMatchers(("/h2-console/**")).permitAll() -> Conseguir acessar console do h2
-                        .anyRequest().authenticated()
-                )
-                //.headers(headers -> headers.frameOptions(frameOptions -> frameOptions.sameOrigin())) -> Conseguir acessar console do h2
-                .build();
+                        .anyRequest().permitAll()
+                ).build();
     }
 
     // Define as configurações de CORS para permitir requisições do frontend.
