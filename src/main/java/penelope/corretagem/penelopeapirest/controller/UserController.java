@@ -1,5 +1,6 @@
 package penelope.corretagem.penelopeapirest.controller;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -10,6 +11,7 @@ import penelope.corretagem.penelopeapirest.service.UserService;
 
 import java.util.List;
 
+@Tag(name="Usuários")
 @RestController
 @RequestMapping("/users")
 public class UserController {
@@ -39,7 +41,8 @@ public class UserController {
 
     // Atualiza os dados de um usuário específico pelo ID.
     @PatchMapping("/{id}")
-    public ResponseEntity<UserResponse> updateUser(@RequestBody UserRequest userRequestUpdate, @PathVariable Long id) {
+    public ResponseEntity<UserResponse> updateUser(@PathVariable Long id,
+                                                   @Valid @RequestBody UserRequest userRequestUpdate) {
         UserResponse response = userService.updateUser(id, userRequestUpdate);
         return ResponseEntity.ok(response);
     }
