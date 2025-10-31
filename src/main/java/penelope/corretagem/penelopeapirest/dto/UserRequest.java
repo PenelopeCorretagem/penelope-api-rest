@@ -7,9 +7,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 import org.hibernate.validator.constraints.br.CPF;
 
 import java.util.Date;
@@ -22,7 +20,7 @@ public class UserRequest {
 
     @Schema(description = "Nome completo do usuário", example = "João da Silva", required = true)
     @NotBlank(message = "O campo nome é obrigatório")
-    private String nome;
+    private String nomeCompleto;
 
     @Schema(description = "CPF do usuário", example = "123.456.789-00", required = true)
     @CPF(message = "O CPF informado é inválido")
@@ -41,9 +39,12 @@ public class UserRequest {
     @Schema(description = "Renda mensal do usuário em reais", example = "3500.50")
     private Double rendaMensal;
 
+    @NotBlank(message = "O campo senha é obrigatório")
+    private String senha;
+
     // Getters e Setters
-    public String getNome() { return nome; }
-    public void setNome(String nome) { this.nome = nome; }
+    public String getNomeCompleto() { return nomeCompleto; }
+    public void setNomeCompleto(String nomeCompleto) { this.nomeCompleto = nomeCompleto; }
 
     public String getCpf() { return cpf; }
     public void setCpf(String cpf) { this.cpf = cpf; }
@@ -56,4 +57,7 @@ public class UserRequest {
 
     public Double getRendaMensal() { return rendaMensal; }
     public void setRendaMensal(Double rendaMensal) { this.rendaMensal = rendaMensal; }
+
+    public String getSenha() { return senha;    }
+    public void setSenha(String senha) {    this.senha = senha;    }
 }
