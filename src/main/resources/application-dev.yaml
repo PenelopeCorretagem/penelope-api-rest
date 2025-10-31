@@ -25,6 +25,17 @@ spring:
     hibernate:
       # Cria e destrói o esquema do banco a cada inicialização (útil para testes)
       ddl-auto: create-drop
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: ${EMAIL}
+    password: ${EMAIL_PASSWORD}
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
 
 logging:
   level:
@@ -38,3 +49,12 @@ logging:
 
   pattern:
     file: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
+
+api:
+  security:
+    token:
+      secret: ${JWT_API_KEY}
+
+app:
+  frontend:
+    url: http://localhost:8080

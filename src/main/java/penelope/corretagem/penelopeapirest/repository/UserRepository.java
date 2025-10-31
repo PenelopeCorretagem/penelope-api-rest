@@ -3,4 +3,10 @@ package penelope.corretagem.penelopeapirest.repository;
 import org.springframework.data.jpa.repository.JpaRepository;
 import penelope.corretagem.penelopeapirest.entity.UserEntity;
 
-public interface UserRepository extends JpaRepository<UserEntity, Long> {}
+import java.util.Optional;
+
+public interface UserRepository extends JpaRepository<UserEntity, Long> {
+    Optional<UserEntity> findByEmail(String email);
+
+    Optional<UserEntity> findByPasswordResetToken(String token);
+}

@@ -1,73 +1,73 @@
 package penelope.corretagem.penelopeapirest.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 @Entity
+@Table(name = "usuario")
 @AllArgsConstructor
 @NoArgsConstructor
 public class UserEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String nome;
-    private String cpf;
+
+    @Column(nullable = false)
+    private String nomeCompleto;
+
+    @Column(nullable = false, unique = true)
     private String email;
+
+    @Column(nullable = false)
+    private String senha;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "nivel_acesso", nullable = false)
+    private NivelAcesso nivelAcesso;
+
+    @Column(nullable = true)
     private Date dtNascimento;
-    private Double rendaMensal;
 
-    public Long getId() {
-        return id;
-    }
+    @Column(nullable = false)
+    private LocalDate dtCriacao;
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+    @Column(nullable = false)
+    private boolean ativo;
 
-    public String getNome() {
-        return nome;
-    }
+    @Column
+    private String passwordResetToken;
 
-    public void setNome(String nome) {
-        this.nome = nome;
-    }
+    @Column
+    private Date passwordResetTokenExpiry;
 
-    public String getCpf() {
-        return cpf;
-    }
+    public Long getId() {   return id;  }
+    public String getNomeCompleto() {   return nomeCompleto;    }
+    public String getEmail() {  return email;   }
+    public Date getDtNascimento() {  return dtNascimento;    }
+    public String getSenha() {  return senha;   }
+    public String getPasswordResetToken() {     return passwordResetToken;  }
+    public Date getPasswordResetTokenExpiry() {     return passwordResetTokenExpiry;    }
+    public NivelAcesso getNivelAcesso() {   return nivelAcesso;     }
+    public LocalDate getDtCriacao() {    return dtCriacao;   }
+    public boolean isAtivo() {   return ativo;   }
 
-    public void setCpf(String cpf) {
-        this.cpf = cpf;
-    }
+    public void setId(Long id) {    this.id = id;   }
+    public void setNomeCompleto(String nomeCompleto) {  this.nomeCompleto = nomeCompleto;   }
+    public void setEmail(String email) {    this.email = email; }
+    public void setDtNascimento(Date dtNascimento) {    this.dtNascimento = dtNascimento;   }
+    public void setSenha(String senha) {    this.senha = senha; }
+    public void setPasswordResetToken(String passwordResetToken) {  this.passwordResetToken = passwordResetToken;   }
+    public void setPasswordResetTokenExpiry(Date passwordResetTokenExpiry) {    this.passwordResetTokenExpiry = passwordResetTokenExpiry;   }
+    public void setNivelAcesso(NivelAcesso nivelAcesso) {   this.nivelAcesso = nivelAcesso;     }
+    public void setDtCriacao(LocalDate dtCriacao) {      this.dtCriacao = dtCriacao;     }
+    public void setAtivo(boolean ativo) {   this.ativo = ativo;     }
 
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public Date getDtNascimento() {
-        return dtNascimento;
-    }
-
-    public void setDtNascimento(Date dtNascimento) {
-        this.dtNascimento = dtNascimento;
-    }
-
-    public Double getRendaMensal() {
-        return rendaMensal;
-    }
-
-    public void setRendaMensal(Double rendaMensal) {
-        this.rendaMensal = rendaMensal;
+    public enum NivelAcesso {
+        Admin, Corretor, Cliente
     }
 }
