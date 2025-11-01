@@ -33,7 +33,6 @@ public class UserRequest {
     private String email;
 
     @Schema(description = "Data de nascimento do usuário", example = "1990-01-01", required = true, type = "string", format = "date")
-    @NotNull(message = "O campo data de nascimento é obrigatório")
     private Date dtNascimento;
 
     @Schema(description = "Renda mensal do usuário em reais", example = "3500.50")
