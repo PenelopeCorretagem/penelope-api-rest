@@ -2,13 +2,19 @@ package penelope.corretagem.penelopeapirest.controller;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import penelope.corretagem.penelopeapirest.dto.UserRequest;
-import penelope.corretagem.penelopeapirest.dto.UserResponse;
+import org.springframework.web.util.UriComponentsBuilder;
+import penelope.corretagem.penelopeapirest.data.domain.dto.EstateAgentRequest;
+import penelope.corretagem.penelopeapirest.data.domain.dto.EstateAgentResponse;
+import penelope.corretagem.penelopeapirest.data.domain.dto.UserRequest;
+import penelope.corretagem.penelopeapirest.data.domain.dto.UserResponse;
+import penelope.corretagem.penelopeapirest.service.EstateAgentService;
 import penelope.corretagem.penelopeapirest.service.UserService;
 
+import java.net.URI;
 import java.util.List;
 
 @Tag(name="Usuários")
@@ -17,9 +23,11 @@ import java.util.List;
 public class UserController {
 
     private final UserService userService;
+    private final EstateAgentService estateAgentService;
 
-    public UserController(UserService userService) {
+    public UserController(UserService userService, EstateAgentService estateAgentService) {
         this.userService = userService;
+        this.estateAgentService = estateAgentService;
     }
 
     // Cria um novo usuário com os dados fornecidos.
@@ -45,11 +53,5 @@ public class UserController {
                                                    @Valid @RequestBody UserRequest userRequestUpdate) {
         UserResponse response = userService.updateUser(id, userRequestUpdate);
         return ResponseEntity.ok(response);
-    }
-
-    // Remove um usuário específico pelo ID.
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
-        return userService.deleteUser(id);
     }
 }

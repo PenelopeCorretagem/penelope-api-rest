@@ -21,6 +21,10 @@ spring:
     # Não falha se encontrar uma propriedade desconhecida no JSON
     deserialization:
       fail-on-unknown-properties: false
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
 
 # Habilita o Swagger UI
 springdoc:
@@ -36,3 +40,14 @@ springdoc:
   api-docs:
     enabled: true
     path: /api-docs
+
+# Configurações da API Cal.com
+calcom:
+  api:
+    base-url: https://api.cal.com/penelope-corretagem
+    key: cal_live_e164e3c0a261292a215d34c31758a90c
+    webhook:
+      secret: 4835FiV4gc58TLmxcy5abK3i4z8BDCtzdh/rN7I60wQ=
+
+update:
+  dir: uploads

@@ -2,20 +2,17 @@ package penelope.corretagem.penelopeapirest.service;
 
 import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import penelope.corretagem.penelopeapirest.dto.UserRequest;
-import penelope.corretagem.penelopeapirest.dto.UserResponse;
-import penelope.corretagem.penelopeapirest.entity.ClientEntity;
-import penelope.corretagem.penelopeapirest.entity.UserEntity;
-import penelope.corretagem.penelopeapirest.event.UserRegisteredEvent;
-import penelope.corretagem.penelopeapirest.exception.EmailAlreadyExistsException;
-import penelope.corretagem.penelopeapirest.exception.InvalidTokenException;
+import penelope.corretagem.penelopeapirest.data.domain.dto.UserRequest;
+import penelope.corretagem.penelopeapirest.data.domain.dto.UserResponse;
+import penelope.corretagem.penelopeapirest.data.domain.entity.UserEntity;
+import penelope.corretagem.penelopeapirest.service.exception.UserEmailAlreadyExistsException;
+import penelope.corretagem.penelopeapirest.service.exception.InvalidTokenException;
 import penelope.corretagem.penelopeapirest.mapper.UserMapper;
-import penelope.corretagem.penelopeapirest.repository.ClientRepository;
-import penelope.corretagem.penelopeapirest.repository.UserRepository;
+import penelope.corretagem.penelopeapirest.data.domain.repository.UserRepository;
+import penelope.corretagem.penelopeapirest.service.exception.UserNotFoundException;
 
 import java.time.LocalDate;
 import java.util.Date;
@@ -30,38 +27,32 @@ public class UserService {
     private final UserMapper userMapper;
     private final PasswordEncoder passwordEncoder;
     private final EmailService emailService;
-    private final ApplicationEventPublisher eventPublisher;
 
-    public UserService(UserRepository userRepository, UserMapper userMapper, PasswordEncoder passwordEncoder, EmailService emailService, ApplicationEventPublisher eventPublisher) {
+    public UserService(
+      UserRepository userRepository,
+      UserMapper userMapper,
+      PasswordEncoder passwordEncoder,
+      EmailService emailService) {
         this.userRepository = userRepository;
         this.emailService = emailService;
         this.userMapper = userMapper;
         this.passwordEncoder = passwordEncoder;
-        this.eventPublisher = eventPublisher;
     }
-
 
     // Adiciona um novo usuário após verificar se o e-mail já está cadastrado.
     @Transactional
     public UserResponse addUser(UserRequest userRequest) {
-        if (userRepository.findByEmail(userRequest.getEmail()).isPresent()) {
-            throw new EmailAlreadyExistsException("O e-mail informado já está cadastrado");
+        if (userRepository.findByEmail(userRequest.email()).isPresent()) {
+            throw new UserEmailAlreadyExistsException("O e-mail informado já está cadastrado");
         }
 
-        // 4. Cria e prepara a entidade de autenticação
-        UserEntity newUser = new UserEntity();
-        newUser.setNomeCompleto(userRequest.getNomeCompleto());
-        newUser.setEmail(userRequest.getEmail());
-        newUser.setSenha(passwordEncoder.encode(userRequest.getSenha()));
-        newUser.setNivelAcesso(UserEntity.NivelAcesso.Cliente);
-        newUser.setAtivo(true);
-        newUser.setDtCriacao(LocalDate.now());
+        UserEntity entity = userMapper.toUserEntity(userRequest);
+        entity.setDateCreation(LocalDate.now());
+        entity.setActive(true);
 
-        UserEntity savedUser = userRepository.save(newUser);
+        userRepository.save(entity);
 
-        eventPublisher.publishEvent(new UserRegisteredEvent(this, savedUser));
-
-        return userMapper.toUserResponse(savedUser);
+        return userMapper.toUserResponse(entity);
     }
 
     // Retorna todos os usuários cadastrados no sistema.
@@ -73,16 +64,13 @@ public class UserService {
     }
 
     // Atualiza os dados de um usuário existente com base no ID.
-    public UserResponse updateUser(Long id, UserRequest userRequestUpdate) {
-        UserEntity user = userRepository.findById(id).orElseThrow(
-                () -> {
-                    return new RuntimeException("Usuário não encontrado");
-                });
+    public UserResponse updateUser(Long id, UserRequest request) {
+        UserEntity entity = userRepository.findById(id)
+          .orElseThrow(UserNotFoundException::new);
 
-        applyUserUpdates(user, userRequestUpdate);
-
-        UserEntity savedUser = userRepository.save(user);
-        return userMapper.toUserResponse(savedUser);
+        userMapper.updateUserFromRequest(request, entity);
+        userRepository.save(entity);
+        return userMapper.toUserResponse(entity);
     }
 
     // Remove um usuário do sistema com base no ID.
@@ -128,7 +116,7 @@ public class UserService {
         UserEntity user = userRepository.findByPasswordResetToken(token).get();
 
         // 2. Criptografa a nova senha
-        user.setSenha(passwordEncoder.encode(newPassword));
+        user.setPassword(passwordEncoder.encode(newPassword));
 
         // 3. Limpa o token para que ele não possa ser usado novamente
         user.setPasswordResetToken(null);
@@ -136,18 +124,5 @@ public class UserService {
 
         // 4. Salva o usuário com a nova senha
         userRepository.save(user);
-    }
-
-    // Aplica as atualizações recebidas ao objeto UserEntity.
-    private void applyUserUpdates(UserEntity user, UserRequest updateRequest) {
-        if (updateRequest.getNomeCompleto() != null) {
-            user.setNomeCompleto(updateRequest.getNomeCompleto());
-        }
-        if (updateRequest.getEmail() != null) {
-            user.setEmail(updateRequest.getEmail());
-        }
-        if (updateRequest.getDtNascimento() != null) {
-            user.setDtNascimento(updateRequest.getDtNascimento());
-        }
     }
 }

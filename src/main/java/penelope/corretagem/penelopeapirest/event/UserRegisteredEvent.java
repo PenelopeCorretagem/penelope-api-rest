@@ -1,8 +1,10 @@
 package penelope.corretagem.penelopeapirest.event;
 
+import lombok.Getter;
 import org.springframework.context.ApplicationEvent;
-import penelope.corretagem.penelopeapirest.entity.UserEntity;
+import penelope.corretagem.penelopeapirest.data.domain.entity.UserEntity;
 
+@Getter
 public class UserRegisteredEvent extends ApplicationEvent {
 
     private final UserEntity registeredUser;
@@ -14,9 +16,5 @@ public class UserRegisteredEvent extends ApplicationEvent {
     public UserRegisteredEvent(Object source, UserEntity registeredUser) {
         super(source);
         this.registeredUser = registeredUser;
-    }
-
-    public UserEntity getRegisteredUser() {
-        return registeredUser;
     }
 }
