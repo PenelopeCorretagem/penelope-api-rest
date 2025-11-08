@@ -5,7 +5,6 @@ import lombok.Getter;
 @Getter
 public enum AccessLevel {
   ADMIN("admin"),
-  ESTATE_AGENT("corretor"),
   CLIENT("cliente");
 
   private final String description;

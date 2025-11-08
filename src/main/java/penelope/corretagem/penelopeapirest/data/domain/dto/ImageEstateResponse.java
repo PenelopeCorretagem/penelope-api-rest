@@ -1,7 +1,11 @@
 package penelope.corretagem.penelopeapirest.data.domain.dto;
 
+import penelope.corretagem.penelopeapirest.data.domain.entity.ImageEstateEntity;
+
 public record ImageEstateResponse(
-  long id,
-  String url,
-  EstateResponse estate
-) {}
+        String id,
+        EstateRequest estate,
+        ImageEstateEntity type,
+        String url
+) {
+}

@@ -16,27 +16,34 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 public class AppointmentEntity {
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-  @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "user_id", nullable = false)
-  private UserEntity user;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "fk_cliente", referencedColumnName = "id", nullable = false)
+    private UserEntity client;
 
-  @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "estate_id", nullable = false)
-  private EstateEntity estate;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "fk_corretor", referencedColumnName = "id", nullable = false)
+    private UserEntity estateAgent;
 
-  @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "estate_agent_id", nullable = false)
-  private EstateAgentEntity estateAgent;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "fk_empreendimento", referencedColumnName = "id", nullable = false)
+    private EstateEntity estate;
 
-  @Enumerated(EnumType.STRING)
-  private Status status;
+    @Column(name = "duracao_minutos")
+    private Integer durationMinutes;
 
-  private LocalDateTime startDateTime;
+    @Column(name = "data_agendamento")
+    private LocalDateTime dateAppointment;
 
-  private LocalDateTime endDateTime;
+    @Column(name = "status")
+    @Enumerated(EnumType.STRING)
+    private Status status;
+
+    private LocalDateTime startDateTime;
+
+    private LocalDateTime endDateTime;
 }
 

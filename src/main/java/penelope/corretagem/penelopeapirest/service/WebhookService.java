@@ -8,12 +8,10 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import penelope.corretagem.penelopeapirest.data.domain.dto.cal.CalWebhookRequest;
 import penelope.corretagem.penelopeapirest.data.domain.entity.AppointmentEntity;
-import penelope.corretagem.penelopeapirest.data.domain.entity.EstateAgentEntity;
 import penelope.corretagem.penelopeapirest.data.domain.entity.EstateEntity;
 import penelope.corretagem.penelopeapirest.data.domain.entity.UserEntity;
 import penelope.corretagem.penelopeapirest.data.domain.enums.Status;
 import penelope.corretagem.penelopeapirest.data.domain.repository.AppointmentRepository;
-import penelope.corretagem.penelopeapirest.data.domain.repository.EstateAgentRepository;
 import penelope.corretagem.penelopeapirest.data.domain.repository.EstateRepository;
 import penelope.corretagem.penelopeapirest.data.domain.repository.UserRepository;
 
@@ -23,123 +21,134 @@ import java.nio.charset.StandardCharsets;
 import java.security.InvalidKeyException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.time.Duration;
 import java.util.Map;
 import java.util.Optional;
 
 @Service
 public class WebhookService {
 
-  private static final Logger logger = LoggerFactory.getLogger(WebhookService.class);
-  private final ObjectMapper mapper;
-  private final AppointmentRepository appointmentRepository;
-  private final UserRepository userRepository;
-  private final EstateRepository estateRepository;
-  private final EstateAgentRepository agentRepository;
+    private static final Logger logger = LoggerFactory.getLogger(WebhookService.class);
 
-  @Value("${cal.webhook.secret}")
-  private String webhookSecret;
+    private final ObjectMapper mapper;
+    private final AppointmentRepository appointmentRepository;
+    private final UserRepository userRepository;
+    private final EstateRepository estateRepository;
 
-  public WebhookService(ObjectMapper mapper, AppointmentRepository agendamentoRepository, UserRepository userRepository, EstateRepository propertyRepository, EstateAgentRepository agentRepository) {
-    this.mapper = mapper;
-    this.appointmentRepository = agendamentoRepository;
-    this.userRepository = userRepository;
-    this.estateRepository = propertyRepository;
-    this.agentRepository = agentRepository;
-    this.mapper.registerModule(new JavaTimeModule());
-  }
+    @Value("${cal.webhook.secret}")
+    private String webhookSecret;
 
-  public void processAppointment(String rawBody, String signature) {
-
-    if (!verifySignature(rawBody, signature)) {
-      logger.warn("Assinatura de Webhook inválida!");
-
-      throw new RuntimeException("Assinatura de Webhook inválida!"); // todo criar exceção customizada
+    public WebhookService(
+            ObjectMapper mapper,
+            AppointmentRepository appointmentRepository,
+            UserRepository userRepository,
+            EstateRepository estateRepository
+    ) {
+        this.mapper = mapper;
+        this.appointmentRepository = appointmentRepository;
+        this.userRepository = userRepository;
+        this.estateRepository = estateRepository;
+        this.mapper.registerModule(new JavaTimeModule());
     }
-    logger.info("Assinatura de Webhook verificada com sucesso!");
 
-    // 13. Bloco try-catch: Se a conversão do JSON falhar, o app não quebra.
-    try {
-      // 14. Conversão: Usa o objectMapper para transformar a String (JSON)
-      // no nosso record CalWebhook.
-      CalWebhookRequest webhook = mapper.readValue(rawBody, CalWebhookRequest.class);
+    public void processAppointment(String rawBody, String signature) {
 
-      // 15. Lógica de Negócio: Verifica se o evento é o que nos interessa.
-      if ("BOOKING_CREATED".equals(webhook.triggerEvent())) {
-        logger.info("Novo agendamento recebido: {}", webhook.payload().title());
+        if (!verifySignature(rawBody, signature)) {
+            logger.warn("Assinatura de Webhook inválida!");
+            throw new RuntimeException("Assinatura de Webhook inválida!"); // TODO: criar exceção customizada
+        }
 
-        String hostEmail = webhook.payload().organizer().email();
+        logger.info("Assinatura de Webhook verificada com sucesso!");
 
-        UserEntity guest = webhook.payload().attendees().stream()
-          .filter(attendee -> !attendee.email().equalsIgnoreCase(hostEmail))
-          .findFirst()
-          .flatMap(attendee -> userRepository.findByEmail(attendee.email()))
-          .orElseThrow(() -> new RuntimeException("convidado do agendamento")); // todo criar exceção customizada
+        try {
+            // Converte o JSON do webhook para o DTO
+            CalWebhookRequest webhook = mapper.readValue(rawBody, CalWebhookRequest.class);
 
-        Optional<Map<String, String>> metadata = Optional.ofNullable(webhook.payload().metadata());
+            if ("BOOKING_CREATED".equals(webhook.triggerEvent())) {
+                logger.info("Novo agendamento recebido: {}", webhook.payload().title());
 
-        Long imovelId = metadata
-          .map(md -> md.get("imovelId"))
-          .map(Long::getLong)
-          .orElseThrow(() -> new RuntimeException("Imóvel não encontrado nos metadados do agendamento"));
+                // E-mail do organizador (host)
+                String hostEmail = webhook.payload().organizer().email();
 
-        EstateEntity property = estateRepository.findById(imovelId)
-          .orElseThrow(() -> new RuntimeException("Imóvel não encontrado no banco de dados")); // todo criar exceção customizada
+                // Busca o convidado (cliente) no sistema
+                UserEntity guest = webhook.payload().attendees().stream()
+                        .filter(attendee -> !attendee.email().equalsIgnoreCase(hostEmail))
+                        .findFirst()
+                        .flatMap(attendee -> userRepository.findByEmail(attendee.email()))
+                        .orElseThrow(() -> new RuntimeException("Convidado do agendamento não encontrado")); // TODO: exceção customizada
 
-        Long agentId = metadata
-          .map(md -> md.get("agentId"))
-          .map(Long::getLong)
-          .orElseThrow(() -> new RuntimeException("Corretor não encontrado nos metadados do agendamento")); // todo criar exceção customizada
+                Optional<Map<String, String>> metadata = Optional.ofNullable(webhook.payload().metadata());
 
-        EstateAgentEntity estateAgent = agentRepository.findById(agentId)
-          .orElseThrow(() -> new RuntimeException("Corretor não encontrado no banco de dados")); // todo criar exceção customizada
+                // Obtém IDs dos metadados
+                Long estateId = metadata
+                        .map(md -> md.get("imovelId"))
+                        .map(Long::parseLong)
+                        .orElseThrow(() -> new RuntimeException("Imóvel não encontrado nos metadados"));
 
-        AppointmentEntity newAppointment = new AppointmentEntity();
+                Long agentId = metadata
+                        .map(md -> md.get("agentId"))
+                        .map(Long::parseLong)
+                        .orElseThrow(() -> new RuntimeException("Corretor não encontrado nos metadados"));
 
-        newAppointment.setUser(guest);
-        newAppointment.setEstate(property);
-        newAppointment.setEstateAgent(estateAgent);
-        newAppointment.setStatus(Status.PENDING);
-        newAppointment.setStartDateTime(webhook.payload().startTime().toLocalDateTime());
-        newAppointment.setEndDateTime(webhook.payload().endTime().toLocalDateTime());
+                // Busca o imóvel e o corretor no banco
+                EstateEntity property = estateRepository.findById(estateId)
+                        .orElseThrow(() -> new RuntimeException("Imóvel não encontrado no banco de dados"));
 
-        appointmentRepository.save(newAppointment);
-        logger.info("Novo agendamento salvo no banco de dados para: " + guest.getEmail());
-      }
+                UserEntity agent = userRepository.findById(agentId)
+                        .orElseThrow(() -> new RuntimeException("Corretor não encontrado no banco de dados"));
 
-    } catch (Exception e) {
-      logger.error("Erro ao processar o payload do webhook: {}", e.getMessage());
+                // Cria novo agendamento
+                AppointmentEntity newAppointment = new AppointmentEntity();
+                newAppointment.setClient(guest);
+                newAppointment.setEstateAgent(agent);
+                newAppointment.setEstate(property);
+                newAppointment.setStatus(Status.PENDING);
+                newAppointment.setStartDateTime(webhook.payload().startTime().toLocalDateTime());
+                newAppointment.setEndDateTime(webhook.payload().endTime().toLocalDateTime());
+                newAppointment.setDateAppointment(webhook.payload().startTime().toLocalDateTime());
+
+                // Calcula a duração em minutos
+                int duration = (int) Duration.between(
+                        webhook.payload().startTime().toLocalDateTime(),
+                        webhook.payload().endTime().toLocalDateTime()
+                ).toMinutes();
+
+                newAppointment.setDurationMinutes(duration);
+
+                appointmentRepository.save(newAppointment);
+                logger.info("Novo agendamento salvo no banco de dados para o cliente: {}", guest.getEmail());
+            }
+
+        } catch (Exception e) {
+            logger.error("Erro ao processar o payload do webhook: {}", e.getMessage(), e);
+        }
     }
-  }
 
-  private boolean verifySignature(String body, String signature) {
-    try {
-      // Pega uma instância do algoritmo HmacSHA256.
-      Mac mac = Mac.getInstance("HmacSHA256");
-      // Cria a chave de criptografia a partir do nosso 'webhookSecret'.
-      SecretKeySpec secretKey = new SecretKeySpec(webhookSecret.getBytes(StandardCharsets.UTF_8), "HmacSHA256");
-      // Inicializa o algoritmo com a nossa chave.
-      mac.init(secretKey);
-      // Calcula o hash (assinatura) do corpo (body) da requisição.
-      //O resultado são bytes puros.
-      byte[] hashBytes = mac.doFinal(body.getBytes(StandardCharsets.UTF_8));
-      // Converte os bytes puros do hash para uma string Base64.
-      StringBuilder hexString = new StringBuilder();
-      for (byte b : hashBytes) {
-        String hex = Integer.toHexString(0xff & b);
+    private boolean verifySignature(String body, String signature) {
+        try {
+            Mac mac = Mac.getInstance("HmacSHA256");
+            SecretKeySpec secretKey = new SecretKeySpec(webhookSecret.getBytes(StandardCharsets.UTF_8), "HmacSHA256");
+            mac.init(secretKey);
 
-        if (hex.length() == 1) hexString.append('0');
+            byte[] hashBytes = mac.doFinal(body.getBytes(StandardCharsets.UTF_8));
 
-        hexString.append(hex);
-      }
+            // Converte hash para hexadecimal
+            StringBuilder hexString = new StringBuilder();
+            for (byte b : hashBytes) {
+                String hex = Integer.toHexString(0xff & b);
+                if (hex.length() == 1) hexString.append('0');
+                hexString.append(hex);
+            }
 
-      return MessageDigest.isEqual(
-        signature.getBytes(StandardCharsets.UTF_8),
-        hexString.toString().getBytes(StandardCharsets.UTF_8)
-      );
+            // Compara de forma segura
+            return MessageDigest.isEqual(
+                    signature.getBytes(StandardCharsets.UTF_8),
+                    hexString.toString().getBytes(StandardCharsets.UTF_8)
+            );
 
-    } catch (NoSuchAlgorithmException | InvalidKeyException e) {
-      logger.error("Erro ao verificar assinatura do webhook", e);
-      return false;
+        } catch (NoSuchAlgorithmException | InvalidKeyException e) {
+            logger.error("Erro ao verificar assinatura do webhook", e);
+            return false;
+        }
     }
-  }
 }

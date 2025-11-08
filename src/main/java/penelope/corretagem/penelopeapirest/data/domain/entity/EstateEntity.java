@@ -11,62 +11,65 @@ import java.util.List;
 import java.util.Set;
 
 @Entity
+@Table(name = "empreendimento")
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
 public class EstateEntity {
 
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-  @Column(name = "titulo", nullable = false)
-  private String title;
+    @Column(name = "titulo", nullable = false)
+    private String title;
 
-  @Column(name = "descricao", nullable = false)
-  private String description;
+    @Column(name = "descricao", nullable = false)
+    private String description;
 
-  @Column(name = "preco", nullable = false)
-  private BigDecimal price;
+    @Column(name = "area", nullable = false)
+    private Double area;
 
-  @Column(name = "area", nullable = false)
-  private Double area;
+    @Column(name = "quartos", nullable = false)
+    private Integer numberOfRooms;
 
-  @Column(name = "quartos", nullable = false)
-  private Integer numberOfRooms;
+    @Column(name = "tipo", nullable = false)
+    @Enumerated(EnumType.STRING)
+    private Type type;
 
-  @Column(name = "banheiros", nullable = false)
-  private Integer numberOfBathrooms;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "fk_endereco", referencedColumnName = "id", nullable = false)
+    private AddressEntity address;
 
-  @Column(name = "vagas", nullable = false)
-  private Integer numberOfVacancies;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "fk_endereco_stand", referencedColumnName = "id", nullable = false)
+    private AddressEntity standAddress;
 
-  @Column(name = "tipo", nullable = false)
-  @Enumerated(EnumType.STRING)
-  private Type type;
+    @OneToMany(
+            mappedBy = "estate",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true,
+            fetch = FetchType.LAZY)
+    private Set<ImageEstateEntity> images;
 
-  @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "fk_endereco", referencedColumnName = "id", nullable = false)
-  private AddressEntity address;
+    @OneToMany(
+            mappedBy = "estate",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true,
+            fetch = FetchType.LAZY)
+    private Set<AppointmentEntity> appointments;
 
-  @OneToMany(
-    mappedBy = "estate",
-    cascade = CascadeType.ALL,
-    orphanRemoval = true,
-    fetch = FetchType.LAZY)
-  private Set<ImageEstateEntity> images;
+    @Getter
+    public enum Type {
+        COMPLETED("Disponível"),
+        UNDER_CONSTRUCTION("Em obras"),
+        LAUNCH("Lançamento");
 
-  @Getter
-  public enum Type {
-    COMPLETED("pronto"),
-    UNDER_CONSTRUCTION("em obras"),
-    LAUNCH("lançamento");
+        private final String typeName;
 
-    private final String typeName;
-
-    Type(String typeName) {
-      this.typeName = typeName;
+        Type(String typeName) {
+            this.typeName = typeName;
+        }
     }
-  }
 }

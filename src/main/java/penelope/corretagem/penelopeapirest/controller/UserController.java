@@ -6,28 +6,20 @@ import jakarta.validation.constraints.NotNull;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.util.UriComponentsBuilder;
-import penelope.corretagem.penelopeapirest.data.domain.dto.EstateAgentRequest;
-import penelope.corretagem.penelopeapirest.data.domain.dto.EstateAgentResponse;
-import penelope.corretagem.penelopeapirest.data.domain.dto.UserRequest;
-import penelope.corretagem.penelopeapirest.data.domain.dto.UserResponse;
-import penelope.corretagem.penelopeapirest.service.EstateAgentService;
+import penelope.corretagem.penelopeapirest.data.domain.dto.*;
 import penelope.corretagem.penelopeapirest.service.UserService;
 
-import java.net.URI;
 import java.util.List;
 
-@Tag(name="Usuários")
+@Tag(name = "Usuários")
 @RestController
 @RequestMapping("/users")
 public class UserController {
 
     private final UserService userService;
-    private final EstateAgentService estateAgentService;
 
-    public UserController(UserService userService, EstateAgentService estateAgentService) {
+    public UserController(UserService userService) {
         this.userService = userService;
-        this.estateAgentService = estateAgentService;
     }
 
     // Cria um novo usuário com os dados fornecidos.
@@ -47,11 +39,22 @@ public class UserController {
         return ResponseEntity.ok(users);
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<UserResponse> getUserById(@PathVariable @NotNull Long id) {
+        return ResponseEntity.ok(userService.getUserById(id));
+    }
+
     // Atualiza os dados de um usuário específico pelo ID.
     @PatchMapping("/{id}")
     public ResponseEntity<UserResponse> updateUser(@PathVariable Long id,
                                                    @Valid @RequestBody UserRequest userRequestUpdate) {
         UserResponse response = userService.updateUser(id, userRequestUpdate);
         return ResponseEntity.ok(response);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<UserResponse> deleteClient(@PathVariable Long id) {
+        userService.deleteUser(id);
+        return ResponseEntity.noContent().build();
     }
 }

@@ -63,7 +63,14 @@ public class UserService {
                 .toList();
     }
 
+    public UserResponse getUserById(Long id) {
+        return userRepository.findById(id)
+                .map(userMapper::toUserResponse)
+                .orElseThrow(UserNotFoundException::new);
+    }
+
     // Atualiza os dados de um usuário existente com base no ID.
+    @Transactional
     public UserResponse updateUser(Long id, UserRequest request) {
         UserEntity entity = userRepository.findById(id)
           .orElseThrow(UserNotFoundException::new);
@@ -74,6 +81,7 @@ public class UserService {
     }
 
     // Remove um usuário do sistema com base no ID.
+    @Transactional
     public ResponseEntity<Void> deleteUser(Long id) {
         if (!userRepository.existsById(id)) {
             return ResponseEntity.notFound().build();

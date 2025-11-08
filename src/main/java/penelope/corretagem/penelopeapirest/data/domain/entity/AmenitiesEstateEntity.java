@@ -7,25 +7,23 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Table(name = "imagem_empreendimento")
+@Table(name = "diferencial_empreendimento")
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class ImageEstateEntity {
+public class AmenitiesEstateEntity {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @EmbeddedId
+    private AmenitiesEstateId id; // chave composta
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @MapsId("estate") // mapeia o campo estate da chave composta
     @JoinColumn(name = "fk_empreendimento", referencedColumnName = "id", nullable = false)
     private EstateEntity estate;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "fk_tipo_imagem", referencedColumnName = "id", nullable = false)
-    private ImageEstateTypeEntity type;
-
-    @Column(name = "url", nullable = false)
-    private String url;
+    @MapsId("amenity") // mapeia o campo amenity da chave composta
+    @JoinColumn(name = "fk_diferencial", referencedColumnName = "id", nullable = false)
+    private AmenitiesEntity amenity;
 }

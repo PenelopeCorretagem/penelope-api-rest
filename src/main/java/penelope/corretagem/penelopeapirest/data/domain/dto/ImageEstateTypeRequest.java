@@ -2,10 +2,11 @@ package penelope.corretagem.penelopeapirest.data.domain.dto;
 
 import penelope.corretagem.penelopeapirest.data.domain.entity.ImageEstateEntity;
 
-public record ImageEstateRequest(
+import java.util.Set;
+
+public record ImageEstateTypeRequest(
         String id,
-        EstateRequest estate,
-        ImageEstateEntity type,
-        String url
+        String description,
+        Set<ImageEstateEntity> images
 ) {
 }

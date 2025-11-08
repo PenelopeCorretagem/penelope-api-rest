@@ -1,11 +1,13 @@
 package penelope.corretagem.penelopeapirest.data.domain.dto;
 
 public record AddressRequest(
-  String street,
-  String number,
-  String neighborhood,
-  String complement,
-  String zipCode,
-  CityRequest city
+        String id,
+        String street,
+        String number,
+        String neighborhood,
+        String city,
+        String uf,
+        String zipCode,
+        String complement
 ) {
 }

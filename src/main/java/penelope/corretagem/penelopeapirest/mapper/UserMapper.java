@@ -1,6 +1,7 @@
 package penelope.corretagem.penelopeapirest.mapper;
 
 import org.mapstruct.Mapper;
+import org.mapstruct.MappingTarget;
 import org.mapstruct.ReportingPolicy;
 import penelope.corretagem.penelopeapirest.data.domain.dto.UserRequest;
 import penelope.corretagem.penelopeapirest.data.domain.dto.UserResponse;
@@ -13,5 +14,5 @@ public interface UserMapper {
 
     UserResponse toUserResponse(UserEntity userEntity);
 
-    UserEntity updateUserFromRequest(UserRequest userRequest, UserEntity userEntity);
+    UserEntity updateUserFromRequest(UserRequest userRequest, @MappingTarget UserEntity userEntity);
 }

@@ -48,24 +48,6 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
     }
 
-    @ExceptionHandler(EstateAgentNotFoundException.class)
-    public ResponseEntity<Map<String, String>> handleEstateAgentNotFound(EstateAgentNotFoundException ex) {
-        Map<String, String> errorResponse = Map.of(
-          Error.MESSAGE.getField(), ex.getMessage(),
-          Error.MESSAGE.getField(), String.valueOf(HttpStatus.NOT_FOUND.value())
-        );
-        return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
-    }
-
-    @ExceptionHandler(ClientNotFoundException.class)
-    public ResponseEntity<Map<String, String>> handleClientNotFound(ClientNotFoundException ex) {
-        Map<String, String> errorResponse = Map.of(
-          Error.MESSAGE.getField(), ex.getMessage(),
-          Error.MESSAGE.getField(), String.valueOf(HttpStatus.NOT_FOUND.value())
-        );
-        return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
-    }
-
     @ExceptionHandler(EstateNotFoundException.class)
     public ResponseEntity<Map<String, String>> handleEstateNotFound(EstateNotFoundException ex) {
         Map<String, String> errorResponse = Map.of(
@@ -80,33 +62,6 @@ public class GlobalExceptionHandler {
         Map<String, String> errorResponse = Map.of(
           Error.MESSAGE.getField(), ex.getMessage(),
           Error.MESSAGE.getField(), String.valueOf(HttpStatus.CONFLICT.value())
-        );
-        return new ResponseEntity<>(errorResponse, HttpStatus.CONFLICT);
-    }
-
-    @ExceptionHandler(EstateAgentAlreadyExistsException.class)
-    public ResponseEntity<Map<String, String>> handleEstateAgentAlreadyExists(EstateAgentAlreadyExistsException ex) {
-        Map<String, String> errorResponse = Map.of(
-          Error.MESSAGE.getField(), ex.getMessage(),
-          Error.MESSAGE.getField(), String.valueOf(HttpStatus.CONFLICT.value())
-        );
-        return new ResponseEntity<>(errorResponse, HttpStatus.CONFLICT);
-    }
-
-    @ExceptionHandler(ClientAlreadyExistsException.class)
-    public ResponseEntity<Map<String, String>> handleClientAlreadyExists(ClientAlreadyExistsException ex) {
-        Map<String, String> errorResponse = Map.of(
-          Error.MESSAGE.getField(), ex.getMessage(),
-          Error.MESSAGE.getField(), String.valueOf(HttpStatus.CONFLICT.value())
-        );
-        return new ResponseEntity<>(errorResponse, HttpStatus.CONFLICT);
-    }
-
-    @ExceptionHandler(EstateAgentAlreadyExistsException.class)
-    public ResponseEntity<Map<String, String>> handleEstateAgentAlreadyExistsException(EstateAgentAlreadyExistsException ex) {
-        Map<String, String> errorResponse = Map.of(
-            Error.MESSAGE.getField(), ex.getMessage(),
-            Error.STATUS.getField(), String.valueOf(HttpStatus.CONFLICT.value())
         );
         return new ResponseEntity<>(errorResponse, HttpStatus.CONFLICT);
     }

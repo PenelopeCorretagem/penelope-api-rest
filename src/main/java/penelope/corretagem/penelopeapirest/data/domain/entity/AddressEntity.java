@@ -14,26 +14,28 @@ import lombok.Setter;
 @NoArgsConstructor
 public class AddressEntity {
 
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-  @Column(name = "rua", nullable = false)
-  private String street;
+    @Column(name = "rua", nullable = false)
+    private String street;
 
-  @Column(name = "numero")
-  private String number;
+    @Column(name = "numero", nullable = false)
+    private String number;
 
-  @Column(name = "bairro")
-  private String neighborhood;
+    @Column(name = "bairro")
+    private String neighborhood;
 
-  @Column(name = "cep", nullable = false, length = 8)
-  private String zipCode;
+    @Column(name = "cidade", nullable = false)
+    private String city;
 
-  @Column(name = "complemento")
-  private String complement;
+    @Column(name = "uf", nullable = false, length = 2)
+    private String uf;
 
-  @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "fk_cidade", referencedColumnName = "id", nullable = false)
-  private CityEntity city;
+    @Column(name = "cep", nullable = false, length = 8)
+    private String zipCode;
+
+    @Column(name = "complemento")
+    private String complement;
 }
