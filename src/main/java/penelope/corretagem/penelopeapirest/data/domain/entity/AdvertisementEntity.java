@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "anuncio")
@@ -19,6 +20,10 @@ public class AdvertisementEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "fk_empreendimento", referencedColumnName = "id", nullable = false)
+    private EstateEntity property;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "fk_criador", referencedColumnName = "id", nullable = false)
@@ -34,9 +39,9 @@ public class AdvertisementEntity {
     @Column(name = "destaque", nullable = false)
     private boolean emphasis;
 
-    @Column(name = "data_inicio")
-    private LocalDate startDate;
-
     @Column(name = "data_fim", nullable = false)
     private LocalDate endDate;
+
+    @Column(name = "data_criacao")
+    private LocalDateTime createdAt;
 }

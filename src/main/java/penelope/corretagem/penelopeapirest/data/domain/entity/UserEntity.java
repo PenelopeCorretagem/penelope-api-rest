@@ -56,7 +56,7 @@ public class UserEntity {
     private LocalDate dateCreation;
 
     @Column(name = "ativo")
-    private boolean active;
+    private boolean active = true;
 
     @OneToMany(
             mappedBy = "client",

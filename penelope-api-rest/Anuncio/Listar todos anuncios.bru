@@ -1,0 +1,22 @@
+meta {
+  name: Listar todos anuncios
+  type: http
+  seq: 1
+}
+
+get {
+  url: http://localhost:8081/api/v1/anuncios?cidade=Rio de Janeiro&quarto=3&tipo=UNDER_CONSTRUCTION
+  body: none
+  auth: none
+}
+
+params:query {
+  cidade: Rio de Janeiro
+  quarto: 3
+  tipo: UNDER_CONSTRUCTION
+  ~regiao: Sudeste
+}
+
+docs {
+  This request retrieves a list of users from the JSONPlaceholder API.
+}

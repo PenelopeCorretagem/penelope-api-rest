@@ -38,4 +38,7 @@ public class AddressEntity {
 
     @Column(name = "complemento")
     private String complement;
+
+    @Column(name = "regiao", nullable = false)
+    private String region;
 }

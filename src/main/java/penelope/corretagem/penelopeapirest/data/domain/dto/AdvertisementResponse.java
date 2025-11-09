@@ -1,14 +1,18 @@
 package penelope.corretagem.penelopeapirest.data.domain.dto;
 
+import penelope.corretagem.penelopeapirest.data.domain.dto.AdvertisementDTO.CreatorResponse;
+import penelope.corretagem.penelopeapirest.data.domain.dto.AdvertisementDTO.ResponsibleResponse;
+
 import java.time.LocalDate;
 
 public record AdvertisementResponse(
-        String id,
-        UserRequest creator,
-        UserRequest responsible,
+        Long id,
         boolean active,
         boolean emphasis,
         LocalDate startDate,
-        LocalDate endDate
+        LocalDate endDate,
+        CreatorResponse creator,
+        ResponsibleResponse responsible,
+        EstateResponse property
 ) {
 }

@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.Set;
+
 @Entity
 @Table(name = "diferencial")
 @Getter
@@ -20,4 +22,11 @@ public class AmenitiesEntity {
 
     @Column(name = "descricao", nullable = false, unique = true)
     private String description;
+
+    @OneToMany(
+            mappedBy = "amenity",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true,
+            fetch = FetchType.LAZY)
+    private Set<AmenitiesEstateEntity> properties;
 }

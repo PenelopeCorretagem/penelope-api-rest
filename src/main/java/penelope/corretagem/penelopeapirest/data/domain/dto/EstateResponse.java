@@ -1,16 +1,21 @@
 package penelope.corretagem.penelopeapirest.data.domain.dto;
 
+import penelope.corretagem.penelopeapirest.data.domain.dto.AdvertisementDTO.AddressResponse;
+import penelope.corretagem.penelopeapirest.data.domain.dto.AdvertisementDTO.AmenitiesResponse;
+import penelope.corretagem.penelopeapirest.data.domain.dto.AdvertisementDTO.ImagesResponse;
+import penelope.corretagem.penelopeapirest.data.domain.dto.AdvertisementDTO.StandAddressResponse;
+
 import java.util.Set;
 
 public record EstateResponse(
-        String id,
+        Long id,
         String title,
         String description,
         Double area,
         Integer numberOfRooms,
         String type,
-        AddressRequest address,
-        AddressRequest addressStand,
-        Set<ImageEstateRequest> images
-) {
-}
+        AddressResponse address,
+        StandAddressResponse addressStand,
+        Set<ImagesResponse> images,
+        Set<AmenitiesResponse> amenities
+) {}

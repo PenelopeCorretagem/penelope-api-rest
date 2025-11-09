@@ -4,8 +4,8 @@ import lombok.Getter;
 
 @Getter
 public enum AccessLevel {
-  ADMIN("admin"),
-  CLIENT("cliente");
+  ADMINISTRADOR("Administrador"),
+  CLIENTE("Cliente");
 
   private final String description;
 

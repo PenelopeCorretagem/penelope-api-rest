@@ -60,6 +60,13 @@ public class EstateEntity {
             fetch = FetchType.LAZY)
     private Set<AppointmentEntity> appointments;
 
+    @OneToMany(
+            mappedBy = "estate",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true,
+            fetch = FetchType.LAZY)
+    private Set<AmenitiesEstateEntity> amenities;
+
     @Getter
     public enum Type {
         COMPLETED("Disponível"),
