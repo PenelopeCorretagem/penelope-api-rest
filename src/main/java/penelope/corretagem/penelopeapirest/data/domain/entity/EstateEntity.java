@@ -69,9 +69,9 @@ public class EstateEntity {
 
     @Getter
     public enum Type {
-        COMPLETED("Disponível"),
-        UNDER_CONSTRUCTION("Em obras"),
-        LAUNCH("Lançamento");
+        DISPONIVEL("Disponível"),
+        EM_OBRAS("Em obras"),
+        LANCAMENTO("Lançamento");
 
         private final String typeName;
 

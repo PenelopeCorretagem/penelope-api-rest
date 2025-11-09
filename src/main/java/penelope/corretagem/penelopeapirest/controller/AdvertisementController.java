@@ -2,6 +2,7 @@ package penelope.corretagem.penelopeapirest.controller;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import penelope.corretagem.penelopeapirest.data.domain.dto.AdvertisementDTO.AdvertisementFilterRequest;
 import penelope.corretagem.penelopeapirest.data.domain.dto.AdvertisementResponse;
 import penelope.corretagem.penelopeapirest.service.AdvertisementService;
 
@@ -19,11 +20,8 @@ public class AdvertisementController {
 
     @GetMapping
     public List<AdvertisementResponse> listAllActive(
-            @RequestParam(required = false) String cidade,
-            @RequestParam(required = false) String regiao,
-            @RequestParam(required = false) String tipo,
-            @RequestParam(required = false) Integer quartos) {
-        return service.getAllActiveAdvertisements(cidade, regiao, tipo, quartos);
+            @ModelAttribute AdvertisementFilterRequest request) {
+        return service.getAllActiveAdvertisements(request);
     }
 
     @GetMapping("/latest")

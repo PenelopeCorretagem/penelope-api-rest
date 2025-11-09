@@ -3,7 +3,7 @@ package penelope.corretagem.penelopeapirest.data.domain.dto;
 import java.util.Set;
 
 public record EstateRequest(
-        String id,
+        Long id,
         String title,
         String description,
         Double area,

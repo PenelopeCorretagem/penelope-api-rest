@@ -3,7 +3,7 @@ package penelope.corretagem.penelopeapirest.data.domain.dto;
 import java.time.LocalDate;
 
 public record AppointmentResponse(
-        String id,
+        Long id,
         UserRequest client,
         UserRequest estateAgent,
         EstateRequest estate,

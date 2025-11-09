@@ -5,7 +5,7 @@ import penelope.corretagem.penelopeapirest.data.domain.entity.ImageEstateEntity;
 import java.util.Set;
 
 public record ImageEstateTypeResponse(
-        String id,
+        Long id,
         String description,
         Set<ImageEstateEntity> images
 ) {

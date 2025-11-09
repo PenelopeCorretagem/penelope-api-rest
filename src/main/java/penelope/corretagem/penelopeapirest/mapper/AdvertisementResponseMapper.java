@@ -86,7 +86,7 @@ public class AdvertisementResponseMapper {
                 anuncio.getId(),
                 anuncio.isActive(),
                 anuncio.isEmphasis(),
-                anuncio.getStartDate(),
+                anuncio.getCreatedAt(),
                 anuncio.getEndDate() != null ? anuncio.getEndDate() : null,
                 creatorDto,
                 responsibleDto,

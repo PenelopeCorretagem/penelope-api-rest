@@ -4,12 +4,13 @@ import penelope.corretagem.penelopeapirest.data.domain.dto.AdvertisementDTO.Crea
 import penelope.corretagem.penelopeapirest.data.domain.dto.AdvertisementDTO.ResponsibleResponse;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 public record AdvertisementResponse(
         Long id,
         boolean active,
         boolean emphasis,
-        LocalDate startDate,
+        LocalDateTime createdAt,
         LocalDate endDate,
         CreatorResponse creator,
         ResponsibleResponse responsible,

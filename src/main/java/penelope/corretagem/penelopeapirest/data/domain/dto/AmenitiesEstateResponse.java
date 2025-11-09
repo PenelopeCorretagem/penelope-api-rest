@@ -1,7 +1,7 @@
 package penelope.corretagem.penelopeapirest.data.domain.dto;
 
 public record AmenitiesEstateResponse(
-        String id,
+        Long id,
         EstateRequest estate,
         AmenitiesRequest amenity
 ) {

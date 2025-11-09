@@ -1,7 +1,7 @@
 package penelope.corretagem.penelopeapirest.data.domain.dto;
 
 public record AddressRequest(
-        String id,
+        Long id,
         String street,
         String number,
         String neighborhood,

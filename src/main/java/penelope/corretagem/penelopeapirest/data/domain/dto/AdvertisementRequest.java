@@ -3,7 +3,7 @@ package penelope.corretagem.penelopeapirest.data.domain.dto;
 import java.time.LocalDate;
 
 public record AdvertisementRequest(
-        String id,
+        Long id,
         UserRequest creator,
         UserRequest responsible,
         boolean active,

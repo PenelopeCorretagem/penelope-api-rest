@@ -2,6 +2,7 @@ package penelope.corretagem.penelopeapirest.service;
 
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import penelope.corretagem.penelopeapirest.data.domain.dto.AdvertisementDTO.AdvertisementFilterRequest;
 import penelope.corretagem.penelopeapirest.data.domain.dto.AdvertisementResponse;
 import penelope.corretagem.penelopeapirest.data.domain.entity.AdvertisementEntity;
 import penelope.corretagem.penelopeapirest.data.domain.entity.EstateEntity;
@@ -21,17 +22,21 @@ public class AdvertisementService {
         this.repository = repository;
     }
 
-    public List<AdvertisementResponse> getAllActiveAdvertisements(String cidade, String regiao, String tipoStr, Integer quartos) {
+    public List<AdvertisementResponse> getAllActiveAdvertisements(AdvertisementFilterRequest request) {
+
         EstateEntity.Type tipo = null;
-        if (tipoStr != null) {
-            tipo = EstateEntity.Type.valueOf(tipoStr.toUpperCase());
+        if (request.tipo() != null) {
+            tipo = EstateEntity.Type.valueOf(request.tipo().toUpperCase());
         }
 
-        Specification<AdvertisementEntity> spec = AdvertisementSpecifications.hasCidade(cidade)
-                .and(AdvertisementSpecifications.hasRegiao(regiao))
+        // se o parâmetro for nulo, assume true
+        boolean ativoFinal = (request.ativo() == null) ? true : request.ativo();
+
+        Specification<AdvertisementEntity> spec = AdvertisementSpecifications.hasCidade(request.cidade())
+                .and(AdvertisementSpecifications.hasRegiao(request.regiao()))
                 .and(AdvertisementSpecifications.hasTipo(tipo))
-                .and(AdvertisementSpecifications.hasQuartos(quartos))
-                .and((root, query, cb) -> cb.isTrue(root.get("active")));
+                .and(AdvertisementSpecifications.hasQuartos(request.quartos()))
+                .and((root, query, cb) -> cb.equal(root.get("active"), ativoFinal));
 
         var anuncios = repository.findAll(spec);
 
@@ -39,6 +44,7 @@ public class AdvertisementService {
                 .map(AdvertisementResponseMapper::toDTO)
                 .collect(Collectors.toList());
     }
+
 
     public AdvertisementResponse getLatestAdvertisement() {
         return repository.findTopByOrderByCreatedAtDesc()
