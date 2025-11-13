@@ -50,6 +50,8 @@ public class UserService {
         entity.setDateCreation(LocalDate.now());
         entity.setActive(true);
 
+        entity.setPassword(passwordEncoder.encode(userRequest.password()));
+
         userRepository.save(entity);
 
         return userMapper.toUserResponse(entity);
