@@ -1,5 +1,7 @@
 package penelope.corretagem.penelopeapirest.service;
 
+import com.auth0.jwt.JWT;
+import com.auth0.jwt.algorithms.Algorithm;
 import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -27,16 +29,19 @@ public class UserService {
     private final UserMapper userMapper;
     private final PasswordEncoder passwordEncoder;
     private final EmailService emailService;
+    private final TokenService tokenService;
 
     public UserService(
-      UserRepository userRepository,
-      UserMapper userMapper,
-      PasswordEncoder passwordEncoder,
-      EmailService emailService) {
+            UserRepository userRepository,
+            UserMapper userMapper,
+            PasswordEncoder passwordEncoder,
+            EmailService emailService,
+            TokenService tokenService) {
         this.userRepository = userRepository;
         this.emailService = emailService;
         this.userMapper = userMapper;
         this.passwordEncoder = passwordEncoder;
+        this.tokenService = tokenService;
     }
 
     // Adiciona um novo usuário após verificar se o e-mail já está cadastrado.
@@ -66,6 +71,12 @@ public class UserService {
     }
 
     public UserResponse getUserById(Long id) {
+        return userRepository.findById(id)
+                .map(userMapper::toUserResponse)
+                .orElseThrow(UserNotFoundException::new);
+    }
+
+    public UserResponse getUserpasswordResetToken(Long id) {
         return userRepository.findById(id)
                 .map(userMapper::toUserResponse)
                 .orElseThrow(UserNotFoundException::new);
@@ -134,5 +145,13 @@ public class UserService {
 
         // 4. Salva o usuário com a nova senha
         userRepository.save(user);
+    }
+
+    public Long getUserIdFromToken(String token) {
+        String email = tokenService.getEmailFromToken(token);
+
+        return userRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("Usuário não encontrado"))
+                .getId();
     }
 }

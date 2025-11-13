@@ -34,8 +34,9 @@ public class AuthenticationController {
         Authentication auth = authenticationManager.authenticate(usernamePassword);
 
         String token = tokenService.generateToken((UserDetails) auth.getPrincipal());
+        Long id = userService.getUserIdFromToken(token);
 
-        return new LoginResponse(token);
+        return new LoginResponse(token, id);
     }
 
     @PostMapping("/forgot-password")
