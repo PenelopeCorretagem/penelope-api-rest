@@ -9,6 +9,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import penelope.corretagem.penelopeapirest.data.domain.dto.UserRequest;
 import penelope.corretagem.penelopeapirest.data.domain.dto.UserResponse;
+import penelope.corretagem.penelopeapirest.data.domain.dto.UserUpdateRequest;
 import penelope.corretagem.penelopeapirest.data.domain.entity.UserEntity;
 import penelope.corretagem.penelopeapirest.service.exception.UserEmailAlreadyExistsException;
 import penelope.corretagem.penelopeapirest.service.exception.InvalidTokenException;
@@ -84,14 +85,34 @@ public class UserService {
 
     // Atualiza os dados de um usuário existente com base no ID.
     @Transactional
-    public UserResponse updateUser(Long id, UserRequest request) {
-        UserEntity entity = userRepository.findById(id)
-          .orElseThrow(UserNotFoundException::new);
+    public UserResponse updateUser(Long id, UserUpdateRequest req) {
 
-        userMapper.updateUserFromRequest(request, entity);
-        userRepository.save(entity);
-        return userMapper.toUserResponse(entity);
+        UserEntity user = userRepository.findById(id)
+                .orElseThrow(UserNotFoundException::new);
+
+        if (req.name() != null)
+            user.setName(req.name());
+
+        if (req.email() != null)
+            user.setEmail(req.email());
+
+        if (req.password() != null)
+            user.setPassword(passwordEncoder.encode(req.password()));
+
+        if (req.cpf() != null)
+            user.setCpf(req.cpf());
+
+        if (req.dateBirth() != null)
+            user.setDateBirth(req.dateBirth());
+
+        if (req.monthlyIncome() != null)
+            user.setMonthlyIncome(req.monthlyIncome());
+
+        userRepository.save(user);
+
+        return userMapper.toUserResponse(user);
     }
+
 
     // Remove um usuário do sistema com base no ID.
     @Transactional
