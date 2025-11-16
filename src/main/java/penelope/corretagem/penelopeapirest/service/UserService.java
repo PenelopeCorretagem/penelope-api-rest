@@ -7,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import penelope.corretagem.penelopeapirest.data.domain.dto.UserAuthInfo;
 import penelope.corretagem.penelopeapirest.data.domain.dto.UserRequest;
 import penelope.corretagem.penelopeapirest.data.domain.dto.UserResponse;
 import penelope.corretagem.penelopeapirest.data.domain.dto.UserUpdateRequest;
@@ -168,11 +169,15 @@ public class UserService {
         userRepository.save(user);
     }
 
-    public Long getUserIdFromToken(String token) {
+    public UserAuthInfo getUserAuthInfoFromToken(String token) {
         String email = tokenService.getEmailFromToken(token);
 
-        return userRepository.findByEmail(email)
-                .orElseThrow(() -> new RuntimeException("Usuário não encontrado"))
-                .getId();
+        UserEntity user = userRepository.findByEmail(email)
+                .orElseThrow(UserNotFoundException::new);
+
+        return new UserAuthInfo(
+                user.getId(),
+                user.getAccessLevel().getDescription()
+        );
     }
 }
