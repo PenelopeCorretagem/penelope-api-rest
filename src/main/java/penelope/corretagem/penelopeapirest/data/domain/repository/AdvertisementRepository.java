@@ -1,10 +1,15 @@
 package penelope.corretagem.penelopeapirest.data.domain.repository;
 
+import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import penelope.corretagem.penelopeapirest.data.domain.entity.AdvertisementEntity;
+
+import java.util.Date;
 import java.util.Optional;
 
 @Repository
@@ -29,4 +34,17 @@ public interface AdvertisementRepository extends JpaRepository<AdvertisementEnti
     WHERE a.id = :id
     """)
     Optional<AdvertisementEntity> findByIdWithAllRelations(Long id);
+
+    @Modifying
+    @Transactional
+    @Query(value = "INSERT INTO anuncio (fk_empreendimento, fk_criador, fk_responsavel, ativo, data_fim) " +
+            "VALUES (:fkEstate, :fkCreator, :fkResponsible, :active, :endDate)", nativeQuery = true)
+    void insertAdvertisementNative(@Param("fkEstate") Long fkEstate,
+                                   @Param("fkCreator") Long fkCreator,
+                                   @Param("fkResponsible") Long fkResponsible,
+                                   @Param("active") Boolean active,
+                                   @Param("endDate") Date endDate);
+
+    @Query(value = "SELECT LAST_INSERT_ID()", nativeQuery = true)
+    Long getLastInsertId();
 }

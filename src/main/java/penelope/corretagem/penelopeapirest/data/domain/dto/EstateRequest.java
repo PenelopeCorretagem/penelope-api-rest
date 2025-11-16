@@ -11,6 +11,7 @@ public record EstateRequest(
         String type,
         AddressRequest address,
         AddressRequest addressStand,
+        Set<AmenitiesRequest> amenities,
         Set<ImageEstateRequest> images
 ) {
 }
