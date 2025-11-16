@@ -29,13 +29,16 @@ public class AuthenticationController {
 
     @PostMapping("/login")
     public LoginResponse login(@RequestBody LoginRequest loginRequest) {
-
-        var usernamePassword = new UsernamePasswordAuthenticationToken(loginRequest.email(), loginRequest.senha());
+        var usernamePassword = new UsernamePasswordAuthenticationToken(
+                loginRequest.email(),
+                loginRequest.senha()
+        );
         Authentication auth = authenticationManager.authenticate(usernamePassword);
 
         String token = tokenService.generateToken((UserDetails) auth.getPrincipal());
+        UserAuthInfo userInfo = userService.getUserAuthInfoFromToken(token);
 
-        return new LoginResponse(token);
+        return new LoginResponse(token, userInfo.id(), userInfo.accessLevel());
     }
 
     @PostMapping("/forgot-password")

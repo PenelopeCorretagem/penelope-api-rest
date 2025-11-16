@@ -1,12 +1,16 @@
 package penelope.corretagem.penelopeapirest.service;
 
+import com.auth0.jwt.JWT;
+import com.auth0.jwt.algorithms.Algorithm;
 import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import penelope.corretagem.penelopeapirest.data.domain.dto.UserAuthInfo;
 import penelope.corretagem.penelopeapirest.data.domain.dto.UserRequest;
 import penelope.corretagem.penelopeapirest.data.domain.dto.UserResponse;
+import penelope.corretagem.penelopeapirest.data.domain.dto.UserUpdateRequest;
 import penelope.corretagem.penelopeapirest.data.domain.entity.UserEntity;
 import penelope.corretagem.penelopeapirest.service.exception.UserEmailAlreadyExistsException;
 import penelope.corretagem.penelopeapirest.service.exception.InvalidTokenException;
@@ -27,16 +31,19 @@ public class UserService {
     private final UserMapper userMapper;
     private final PasswordEncoder passwordEncoder;
     private final EmailService emailService;
+    private final TokenService tokenService;
 
     public UserService(
-      UserRepository userRepository,
-      UserMapper userMapper,
-      PasswordEncoder passwordEncoder,
-      EmailService emailService) {
+            UserRepository userRepository,
+            UserMapper userMapper,
+            PasswordEncoder passwordEncoder,
+            EmailService emailService,
+            TokenService tokenService) {
         this.userRepository = userRepository;
         this.emailService = emailService;
         this.userMapper = userMapper;
         this.passwordEncoder = passwordEncoder;
+        this.tokenService = tokenService;
     }
 
     // Adiciona um novo usuário após verificar se o e-mail já está cadastrado.
@@ -49,6 +56,8 @@ public class UserService {
         UserEntity entity = userMapper.toUserEntity(userRequest);
         entity.setDateCreation(LocalDate.now());
         entity.setActive(true);
+
+        entity.setPassword(passwordEncoder.encode(userRequest.password()));
 
         userRepository.save(entity);
 
@@ -69,16 +78,45 @@ public class UserService {
                 .orElseThrow(UserNotFoundException::new);
     }
 
+    public UserResponse getUserpasswordResetToken(Long id) {
+        return userRepository.findById(id)
+                .map(userMapper::toUserResponse)
+                .orElseThrow(UserNotFoundException::new);
+    }
+
     // Atualiza os dados de um usuário existente com base no ID.
     @Transactional
-    public UserResponse updateUser(Long id, UserRequest request) {
-        UserEntity entity = userRepository.findById(id)
-          .orElseThrow(UserNotFoundException::new);
+    public UserResponse updateUser(Long id, UserUpdateRequest req) {
 
-        userMapper.updateUserFromRequest(request, entity);
-        userRepository.save(entity);
-        return userMapper.toUserResponse(entity);
+        UserEntity user = userRepository.findById(id)
+                .orElseThrow(UserNotFoundException::new);
+
+        if (req.name() != null)
+            user.setName(req.name());
+
+        if (req.email() != null)
+            user.setEmail(req.email());
+
+        if (req.password() != null)
+            user.setPassword(passwordEncoder.encode(req.password()));
+
+        if (req.cpf() != null)
+            user.setCpf(req.cpf());
+
+        if (req.dateBirth() != null)
+            user.setDateBirth(req.dateBirth());
+
+        if (req.monthlyIncome() != null)
+            user.setMonthlyIncome(req.monthlyIncome());
+
+        if (req.phone() != null)
+            user.setPhone(req.phone());
+
+        userRepository.save(user);
+
+        return userMapper.toUserResponse(user);
     }
+
 
     // Remove um usuário do sistema com base no ID.
     @Transactional
@@ -132,5 +170,17 @@ public class UserService {
 
         // 4. Salva o usuário com a nova senha
         userRepository.save(user);
+    }
+
+    public UserAuthInfo getUserAuthInfoFromToken(String token) {
+        String email = tokenService.getEmailFromToken(token);
+
+        UserEntity user = userRepository.findByEmail(email)
+                .orElseThrow(UserNotFoundException::new);
+
+        return new UserAuthInfo(
+                user.getId(),
+                user.getAccessLevel().getDescription()
+        );
     }
 }

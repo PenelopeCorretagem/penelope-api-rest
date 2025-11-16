@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
+import penelope.corretagem.penelopeapirest.data.domain.dto.ContactUsRequest;
 
 @Service
 public class EmailService {
@@ -48,5 +49,33 @@ public class EmailService {
         System.out.println("E-mail de redefinição de senha enviado para: " + toEmail);
         System.out.println("Link de redefinição: " + resetUrl);
         System.out.println("Link alternativo: " + manualUrl);
+    }
+
+    public void contactUsEmail(ContactUsRequest contactUsRequest) {
+
+        String nome = contactUsRequest.nome();
+        String email = contactUsRequest.email();
+        String assunto = contactUsRequest.assunto();
+        String mensagem = contactUsRequest.mensagem();
+
+        SimpleMailMessage message = new SimpleMailMessage();
+
+        String emailBody = String.format(
+                "Olá, alguém te enviou um email \n\n" +
+                        "Email: %s.\n\n" +
+                        "mensagem: %s.\n\n" +
+                        "Atenciosamente,\n" +
+                        "%s",
+                email,
+                mensagem,
+                nome
+        );
+
+        message.setTo("rennan.moura@sptech.school");
+        message.setCc(email);
+        message.setSubject(assunto);
+        message.setText(emailBody);
+
+        mailSender.send(message);
     }
 }

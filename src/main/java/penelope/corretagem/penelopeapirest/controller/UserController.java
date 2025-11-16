@@ -46,10 +46,11 @@ public class UserController {
 
     // Atualiza os dados de um usuário específico pelo ID.
     @PatchMapping("/{id}")
-    public ResponseEntity<UserResponse> updateUser(@PathVariable Long id,
-                                                   @Valid @RequestBody UserRequest userRequestUpdate) {
-        UserResponse response = userService.updateUser(id, userRequestUpdate);
-        return ResponseEntity.ok(response);
+    public ResponseEntity<UserResponse> update(
+            @PathVariable Long id,
+            @RequestBody UserUpdateRequest req
+    ) {
+        return ResponseEntity.ok(userService.updateUser(id, req));
     }
 
     @DeleteMapping("/{id}")
