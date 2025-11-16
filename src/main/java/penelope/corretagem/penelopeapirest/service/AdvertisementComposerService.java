@@ -100,4 +100,69 @@ public class AdvertisementComposerService {
         }
         return result;
     }
+
+    @Transactional
+    public Optional<AdvertisementEntity> updateAdvertisement(Long estateId, EstateCreateRequest estateCreateRequest
+    ) throws IOException {
+            var estate = estateRepository.findById(estateId)
+                    .orElseThrow(() -> new RuntimeException("Propriedade não encontrado"));
+
+            addressRepository.updateAddress(
+                    estate.getAddress().getId(),
+                    estateCreateRequest.address().street(),
+                    estateCreateRequest.address().number(),
+                    estateCreateRequest.address().neighborhood(),
+                    estateCreateRequest.address().city(),
+                    estateCreateRequest.address().uf(),
+                    estateCreateRequest.address().zipCode(),
+                    estateCreateRequest.address().complement(),
+                    estateCreateRequest.address().region()
+            );
+
+            addressRepository.updateAddress(
+                    estate.getStandAddress().getId(),
+                    estateCreateRequest.standAddress().street(),
+                    estateCreateRequest.standAddress().number(),
+                    estateCreateRequest.standAddress().neighborhood(),
+                    estateCreateRequest.standAddress().city(),
+                    estateCreateRequest.standAddress().uf(),
+                    estateCreateRequest.standAddress().zipCode(),
+                    estateCreateRequest.standAddress().complement(),
+                    estateCreateRequest.standAddress().region()
+            );
+
+            estateRepository.updateEstate(
+                    estateId,
+                    estateCreateRequest.title(),
+                    estateCreateRequest.description(),
+                    estateCreateRequest.area(),
+                    estateCreateRequest.numberOfRooms(),
+                    estateCreateRequest.type()
+            );
+
+            amenitiesEstateRepository.deleteAmenities(estateId);
+            for (Long featureId : estateCreateRequest.amenitiesIds()) {
+                amenitiesEstateRepository.insertFeatureNative(estateId, featureId);
+            }
+
+            imageEstateRepository.deleteImages(estateId);
+
+            for (int i = 0; i < estateCreateRequest.images().size(); i++) {
+                imageEstateRepository.insertImageNative(
+                        estateId,
+                        estateCreateRequest.imageType().get(i),
+                        estateCreateRequest.images().get(i)
+                );
+            }
+
+            advertisementRepository.updateAdvertisement(
+                    estateId,
+                    estateCreateRequest.advertisementCreateRequest().creator(),
+                    estateCreateRequest.advertisementCreateRequest().responsible(),
+                    estateCreateRequest.advertisementCreateRequest().active(),
+                    estateCreateRequest.advertisementCreateRequest().dataFim()
+            );
+
+            return advertisementRepository.findByEstateId(estateId);
+        }
 }

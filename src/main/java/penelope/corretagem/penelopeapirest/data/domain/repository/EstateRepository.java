@@ -24,4 +24,23 @@ public interface EstateRepository extends JpaRepository<EstateEntity, Long> {
 
     @Query(value = "SELECT LAST_INSERT_ID()", nativeQuery = true)
     Long getLastInsertId();
+
+    @Modifying
+    @Query(value = """
+        UPDATE empreendimento 
+        SET titulo = :title,
+            descricao = :description,
+            area = :area,
+            quartos = :rooms,
+            tipo = :type
+        WHERE id = :id
+        """, nativeQuery = true)
+    void updateEstate(
+            Long id,
+            String title,
+            String description,
+            Double area,
+            Integer rooms,
+            String type);
+
 }
