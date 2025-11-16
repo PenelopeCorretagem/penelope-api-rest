@@ -8,8 +8,8 @@ import java.time.LocalDateTime;
 
 public record AdvertisementResponse(
         Long id,
-        boolean active,
-        boolean emphasis,
+        Boolean active,
+        Boolean emphasis,
         LocalDateTime createdAt,
         LocalDate endDate,
         CreatorResponse creator,

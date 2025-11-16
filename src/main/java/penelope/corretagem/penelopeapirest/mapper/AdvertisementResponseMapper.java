@@ -84,8 +84,8 @@ public class AdvertisementResponseMapper {
         // Retorno do anúncio
         return new AdvertisementResponse(
                 anuncio.getId(),
-                anuncio.isActive(),
-                anuncio.isEmphasis(),
+                anuncio.getActive(),
+                anuncio.getEmphasis(),
                 anuncio.getCreatedAt(),
                 anuncio.getEndDate() != null ? anuncio.getEndDate() : null,
                 creatorDto,

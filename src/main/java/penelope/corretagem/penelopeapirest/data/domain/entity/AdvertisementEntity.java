@@ -34,10 +34,10 @@ public class AdvertisementEntity {
     private UserEntity responsible;
 
     @Column(name = "ativo", nullable = false)
-    private boolean active;
+    private Boolean active;
 
-    @Column(name = "destaque", nullable = false)
-    private boolean emphasis;
+    @Column(name = "destaque", nullable = true)
+    private Boolean emphasis;
 
     @Column(name = "data_fim", nullable = false)
     private LocalDate endDate;
