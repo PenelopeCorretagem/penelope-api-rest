@@ -15,8 +15,7 @@ public record EstateCreateRequest(
         AdvertisementCreateRequest advertisementCreateRequest,
         AddressRequest address,
         AddressRequest standAddress,
-
         List<Long> amenitiesIds,
-
-        List<ImageUploadRequest> images
+        List<String> images,
+        List<Integer> imageType
 ) {}

@@ -9,6 +9,7 @@ import penelope.corretagem.penelopeapirest.data.domain.repository.*;
 import penelope.corretagem.penelopeapirest.mapper.AddressMapper;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -63,32 +64,19 @@ public class AdvertisementComposerService {
         Long idEstate = estateRepository.getLastInsertId();
 
 
-//        if (files != null && !files.isEmpty()) {
-//            for (int i = 0; i < files.size(); i++) {
-//                MultipartFile file = files.get(i);
-//                String tipoImagem = imageTypes.get(i);
-//                int idTipoImagem = 0;
-//
-//                String uploadedUrl = cloudinaryService.uploadImage(file);
-//
-//                if (tipoImagem.equals("capa")){
-//                    idTipoImagem = 0;
-//                }
-//                else if(tipoImagem.equals("galeria")){
-//                    idTipoImagem = 1;
-//                }
-//                else if (tipoImagem.equals("planta")){
-//                    idTipoImagem = 2;
-//                }
-//
-//                imageEstateRepository.insertImageNative(idEstate, idTipoImagem, uploadedUrl);
-//            }
-//        }
+        if (estateCreateRequest.images() != null && !estateCreateRequest.images().isEmpty()) {
+            for (int i = 0; i < estateCreateRequest.images().size(); i++) {
+                String url = estateCreateRequest.images().get(i);
+                Integer imageType = estateCreateRequest.imageType().get(i);
 
-//        for (int i = 0; i < estateCreateRequest.amenitiesIds().size(); i++) {
-//            Long featureId = estateCreateRequest.amenitiesIds().get(i);
-//            amenitiesEstateRepository.insertFeatureNative(idEstate, featureId);
-//        }
+                imageEstateRepository.insertImageNative(idEstate, imageType, url);
+            }
+        }
+
+        for (int i = 0; i < estateCreateRequest.amenitiesIds().size(); i++) {
+            Long featureId = estateCreateRequest.amenitiesIds().get(i);
+            amenitiesEstateRepository.insertFeatureNative(idEstate, featureId);
+        }
 
         advertisementRepository.insertAdvertisementNative(idEstate,
                 estateCreateRequest.advertisementCreateRequest().creator(),
@@ -99,5 +87,17 @@ public class AdvertisementComposerService {
         Long advertisementId = advertisementRepository.getLastInsertId();
 
         return advertisementRepository.findById(advertisementId);
+    }
+
+
+    @Transactional
+    public List<String> uploadImages(List<MultipartFile> files) throws IOException {
+        List<String> result = new ArrayList<>();
+
+        for (MultipartFile file : files) {
+            String url = cloudinaryService.uploadImage(file);
+            result.add(url);
+        }
+        return result;
     }
 }

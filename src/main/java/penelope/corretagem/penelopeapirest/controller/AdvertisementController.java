@@ -54,14 +54,17 @@ public class AdvertisementController {
         }
     }
 
-    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PostMapping(consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
     public ResponseEntity<Optional<AdvertisementEntity>> create(
-            @RequestPart("data") EstateCreateRequest request
-//            @RequestPart("files") List<MultipartFile> files,
-//            @RequestPart("imageTypes") List<String> imageTypes
-    ) throws IOException {
+            @RequestPart("data") EstateCreateRequest request) throws IOException {
         Optional<AdvertisementEntity> response = composerService.createAdvertisement(request);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
+    @PostMapping(value = "/fotos", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<List<String>> uploadImages(
+            @RequestPart("files") List<MultipartFile> files) throws IOException {
+        List<String> result = composerService.uploadImages(files);
+        return ResponseEntity.ok(result);
+    }
 }
