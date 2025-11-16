@@ -9,7 +9,7 @@ server:
 spring:
   datasource:
     # URL do banco H2 em memória
-    url: jdbc:mysql://localhost:3306/penelopec?useSSL=false&serverTimezone=UTC
+    url: jdbc:mysql://localhost:3306/penelopec?allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=UTC
     driverClassName: com.mysql.cj.jdbc.Driver
     username: root
     password: ${DB_PASSWORD}

@@ -54,9 +54,9 @@ public class AdvertisementController {
         }
     }
 
-    @PostMapping(consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
+    @PostMapping
     public ResponseEntity<Optional<AdvertisementEntity>> create(
-            @RequestPart("data") EstateCreateRequest request) throws IOException {
+            @RequestBody EstateCreateRequest request) throws IOException {
         Optional<AdvertisementEntity> response = composerService.createAdvertisement(request);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
