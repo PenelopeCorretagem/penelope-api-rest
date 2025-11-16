@@ -8,6 +8,7 @@ public record AddressResponse(
         String city,
         String uf,
         String zipCode,
-        String complement
+        String complement,
+        String region
 ) {
 }

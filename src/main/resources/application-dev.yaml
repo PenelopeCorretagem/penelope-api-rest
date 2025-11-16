@@ -2,6 +2,9 @@
 server:
   # Usar uma porta diferente para não conflitar com outros serviços
   port: 8081
+  tomcat:
+    max-http-form-post-size: 20MB
+
 
 spring:
   datasource:
@@ -10,6 +13,11 @@ spring:
     driverClassName: com.mysql.cj.jdbc.Driver
     username: root
     password: ${DB_PASSWORD}
+
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 20MB
 
   jpa:
     # Mostra o SQL gerado pelo Hibernate no console
@@ -55,3 +63,8 @@ api:
 app:
   frontend:
     url: http://localhost:8080
+
+cloudinary:
+  cloud-name: ${CLOUDINARY_CLOUD_NAME}
+  api-key: ${CLOUDINARY_API_KEY}
+  api-secret: ${CLOUDINARY_API_SECRET}

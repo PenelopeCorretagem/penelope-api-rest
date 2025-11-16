@@ -4,38 +4,65 @@ import org.mapstruct.Mapper;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.ReportingPolicy;
 import penelope.corretagem.penelopeapirest.data.domain.dto.AdvertisementDTO.AmenitiesResponse;
+import penelope.corretagem.penelopeapirest.data.domain.dto.AmenitiesRequest;
 import penelope.corretagem.penelopeapirest.data.domain.dto.EstateRequest;
 import penelope.corretagem.penelopeapirest.data.domain.dto.EstateResponse;
-import penelope.corretagem.penelopeapirest.data.domain.entity.AmenitiesEstateEntity;
-import penelope.corretagem.penelopeapirest.data.domain.entity.EstateEntity;
-import penelope.corretagem.penelopeapirest.data.domain.entity.ImageEstateTypeEntity;
+import penelope.corretagem.penelopeapirest.data.domain.entity.*;
 
 import java.util.Set;
 import java.util.stream.Collectors;
 
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
-  public interface EstateMapper {
+public interface EstateMapper {
 
+  // --- Entity → Response ---
   EstateResponse toResponse(EstateEntity estate);
-
-  EstateEntity toEntity(EstateRequest estate);
-
-  void updateEntityFromRequest(EstateRequest estateRequest, @MappingTarget EstateEntity estateEntity);
 
   default String map(ImageEstateTypeEntity type) {
     return type != null ? type.getDescription() : null;
   }
 
-  // Método auxiliar para mapear um AmenitiesEstateEntity para AmenitiesResponse
   default AmenitiesResponse map(AmenitiesEstateEntity entity) {
+    if (entity == null || entity.getAmenity() == null) return null;
     return new AmenitiesResponse(
-            entity.getAmenity().getId(),           // pega o id do diferencial
-            entity.getAmenity().getDescription()   // pega a descrição
+            entity.getAmenity().getId(),
+            entity.getAmenity().getDescription()
     );
   }
 
-  // Método auxiliar para mapear um conjunto de AmenitiesEstateEntity para um Set de AmenitiesResponse
   default Set<AmenitiesResponse> mapAmenities(Set<AmenitiesEstateEntity> amenities) {
+    if (amenities == null) return null;
     return amenities.stream().map(this::map).collect(Collectors.toSet());
   }
+
+  // --- Request → Entity ---
+  EstateEntity toEntity(EstateRequest estate);
+
+  void updateEntityFromRequest(EstateRequest estateRequest, @MappingTarget EstateEntity estateEntity);
+
+  // Converte AmenitiesRequest → AmenitiesEstateEntity
+  default AmenitiesEstateEntity map(AmenitiesRequest request) {
+    if (request == null) return null;
+    AmenitiesEstateEntity entity = new AmenitiesEstateEntity();
+    AmenitiesEstateId pk = new AmenitiesEstateId();
+    pk.setId(request.id());
+    entity.setId(pk);
+    return entity;
+  }
+
+  // Converte Set<AmenitiesRequest> → Set<AmenitiesEstateEntity>
+  default Set<AmenitiesEstateEntity> mapAmenitiesRequestSet(Set<AmenitiesRequest> requests) {
+    if (requests == null) return null;
+    return requests.stream()
+            .map(this::map)
+            .collect(Collectors.toSet());
+  }
+
+  // Atualiza amenities no updateEntityFromRequest
+  default void updateAmenitiesFromRequest(EstateRequest request, EstateEntity entity) {
+    if (request.amenities() != null) {
+      entity.setAmenities(mapAmenitiesRequestSet(request.amenities()));
+    }
+  }
 }
+

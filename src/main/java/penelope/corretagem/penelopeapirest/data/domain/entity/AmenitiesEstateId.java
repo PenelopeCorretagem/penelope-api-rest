@@ -32,4 +32,7 @@ public class AmenitiesEstateId implements Serializable {
     public int hashCode() {
         return Objects.hash(estate, amenity);
     }
+
+    public void setId(Long id) {
+    }
 }

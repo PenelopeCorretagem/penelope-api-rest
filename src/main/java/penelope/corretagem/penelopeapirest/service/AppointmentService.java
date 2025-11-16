@@ -6,10 +6,10 @@ import penelope.corretagem.penelopeapirest.data.domain.repository.AppointmentRep
 @Service
 public class AppointmentService {
 
-  private AppointmentRepository appointmentRepository;
-
-  public AppointmentService(AppointmentRepository appointmentRepository) {
-    this.appointmentRepository = appointmentRepository;
-  }
+//  private AppointmentRepository appointmentRepository;
+//
+//  public AppointmentService(AppointmentRepository appointmentRepository) {
+//    this.appointmentRepository = appointmentRepository;
+//  }
 
 }
