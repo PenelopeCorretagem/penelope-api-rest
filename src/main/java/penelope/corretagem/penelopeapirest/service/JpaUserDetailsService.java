@@ -5,7 +5,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-import penelope.corretagem.penelopeapirest.repository.UserRepository;
+import penelope.corretagem.penelopeapirest.data.domain.repository.UserRepository;
 
 import java.util.Collections;
 
@@ -24,7 +24,7 @@ public class JpaUserDetailsService implements UserDetailsService {
         return userRepository.findByEmail(email)
                 .map(userEntity -> User.withUsername(
                         userEntity.getEmail())
-                        .password(userEntity.getSenha())
+                        .password(userEntity.getPassword())
                         .authorities(Collections.emptyList()) // Criação futura de roles (ex: "ROLE_ADMIN")
                         .build())
                 .orElseThrow(() -> new UsernameNotFoundException("Usuário não encontrado com o e-mail: " + email));

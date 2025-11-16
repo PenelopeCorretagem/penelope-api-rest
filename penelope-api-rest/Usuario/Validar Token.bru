@@ -1,0 +1,22 @@
+meta {
+  name: Validar Token
+  type: http
+  seq: 3
+}
+
+post {
+  url: http://localhost:8081/api/v1/auth/validate-token
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "token": "779b95b1-ddcf-4340-a641-511e4eafa372"
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

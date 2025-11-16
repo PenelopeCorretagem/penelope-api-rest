@@ -2,16 +2,16 @@ package penelope.corretagem.penelopeapirest.controller;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import penelope.corretagem.penelopeapirest.dto.UserRequest;
-import penelope.corretagem.penelopeapirest.dto.UserResponse;
+import penelope.corretagem.penelopeapirest.data.domain.dto.*;
 import penelope.corretagem.penelopeapirest.service.UserService;
 
 import java.util.List;
 
-@Tag(name="Usuários")
+@Tag(name = "Usuários")
 @RestController
 @RequestMapping("/users")
 public class UserController {
@@ -39,17 +39,23 @@ public class UserController {
         return ResponseEntity.ok(users);
     }
 
-    // Atualiza os dados de um usuário específico pelo ID.
-    @PatchMapping("/{id}")
-    public ResponseEntity<UserResponse> updateUser(@PathVariable Long id,
-                                                   @Valid @RequestBody UserRequest userRequestUpdate) {
-        UserResponse response = userService.updateUser(id, userRequestUpdate);
-        return ResponseEntity.ok(response);
+    @GetMapping("/{id}")
+    public ResponseEntity<UserResponse> getUserById(@PathVariable @NotNull Long id) {
+        return ResponseEntity.ok(userService.getUserById(id));
     }
 
-    // Remove um usuário específico pelo ID.
+    // Atualiza os dados de um usuário específico pelo ID.
+    @PatchMapping("/{id}")
+    public ResponseEntity<UserResponse> update(
+            @PathVariable Long id,
+            @RequestBody UserUpdateRequest req
+    ) {
+        return ResponseEntity.ok(userService.updateUser(id, req));
+    }
+
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
-        return userService.deleteUser(id);
+    public ResponseEntity<UserResponse> deleteClient(@PathVariable Long id) {
+        userService.deleteUser(id);
+        return ResponseEntity.noContent().build();
     }
 }
