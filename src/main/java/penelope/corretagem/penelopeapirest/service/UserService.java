@@ -109,6 +109,9 @@ public class UserService {
         if (req.monthlyIncome() != null)
             user.setMonthlyIncome(req.monthlyIncome());
 
+        if (req.phone() != null)
+            user.setPhone(req.phone());
+
         userRepository.save(user);
 
         return userMapper.toUserResponse(user);

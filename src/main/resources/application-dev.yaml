@@ -21,7 +21,7 @@ spring:
         format_sql: true
     hibernate:
       # Cria e destrói o esquema do banco a cada inicialização (útil para testes)
-      ddl-auto: update
+      ddl-auto: create-drop
   mail:
     host: smtp.gmail.com
     port: 587

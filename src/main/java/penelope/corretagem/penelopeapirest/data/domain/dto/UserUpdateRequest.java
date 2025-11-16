@@ -13,6 +13,7 @@ public record UserUpdateRequest(
         @JsonProperty("senha") String password,
         String cpf,
         @JsonProperty("dtNascimento") LocalDate dateBirth,
-        @JsonProperty("rendaMensal") BigDecimal monthlyIncome
+        @JsonProperty("rendaMensal") BigDecimal monthlyIncome,
+        String phone
 ) {
 }
