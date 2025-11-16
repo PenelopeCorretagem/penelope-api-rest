@@ -1,5 +1,6 @@
 package penelope.corretagem.penelopeapirest.controller;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -13,6 +14,7 @@ import penelope.corretagem.penelopeapirest.data.domain.dto.*;
 import penelope.corretagem.penelopeapirest.service.TokenService;
 import penelope.corretagem.penelopeapirest.service.UserService;
 
+@Tag(name = "Autenticação")
 @RestController
 @RequestMapping("/auth")
 public class AuthenticationController {

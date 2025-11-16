@@ -1,5 +1,6 @@
 package penelope.corretagem.penelopeapirest.controller;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +17,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
+@Tag(name = "Anúncios")
 @RestController
 @RequestMapping("/anuncios")
 public class AdvertisementController {
