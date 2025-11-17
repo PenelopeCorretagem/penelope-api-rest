@@ -8,15 +8,15 @@ import penelope.corretagem.penelopeapirest.data.domain.entity.AddressEntity;
 public interface AddressRepository extends JpaRepository<AddressEntity, Long> {
     @Modifying
     @Query(value = """
-        UPDATE address
-        SET street = :street,
-            number = :number,
-            neighborhood = :neighborhood,
-            city = :city,
+        UPDATE endereco
+        SET rua = :street,
+            numero = :number,
+            bairro = :neighborhood,
+            cidade = :city,
             uf = :uf,
-            zip_code = :zipCode,
-            complement = :complement,
-            region = :region
+            cep = :zipCode,
+            complemento = :complement,
+            regiao = :region
         WHERE id = :id
         """, nativeQuery = true)
     void updateAddress(

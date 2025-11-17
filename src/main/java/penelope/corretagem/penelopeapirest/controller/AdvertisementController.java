@@ -72,12 +72,10 @@ public class AdvertisementController {
 
     @PutMapping("/{id}")
     public ResponseEntity<Optional<AdvertisementEntity>> updateAdvertisement(
-            @PathVariable Long estateId,
+            @PathVariable("id") Long estateId,
             @RequestBody EstateCreateRequest request) throws IOException {
 
         Optional<AdvertisementEntity> response = composerService.updateAdvertisement(estateId, request);
-        return response.isPresent()
-                ? ResponseEntity.ok(response)
-                : ResponseEntity.notFound().build();
+        return ResponseEntity.noContent().build();
     }
 }
