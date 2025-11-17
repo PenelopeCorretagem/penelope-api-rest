@@ -18,7 +18,7 @@ import java.util.Optional;
 public class AdvertisementComposerService {
     private final AddressRepository addressRepository;
     private final EstateRepository estateRepository;
-    private final CloudinaryService cloudinaryService;
+//    private final CloudinaryService cloudinaryService;
     private final AddressMapper addressMapper;
     private final ImageEstateRepository imageEstateRepository;
     private final AmenitiesEstateRepository amenitiesEstateRepository;
@@ -26,14 +26,14 @@ public class AdvertisementComposerService {
 
     public AdvertisementComposerService(AddressRepository addressRepository,
                                         EstateRepository estateRepository,
-                                        CloudinaryService cloudinaryService,
+                                        /* CloudinaryService cloudinaryService, */
                                         AddressMapper addressMapper,
                                         ImageEstateRepository imageEstateRepository,
                                         AmenitiesEstateRepository amenitiesEstateRepository,
                                         AdvertisementRepository advertisementRepository) {
         this.addressRepository = addressRepository;
         this.estateRepository = estateRepository;
-        this.cloudinaryService = cloudinaryService;
+        /* this.cloudinaryService = cloudinaryService; */
         this.addressMapper = addressMapper;
         this.imageEstateRepository = imageEstateRepository;
         this.amenitiesEstateRepository = amenitiesEstateRepository;
@@ -90,14 +90,14 @@ public class AdvertisementComposerService {
     }
 
 
-    @Transactional
-    public List<String> uploadImages(List<MultipartFile> files) throws IOException {
-        List<String> result = new ArrayList<>();
-
-        for (MultipartFile file : files) {
-            String url = cloudinaryService.uploadImage(file);
-            result.add(url);
-        }
-        return result;
-    }
+//    @Transactional
+//    public List<String> uploadImages(List<MultipartFile> files) throws IOException {
+//        List<String> result = new ArrayList<>();
+//
+//        for (MultipartFile file : files) {
+//            String url = cloudinaryService.uploadImage(file);
+//            result.add(url);
+//        }
+//        return result;
+//    }
 }

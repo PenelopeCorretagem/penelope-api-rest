@@ -9,6 +9,7 @@ public record Payload(
   String status,
   OffsetDateTime startTime,
   OffsetDateTime endTime,
+  Long eventTypeId,
   List<Attendee> attendees,
   Organizer organizer,
   Map<String, String> metadata

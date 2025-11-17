@@ -62,11 +62,11 @@ public class AdvertisementController {
         Optional<AdvertisementEntity> response = composerService.createAdvertisement(request);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
-
-    @PostMapping(value = "/fotos", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<List<String>> uploadImages(
-            @RequestPart("files") List<MultipartFile> files) throws IOException {
-        List<String> result = composerService.uploadImages(files);
-        return ResponseEntity.ok(result);
-    }
+//
+//    @PostMapping(value = "/fotos", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+//    public ResponseEntity<List<String>> uploadImages(
+//            @RequestPart("files") List<MultipartFile> files) throws IOException {
+//        List<String> result = composerService.uploadImages(files);
+//        return ResponseEntity.ok(result);
+//    }
 }

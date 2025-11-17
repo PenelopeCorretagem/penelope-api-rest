@@ -5,9 +5,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import java.math.BigDecimal;
-import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -45,6 +42,9 @@ public class EstateEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "fk_endereco_stand", referencedColumnName = "id", nullable = false)
     private AddressEntity standAddress;
+
+    @Column(name = "cal_event_type_id")
+    private Long calEventTypeId;
 
     @OneToMany(
             mappedBy = "estate",
