@@ -7,10 +7,12 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import penelope.corretagem.penelopeapirest.data.domain.dto.cal.CalWebhookRequest;
+import penelope.corretagem.penelopeapirest.data.domain.entity.AdvertisementEntity;
 import penelope.corretagem.penelopeapirest.data.domain.entity.AppointmentEntity;
 import penelope.corretagem.penelopeapirest.data.domain.entity.EstateEntity;
 import penelope.corretagem.penelopeapirest.data.domain.entity.UserEntity;
 import penelope.corretagem.penelopeapirest.data.domain.enums.Status;
+import penelope.corretagem.penelopeapirest.data.domain.repository.AdvertisementRepository;
 import penelope.corretagem.penelopeapirest.data.domain.repository.AppointmentRepository;
 import penelope.corretagem.penelopeapirest.data.domain.repository.EstateRepository;
 import penelope.corretagem.penelopeapirest.data.domain.repository.UserRepository;
@@ -34,6 +36,7 @@ public class WebhookService {
     private final AppointmentRepository appointmentRepository;
     private final UserRepository userRepository;
     private final EstateRepository estateRepository;
+    private final AdvertisementRepository advertisementRepository;
 
     @Value("${calcom.webhook.secret}")
     private String webhookSecret;
@@ -42,13 +45,14 @@ public class WebhookService {
             ObjectMapper mapper,
             AppointmentRepository appointmentRepository,
             UserRepository userRepository,
-            EstateRepository estateRepository
-    ) {
+            EstateRepository estateRepository,
+            AdvertisementRepository advertisementRepository) {
         this.mapper = mapper;
         this.appointmentRepository = appointmentRepository;
         this.userRepository = userRepository;
         this.estateRepository = estateRepository;
         this.mapper.registerModule(new JavaTimeModule());
+        this.advertisementRepository = advertisementRepository;
     }
 
     public void processAppointment(String rawBody, String signature) {
@@ -86,27 +90,12 @@ public class WebhookService {
                 .flatMap(attendee -> userRepository.findByEmail(attendee.email()))
                 .orElseThrow(() -> new RuntimeException("Convidado do agendamento não encontrado"));
 
-        Optional<Map<String, String>> metadata = Optional.ofNullable(webhook.payload().metadata());
+        AdvertisementEntity advertisement = advertisementRepository.findByEventTypeId(webhook.payload().eventTypeId());
 
-        Long estateId = metadata
-                .map(md -> md.get("imovelId"))
-                .map(Long::parseLong)
-                .orElseThrow(() -> new RuntimeException("Imóvel não encontrado nos metadados"));
-
-        Long agentId = metadata
-                .map(md -> md.get("agentId"))
-                .map(Long::parseLong)
-                .orElseThrow(() -> new RuntimeException("Corretor não encontrado nos metadados"));
-
-        Long calBookingId = metadata
-                .map(md -> md.get("bookingId"))
-                .map(Long::parseLong)
-                .orElse(null);
-
-        EstateEntity property = estateRepository.findById(estateId)
+        EstateEntity property = estateRepository.findById(advertisement.getProperty().getId())
                 .orElseThrow(() -> new RuntimeException("Imóvel não encontrado no banco de dados"));
 
-        UserEntity agent = userRepository.findById(agentId)
+        UserEntity agent = userRepository.findById(advertisement.getResponsible().getId())
                 .orElseThrow(() -> new RuntimeException("Corretor não encontrado no banco de dados"));
 
         AppointmentEntity newAppointment = new AppointmentEntity();
@@ -117,7 +106,7 @@ public class WebhookService {
         newAppointment.setStartDateTime(webhook.payload().startTime().toLocalDateTime());
         newAppointment.setEndDateTime(webhook.payload().endTime().toLocalDateTime());
         newAppointment.setDateAppointment(webhook.payload().startTime().toLocalDateTime());
-        newAppointment.setCalBookingId(calBookingId);
+        newAppointment.setCalBookingId(webhook.payload().bookingId());
 
         int duration = (int) Duration.between(
                 webhook.payload().startTime().toLocalDateTime(),

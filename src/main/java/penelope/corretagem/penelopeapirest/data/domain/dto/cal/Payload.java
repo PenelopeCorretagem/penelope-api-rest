@@ -12,5 +12,6 @@ public record Payload(
   Long eventTypeId,
   List<Attendee> attendees,
   Organizer organizer,
-  Map<String, String> metadata
+  Map<String, String> metadata,
+  Long bookingId
 ) {}

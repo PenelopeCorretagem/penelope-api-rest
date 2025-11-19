@@ -2,7 +2,7 @@ package penelope.corretagem.penelopeapirest.data.domain.dto.cal.eventtype;
 
 import java.time.OffsetDateTime;
 
-public record EventTypeResponse(
+public record EventTypeCalResponse(
         Long id,
         String title,
         String slug,

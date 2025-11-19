@@ -8,7 +8,7 @@ import penelope.corretagem.penelopeapirest.data.domain.dto.ApiResponseWrapper;
 import penelope.corretagem.penelopeapirest.data.domain.dto.cal.CalUser;
 import penelope.corretagem.penelopeapirest.data.domain.dto.cal.booking.*;
 import penelope.corretagem.penelopeapirest.data.domain.dto.cal.eventtype.EventTypeRequest;
-import penelope.corretagem.penelopeapirest.data.domain.dto.cal.eventtype.EventTypeResponse;
+import penelope.corretagem.penelopeapirest.data.domain.dto.cal.eventtype.EventTypeCalResponse;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
@@ -19,9 +19,9 @@ public class CalClient {
   private final RestClient eventTypeRestClient;
   private final RestClient bookingRestClient;
 
-  private static final ParameterizedTypeReference<ApiResponseWrapper<List<EventTypeResponse>>> WRAPPER_LIST_EVENT_TYPE =
+  private static final ParameterizedTypeReference<ApiResponseWrapper<List<EventTypeCalResponse>>> WRAPPER_LIST_EVENT_TYPE =
     new ParameterizedTypeReference<>() {};
-  private static final ParameterizedTypeReference<ApiResponseWrapper<EventTypeResponse>> WRAPPER_EVENT_TYPE =
+  private static final ParameterizedTypeReference<ApiResponseWrapper<EventTypeCalResponse>> WRAPPER_EVENT_TYPE =
     new ParameterizedTypeReference<>() {};
   private static final ParameterizedTypeReference<ApiResponseWrapper<List<BookingResponse>>> WRAPPER_LIST_BOOKINGS =
     new ParameterizedTypeReference<>() {};
@@ -47,7 +47,7 @@ public class CalClient {
     .orElse(null);
   }
 
-  public EventTypeResponse createEventType(EventTypeRequest request) {
+  public EventTypeCalResponse createEventType(EventTypeRequest request) {
     return Optional.ofNullable(
       eventTypeRestClient.post()
         .uri("/v2/event-types")
@@ -58,7 +58,7 @@ public class CalClient {
     .orElse(null);
   }
 
-  public List<EventTypeResponse> listEventTypes(String username) {
+  public List<EventTypeCalResponse> listEventTypes(String username) {
 
     return Optional.ofNullable(
       eventTypeRestClient.get()
@@ -72,7 +72,7 @@ public class CalClient {
     .orElse(List.of());
   }
 
-  public EventTypeResponse getEventType(Long id) {
+  public EventTypeCalResponse getEventType(Long id) {
     return Optional.ofNullable(
       eventTypeRestClient.get()
         .uri("/v2/event-types/{id}", id)
@@ -82,7 +82,7 @@ public class CalClient {
     .orElse(null);
   }
 
-  public EventTypeResponse updateEventType(Long id, EventTypeRequest request) {
+  public EventTypeCalResponse updateEventType(Long id, EventTypeRequest request) {
     return Optional.ofNullable(
       eventTypeRestClient.patch()
         .uri("/v2/event-types/{id}", id)

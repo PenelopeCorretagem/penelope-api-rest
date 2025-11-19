@@ -81,6 +81,11 @@ public class AdvertisementResponseMapper {
                 amenitiesDto
         );
 
+        var eventTypeDto = new EventTypeResponse(
+                anuncio.getEventType().getId(),
+                anuncio.getEventType().getTitle(),
+                anuncio.getEventType().getSlug());
+
         // Retorno do anúncio
         return new AdvertisementResponse(
                 anuncio.getId(),
@@ -90,7 +95,7 @@ public class AdvertisementResponseMapper {
                 anuncio.getEndDate() != null ? anuncio.getEndDate() : null,
                 creatorDto,
                 responsibleDto,
-                estateDto
-        );
+                estateDto,
+                eventTypeDto);
     }
 }

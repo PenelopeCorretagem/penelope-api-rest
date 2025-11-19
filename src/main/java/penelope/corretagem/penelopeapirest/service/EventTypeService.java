@@ -5,9 +5,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import penelope.corretagem.penelopeapirest.clients.CalClient;
 import penelope.corretagem.penelopeapirest.data.domain.dto.cal.eventtype.EventTypeRequest;
-import penelope.corretagem.penelopeapirest.data.domain.dto.cal.eventtype.EventTypeResponse;
+import penelope.corretagem.penelopeapirest.data.domain.dto.cal.eventtype.EventTypeCalResponse;
 import penelope.corretagem.penelopeapirest.data.domain.entity.EstateEntity;
+import penelope.corretagem.penelopeapirest.data.domain.entity.EventTypeEntity;
 import penelope.corretagem.penelopeapirest.data.domain.repository.EstateRepository;
+import penelope.corretagem.penelopeapirest.data.domain.repository.EventTypeRepository;
 
 import java.util.List;
 
@@ -18,16 +20,18 @@ public class EventTypeService {
 
     private final CalClient calClient;
     private final EstateRepository estateRepository;
+    private final EventTypeRepository eventTypeRepository;
 
-    public EventTypeService(CalClient calClient, EstateRepository estateRepository) {
+    public EventTypeService(CalClient calClient, EstateRepository estateRepository, EventTypeRepository eventTypeRepository) {
         this.calClient = calClient;
         this.estateRepository = estateRepository;
+        this.eventTypeRepository = eventTypeRepository;
     }
 
     /**
      * Cria um Event Type no Cal.com quando uma nova localização (Estate) é criada
      */
-    public EventTypeResponse createEventTypeForEstate(Long estateId) {
+    public EventTypeCalResponse createEventTypeForEstate(Long estateId) {
       logger.info("Criando Event Type para o imóvel ID: {}", estateId);
 
       EstateEntity estate = estateRepository.findById(estateId)
@@ -44,11 +48,14 @@ public class EventTypeService {
         );
 
         try {
-          EventTypeResponse response = calClient.createEventType(request);
+          EventTypeCalResponse response = calClient.createEventType(request);
 
           if (response != null) {
-            estate.setCalEventTypeId(response.id());
-            estateRepository.save(estate);
+            eventTypeRepository.save(new EventTypeEntity(
+                    response.id(),
+                    response.title(),
+                    response.slug()
+            ));
             logger.info("Event Type criado com sucesso. ID: {} para imóvel: {}", response.id(), estateId);
           }
 
@@ -62,7 +69,7 @@ public class EventTypeService {
     /**
      * Atualiza um Event Type existente quando os dados do imóvel mudam
      */
-    public EventTypeResponse updateEventTypeForEstate(Long estateId) {
+    public EventTypeCalResponse updateEventTypeForEstate(Long estateId) {
       logger.info("Atualizando Event Type para o imóvel ID: {}", estateId);
 
       EstateEntity estate = estateRepository.findById(estateId)
@@ -95,7 +102,7 @@ public class EventTypeService {
     /**
      * Lista todos os Event Types
      */
-    public List<EventTypeResponse> listAllEventTypes() {
+    public List<EventTypeCalResponse> listAllEventTypes() {
       logger.info("Listando todos os Event Types");
 
       try {
@@ -110,7 +117,7 @@ public class EventTypeService {
     /**
      * Busca um Event Type específico
      */
-    public EventTypeResponse getEventType(Long eventTypeId) {
+    public EventTypeCalResponse getEventType(Long eventTypeId) {
       logger.info("Buscando Event Type ID: {}", eventTypeId);
 
       try {

@@ -23,6 +23,7 @@ public class AdvertisementComposerService {
     private final ImageEstateRepository imageEstateRepository;
     private final AmenitiesEstateRepository amenitiesEstateRepository;
     private final AdvertisementRepository advertisementRepository;
+    private final EventTypeService eventTypeService;
 
     public AdvertisementComposerService(AddressRepository addressRepository,
                                         EstateRepository estateRepository,
@@ -30,7 +31,7 @@ public class AdvertisementComposerService {
                                         AddressMapper addressMapper,
                                         ImageEstateRepository imageEstateRepository,
                                         AmenitiesEstateRepository amenitiesEstateRepository,
-                                        AdvertisementRepository advertisementRepository) {
+                                        AdvertisementRepository advertisementRepository, EventTypeService eventTypeService) {
         this.addressRepository = addressRepository;
         this.estateRepository = estateRepository;
         /* this.cloudinaryService = cloudinaryService; */
@@ -38,6 +39,7 @@ public class AdvertisementComposerService {
         this.imageEstateRepository = imageEstateRepository;
         this.amenitiesEstateRepository = amenitiesEstateRepository;
         this.advertisementRepository = advertisementRepository;
+        this.eventTypeService = eventTypeService;
     }
 
     @Transactional
@@ -78,11 +80,15 @@ public class AdvertisementComposerService {
             amenitiesEstateRepository.insertFeatureNative(idEstate, featureId);
         }
 
+        var eventType = eventTypeService.createEventTypeForEstate(idEstate);
+        Long eventTypeId = eventType.id();
+
         advertisementRepository.insertAdvertisementNative(idEstate,
                 estateCreateRequest.advertisementCreateRequest().creator(),
                 estateCreateRequest.advertisementCreateRequest().responsible(),
                 estateCreateRequest.advertisementCreateRequest().active(),
-                estateCreateRequest.advertisementCreateRequest().dataFim());
+                estateCreateRequest.advertisementCreateRequest().dataFim(),
+                eventTypeId);
 
         Long advertisementId = advertisementRepository.getLastInsertId();
 
