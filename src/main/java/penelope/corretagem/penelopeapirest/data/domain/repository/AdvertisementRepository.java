@@ -47,4 +47,26 @@ public interface AdvertisementRepository extends JpaRepository<AdvertisementEnti
 
     @Query(value = "SELECT LAST_INSERT_ID()", nativeQuery = true)
     Long getLastInsertId();
+
+    @Modifying
+    @Query(value = """
+        UPDATE anuncio
+        SET fk_criador = :creator,
+            fk_responsavel = :responsible,
+            ativo = :active,
+            data_fim = :dataFim
+        WHERE fk_empreendimento = :estateId
+        """, nativeQuery = true)
+    void updateAdvertisement(
+            Long estateId,
+            Long creator,
+            Long responsible,
+            Boolean active,
+            Date dataFim);
+
+    @Query(value = """
+        SELECT * FROM anuncio 
+        WHERE fk_empreendimento = :estateId
+        """, nativeQuery = true)
+    Optional<AdvertisementEntity> findByEstateId(Long estateId);
 }

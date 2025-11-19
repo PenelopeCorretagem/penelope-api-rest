@@ -57,7 +57,7 @@ public class AdvertisementController {
     }
 
     @PostMapping
-    public ResponseEntity<Optional<AdvertisementEntity>> create(
+    public ResponseEntity<Optional<AdvertisementEntity>> createAdvertisement(
             @RequestBody EstateCreateRequest request) throws IOException {
         Optional<AdvertisementEntity> response = composerService.createAdvertisement(request);
         return ResponseEntity.status(HttpStatus.CREATED).build();
@@ -68,5 +68,14 @@ public class AdvertisementController {
             @RequestPart("files") List<MultipartFile> files) throws IOException {
         List<String> result = composerService.uploadImages(files);
         return ResponseEntity.ok(result);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Optional<AdvertisementEntity>> updateAdvertisement(
+            @PathVariable("id") Long estateId,
+            @RequestBody EstateCreateRequest request) throws IOException {
+
+        Optional<AdvertisementEntity> response = composerService.updateAdvertisement(estateId, request);
+        return ResponseEntity.noContent().build();
     }
 }

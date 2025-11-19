@@ -19,4 +19,9 @@ AmenitiesEstateRepository extends JpaRepository<AmenitiesEstateEntity, Long> {
 
     @Query(value = "SELECT LAST_INSERT_ID()", nativeQuery = true)
     Long getLastInsertId();
+
+    @Modifying
+    @Query(value = "DELETE FROM diferencial_empreendimento WHERE fk_empreendimento = :estateId", nativeQuery = true)
+    void deleteAmenities(Long estateId);
+
 }

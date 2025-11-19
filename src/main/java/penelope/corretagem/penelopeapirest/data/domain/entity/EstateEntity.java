@@ -43,7 +43,7 @@ public class EstateEntity {
     private AddressEntity address;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "fk_endereco_stand", referencedColumnName = "id", nullable = false)
+    @JoinColumn(name = "fk_endereco_stand", referencedColumnName = "id", nullable = true)
     private AddressEntity standAddress;
 
     @OneToMany(
