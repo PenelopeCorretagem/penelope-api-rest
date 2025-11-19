@@ -43,4 +43,9 @@ public interface EstateRepository extends JpaRepository<EstateEntity, Long> {
             Integer rooms,
             String type);
 
+    @Modifying
+    @Query("UPDATE EstateEntity e SET e.standAddress.id = :standAddressId WHERE e.id = :estateId")
+    void updateEstateStandAddressId(@Param("estateId") Long estateId,
+                                    @Param("standAddressId") Long standAddressId);
+
 }

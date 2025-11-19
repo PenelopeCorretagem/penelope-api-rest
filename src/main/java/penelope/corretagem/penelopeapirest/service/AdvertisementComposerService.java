@@ -48,9 +48,10 @@ public class AdvertisementComposerService {
         AddressEntity address = addressMapper.toEntity(addressReq);
         var savedAddress = addressRepository.save(address);
 
-        var standAddressReq = estateCreateRequest.standAddress();
-        AddressEntity standAddress = addressMapper.toEntity(standAddressReq);
-        var savedStandAddress = addressRepository.save(standAddress);
+        AddressEntity savedStandAddress = null;
+        if (estateCreateRequest.standAddress() != null) {
+            savedStandAddress = addressRepository.save(addressMapper.toEntity(estateCreateRequest.standAddress()));
+        }
 
         estateRepository.createEstateNative(
                 estateCreateRequest.title(),
@@ -59,7 +60,7 @@ public class AdvertisementComposerService {
                 estateCreateRequest.numberOfRooms(),
                 estateCreateRequest.type(),
                 savedAddress.getId(),
-                savedStandAddress.getId());
+                savedStandAddress != null ? savedStandAddress.getId() : null);
 
         Long idEstate = estateRepository.getLastInsertId();
 
@@ -119,17 +120,44 @@ public class AdvertisementComposerService {
                     estateCreateRequest.address().region()
             );
 
-            addressRepository.updateAddress(
-                    estate.getStandAddress().getId(),
-                    estateCreateRequest.standAddress().street(),
-                    estateCreateRequest.standAddress().number(),
-                    estateCreateRequest.standAddress().neighborhood(),
-                    estateCreateRequest.standAddress().city(),
-                    estateCreateRequest.standAddress().uf(),
-                    estateCreateRequest.standAddress().zipCode(),
-                    estateCreateRequest.standAddress().complement(),
-                    estateCreateRequest.standAddress().region()
-            );
+
+            AddressEntity oldStandAddress = estate.getStandAddress();
+            var newStandReq = estateCreateRequest.standAddress();
+
+            if (oldStandAddress != null && newStandReq != null) {
+
+                addressRepository.updateAddress(
+                        oldStandAddress.getId(),
+                        newStandReq.street(),
+                        newStandReq.number(),
+                        newStandReq.neighborhood(),
+                        newStandReq.city(),
+                        newStandReq.uf(),
+                        newStandReq.zipCode(),
+                        newStandReq.complement(),
+                        newStandReq.region()
+                );
+            }
+
+            else if (oldStandAddress == null && newStandReq != null) {
+
+                var newStandAddress = addressMapper.toEntity(newStandReq);
+                var savedStand = addressRepository.save(newStandAddress);
+
+                estateRepository.updateEstateStandAddressId(
+                        estateId,
+                        savedStand.getId()
+                );
+            }
+
+            else if (oldStandAddress != null && newStandReq == null) {
+
+                Long standId = oldStandAddress.getId();
+
+                estateRepository.updateEstateStandAddressId(estateId, null);
+
+                addressRepository.deleteById(standId);
+            }
 
             estateRepository.updateEstate(
                     estateId,
