@@ -1,0 +1,20 @@
+meta {
+  name: Desativar anuncio
+  type: http
+  seq: 5
+}
+
+patch {
+  url: http://localhost:8081/api/v1/anuncios/1
+  body: json
+  auth: inherit
+}
+
+body:json {
+  false
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

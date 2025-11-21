@@ -69,4 +69,13 @@ public interface AdvertisementRepository extends JpaRepository<AdvertisementEnti
         WHERE fk_empreendimento = :estateId
         """, nativeQuery = true)
     Optional<AdvertisementEntity> findByEstateId(Long estateId);
+
+    @Modifying
+    @Transactional
+    @Query(value = """
+        UPDATE anuncio
+        SET ativo = :active
+        WHERE id = :id
+        """, nativeQuery = true)
+    void updateActive(@Param("id") Long id, @Param("active") Boolean active);
 }
