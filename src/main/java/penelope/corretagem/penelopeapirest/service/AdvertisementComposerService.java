@@ -1,8 +1,10 @@
 package penelope.corretagem.penelopeapirest.service;
 
 import jakarta.transaction.Transactional;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import penelope.corretagem.penelopeapirest.data.domain.dto.AdvertisementResponse;
 import penelope.corretagem.penelopeapirest.data.domain.dto.EstateCreateDTO.EstateCreateRequest;
 import penelope.corretagem.penelopeapirest.data.domain.entity.*;
 import penelope.corretagem.penelopeapirest.data.domain.repository.*;
@@ -192,5 +194,14 @@ public class AdvertisementComposerService {
             );
 
             return advertisementRepository.findByEstateId(estateId);
+        }
+
+        @Transactional
+        public void deactivateAdvertisement(Long advertisementId, Boolean active) {
+
+            if (!advertisementRepository.existsById(advertisementId))
+                throw new RuntimeException("Anúncio não encontrado");
+
+            advertisementRepository.updateActive(advertisementId, active);
         }
 }

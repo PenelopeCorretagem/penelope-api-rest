@@ -78,4 +78,14 @@ public class AdvertisementController {
         Optional<AdvertisementEntity> response = composerService.updateAdvertisement(estateId, request);
         return ResponseEntity.noContent().build();
     }
+
+    @PatchMapping("/{id}")
+    public ResponseEntity<Void> deactivateAdvertisement(
+            @PathVariable("id") Long id,
+            @RequestBody Boolean active) throws IOException {
+
+        composerService.deactivateAdvertisement(id, active);
+        return ResponseEntity.noContent().build();
+    }
+
 }
