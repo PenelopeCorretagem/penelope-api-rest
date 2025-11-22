@@ -8,12 +8,12 @@ import java.time.LocalDate;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public record UserUpdateRequest(
-        @JsonProperty("nomeCompleto") String name,
+        String name,
         String email,
-        @JsonProperty("senha") String password,
+        String password,
         String cpf,
-        @JsonProperty("dtNascimento") LocalDate dateBirth,
-        @JsonProperty("rendaMensal") BigDecimal monthlyIncome,
+        LocalDate dateBirth,
+        BigDecimal monthlyIncome,
         String phone
 ) {
 }
