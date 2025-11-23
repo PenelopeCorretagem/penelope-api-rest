@@ -52,7 +52,7 @@ public class UserService {
             throw new UserEmailAlreadyExistsException("O e-mail informado já está cadastrado");
         }
 
-        if (!userRequest.creci().isEmpty() && userRequest.accessLevel().toString().equalsIgnoreCase("CLIENTE")) {
+        if (userRequest.creci() != null && userRequest.accessLevel().toString().equalsIgnoreCase("CLIENTE")) {
             throw new ClientMustNotPossessACreci("Clientes não devem possuir Creci");
         }
 

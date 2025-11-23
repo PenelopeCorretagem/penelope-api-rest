@@ -1,6 +1,5 @@
 package penelope.corretagem.penelopeapirest.data.domain.dto;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import penelope.corretagem.penelopeapirest.data.domain.entity.AppointmentEntity;
 import penelope.corretagem.penelopeapirest.data.domain.enums.AccessLevel;
 
