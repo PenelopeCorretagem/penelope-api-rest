@@ -18,7 +18,7 @@ import java.util.Optional;
 public class AdvertisementComposerService {
     private final AddressRepository addressRepository;
     private final EstateRepository estateRepository;
-//    private final CloudinaryService cloudinaryService;
+    private final CloudinaryService cloudinaryService;
     private final AddressMapper addressMapper;
     private final ImageEstateRepository imageEstateRepository;
     private final AmenitiesEstateRepository amenitiesEstateRepository;
@@ -96,14 +96,14 @@ public class AdvertisementComposerService {
     }
 
 
-//    @Transactional
-//    public List<String> uploadImages(List<MultipartFile> files) throws IOException {
-//        List<String> result = new ArrayList<>();
-//
-//        for (MultipartFile file : files) {
-//            String url = cloudinaryService.uploadImage(file);
-//            result.add(url);
-//        }
-//        return result;
-//    }
+    @Transactional
+    public List<String> uploadImages(List<MultipartFile> files) throws IOException {
+        List<String> result = new ArrayList<>();
+
+        for (MultipartFile file : files) {
+            String url = cloudinaryService.uploadImage(file);
+            result.add(url);
+        }
+        return result;
+    }
 }
