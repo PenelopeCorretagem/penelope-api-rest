@@ -19,4 +19,9 @@ public interface ImageEstateRepository extends JpaRepository<ImageEstateEntity, 
 
     @Query(value = "SELECT LAST_INSERT_ID()", nativeQuery = true)
     Long getLastInsertId();
+
+    @Modifying
+    @Query(value = "DELETE FROM imagem_empreendimento WHERE fk_empreendimento = :estateId", nativeQuery = true)
+    void deleteImages(Long estateId);
+
 }

@@ -27,16 +27,19 @@ public class AdvertisementResponseMapper {
         );
 
         // Endereço stand
-        var standAddressDto = new StandAddressResponse(
-                empreendimento.getStandAddress().getId(),
-                empreendimento.getStandAddress().getStreet(),
-                empreendimento.getStandAddress().getNumber(),
-                empreendimento.getStandAddress().getNeighborhood(),
-                empreendimento.getStandAddress().getCity(),
-                empreendimento.getStandAddress().getUf(),
-                empreendimento.getStandAddress().getRegion(),
-                empreendimento.getStandAddress().getZipCode(),
-                empreendimento.getStandAddress().getComplement()
+        var stand = empreendimento.getStandAddress();
+        var standAddressDto = (stand == null)
+                ? new StandAddressResponse(null, null, null, null, null, null, null, null, null)
+                : new StandAddressResponse(
+                stand.getId(),
+                stand.getStreet(),
+                stand.getNumber(),
+                stand.getNeighborhood(),
+                stand.getCity(),
+                stand.getUf(),
+                stand.getRegion(),
+                stand.getZipCode(),
+                stand.getComplement()
         );
 
         // Imagens

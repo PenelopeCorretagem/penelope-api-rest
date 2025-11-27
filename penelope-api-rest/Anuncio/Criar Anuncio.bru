@@ -16,14 +16,15 @@ headers {
 
 body:json {
   {
-    "title": "Residencial Sol Nascente",
+    "title": "Residencial Sol Poente",
     "description": "Apartamento com 3 quartos...",
     "cardDescription": "3 quartos • 120m² • Lançamento",
     "area": 120.0,
     "numberOfRooms": 3,
     "type": "LANCAMENTO",
+  
     "address": {
-      "street": "Rua X",
+      "street": "Rua Aca",
       "number": "123",
       "neighborhood": "Bairro Y",
       "city": "São Paulo",
@@ -32,32 +33,21 @@ body:json {
       "complement": "Torre A",
       "region": "Sul"
     },
-    "standAddress": {
-      "street": "Rua ABC",
-      "number": "999",
-      "neighborhood": "Centro",
-      "city": "São Paulo",
-      "uf": "SP",
-      "zipCode": "11111111",
-      "complement": null,
-      "region": "Centro"
-    },
-    "amenitiesIds": [
-      1,
-      4,
-      5
-    ],
+  
+    "standAddress": null,
+  
+    "amenitiesIds": [1, 2, 5],
+  
     "images": [
       "https://res.cloudinary.com/.../img1.jpg",
       "https://res.cloudinary.com/.../img2.jpg"
     ],
+  
     "imageType": [
       "1",
-      "1",
-      "1",
-      "1",
-      "2"
+      "1"
     ],
+  
     "advertisementCreateRequest": {
       "creator": 1,
       "responsible": 3,

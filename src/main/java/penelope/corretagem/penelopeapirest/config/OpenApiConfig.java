@@ -40,7 +40,10 @@ import java.util.List;
                 @Server(url = "/api/v1", description = "Servidor local")
         },
         tags = {
-                @Tag(name = "Usuários", description = "Gerencia usuários do sistema")
+                @Tag(name = "Usuários", description = "Gerencia os usuários do sistema"),
+                @Tag(name = "Autenticação", description = "Gerencia as formas de autenticação do sistema"),
+                @Tag(name = "Anúncios", description = "Gerencia os anúncios do sistema"),
+                @Tag(name = "Agendamentos", description = "Gerencia os agendamentos do usuário administrador")
         }
 )
 public class OpenApiConfig {

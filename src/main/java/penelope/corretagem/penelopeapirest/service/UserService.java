@@ -1,7 +1,5 @@
 package penelope.corretagem.penelopeapirest.service;
 
-import com.auth0.jwt.JWT;
-import com.auth0.jwt.algorithms.Algorithm;
 import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -12,6 +10,7 @@ import penelope.corretagem.penelopeapirest.data.domain.dto.UserRequest;
 import penelope.corretagem.penelopeapirest.data.domain.dto.UserResponse;
 import penelope.corretagem.penelopeapirest.data.domain.dto.UserUpdateRequest;
 import penelope.corretagem.penelopeapirest.data.domain.entity.UserEntity;
+import penelope.corretagem.penelopeapirest.service.exception.ClientMustNotPossessACreci;
 import penelope.corretagem.penelopeapirest.service.exception.UserEmailAlreadyExistsException;
 import penelope.corretagem.penelopeapirest.service.exception.InvalidTokenException;
 import penelope.corretagem.penelopeapirest.mapper.UserMapper;
@@ -51,6 +50,10 @@ public class UserService {
     public UserResponse addUser(UserRequest userRequest) {
         if (userRepository.findByEmail(userRequest.email()).isPresent()) {
             throw new UserEmailAlreadyExistsException("O e-mail informado já está cadastrado");
+        }
+
+        if (userRequest.creci() != null && userRequest.accessLevel().toString().equalsIgnoreCase("CLIENTE")) {
+            throw new ClientMustNotPossessACreci("Clientes não devem possuir Creci");
         }
 
         UserEntity entity = userMapper.toUserEntity(userRequest);

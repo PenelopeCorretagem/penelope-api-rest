@@ -21,18 +21,18 @@ public interface AdvertisementRepository extends JpaRepository<AdvertisementEnti
 
     // Lista um anuncio pelo ID
     @Query("""
-            SELECT a
-            FROM AdvertisementEntity a
-            JOIN FETCH a.property e
-            JOIN FETCH e.address address
-            JOIN FETCH e.standAddress standAddress
-            LEFT JOIN FETCH a.creator creator
-            LEFT JOIN FETCH a.responsible responsible
-            LEFT JOIN FETCH e.images images
-            LEFT JOIN FETCH images.type tipo
-            LEFT JOIN FETCH e.amenities amenities
-            WHERE a.id = :id
-            """)
+    SELECT a
+    FROM AdvertisementEntity a
+    JOIN FETCH a.property e
+    JOIN FETCH e.address address
+    JOIN FETCH e.standAddress standAddress
+    LEFT JOIN FETCH a.creator creator
+    LEFT JOIN FETCH a.responsible responsible
+    LEFT JOIN FETCH e.images images
+    LEFT JOIN FETCH images.type tipo
+    LEFT JOIN FETCH e.amenities amenities
+    WHERE a.id = :id
+    """)
     Optional<AdvertisementEntity> findByIdWithAllRelations(Long id);
 
     @Modifying
@@ -48,6 +48,37 @@ public interface AdvertisementRepository extends JpaRepository<AdvertisementEnti
 
     @Query(value = "SELECT LAST_INSERT_ID()", nativeQuery = true)
     Long getLastInsertId();
+
+    @Modifying
+    @Query(value = """
+        UPDATE anuncio
+        SET fk_criador = :creator,
+            fk_responsavel = :responsible,
+            ativo = :active,
+            data_fim = :dataFim
+        WHERE fk_empreendimento = :estateId
+        """, nativeQuery = true)
+    void updateAdvertisement(
+            Long estateId,
+            Long creator,
+            Long responsible,
+            Boolean active,
+            Date dataFim);
+
+    @Query(value = """
+        SELECT * FROM anuncio 
+        WHERE fk_empreendimento = :estateId
+        """, nativeQuery = true)
+    Optional<AdvertisementEntity> findByEstateId(Long estateId);
+
+    @Modifying
+    @Transactional
+    @Query(value = """
+        UPDATE anuncio
+        SET ativo = :active
+        WHERE id = :id
+        """, nativeQuery = true)
+    void updateActive(@Param("id") Long id, @Param("active") Boolean active);
 
     AdvertisementEntity findByEventTypeId(long eventTypeId);
 }

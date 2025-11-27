@@ -33,7 +33,7 @@ public class AuthenticationController {
     public LoginResponse login(@RequestBody LoginRequest loginRequest) {
         var usernamePassword = new UsernamePasswordAuthenticationToken(
                 loginRequest.email(),
-                loginRequest.senha()
+                loginRequest.password()
         );
         Authentication auth = authenticationManager.authenticate(usernamePassword);
 

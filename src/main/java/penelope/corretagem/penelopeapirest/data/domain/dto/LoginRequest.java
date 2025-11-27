@@ -1,3 +1,3 @@
 package penelope.corretagem.penelopeapirest.data.domain.dto;
 
-public record LoginRequest(String email, String senha) {}
+public record LoginRequest(String email, String password) {}

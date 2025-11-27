@@ -45,7 +45,6 @@ public class AdvertisementService {
                 .collect(Collectors.toList());
     }
 
-
     public AdvertisementResponse getLatestAdvertisement() {
         return repository.findTopByOrderByCreatedAtDesc()
                 .map(AdvertisementResponseMapper::toDTO)
