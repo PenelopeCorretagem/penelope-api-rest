@@ -37,7 +37,7 @@ import java.util.List;
                 )
         ),
         servers = {
-                @Server(url = "/", description = "Servidor local")
+                @Server(url = "/api/v1", description = "Servidor local")
         },
         tags = {
                 @Tag(name = "Usuários", description = "Gerencia os usuários do sistema"),

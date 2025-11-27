@@ -9,10 +9,25 @@ server:
 spring:
   datasource:
     # URL do banco H2 em memória
-    url: jdbc:mysql://localhost:3306/penelopec?allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=UTC
-    driverClassName: com.mysql.cj.jdbc.Driver
-    username: root
-    password: ${DB_PASSWORD}
+    url: jdbc:h2:mem:penelope_test_db;mode=MYSQL
+    driverClassName: org.h2.Driver
+    username: sa
+    password: penelope123
+    # URL do banco H2 em memória
+#    url: jdbc:mysql://localhost:3306/penelopec?allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=UTC
+#    driverClassName: com.mysql.cj.jdbc.Driver
+#    username: root
+#    password: ${DB_PASSWORD}
+    h2:
+      console:
+        # Habilita o console do H2 para acessar o banco pelo navegador
+        enabled: true
+        path: /h2-console
+
+        # Inicialização de dados
+  sql:
+    init:
+      mode: always
 
   servlet:
     multipart:
@@ -22,6 +37,7 @@ spring:
   jpa:
     # Mostra o SQL gerado pelo Hibernate no console
     show-sql: true
+    defer-datasource-initialization: true
     properties:
       hibernate:
         dialect: org.hibernate.dialect.MySQL8Dialect
@@ -47,8 +63,14 @@ logging:
     # Nível de log DEBUG para o nosso pacote, para ver mais detalhes
     penelope.corretagem.penelopeapirest: DEBUG
     # Nível de log DEBUG para o Hibernate, para ver detalhes das operações com o banco
-    org.hibernate: DEBUG
-
+    org:
+      hibernate: DEBUG
+      springframework:
+        web:
+          reactive:
+            function:
+              client:
+                ExchangeFunctions: TRACE
   file:
     name: logs/dev.log
 
@@ -63,6 +85,14 @@ api:
 app:
   frontend:
     url: http://localhost:8080
+
+# Configurações da API Cal.com
+calcom:
+  api:
+    base-url: https://api.cal.com
+    key: cal_live_caebf2c0a4609bb94af839480f4eaea1
+  webhook:
+    secret: 4835FiV4gc58TLmxcy5abK3i4z8BDCtzdh/rN7I60wQ=
 
 cloudinary:
   cloud-name: ${CLOUDINARY_CLOUD_NAME}

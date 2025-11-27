@@ -41,13 +41,6 @@ springdoc:
     enabled: true
     path: /api-docs
 
-# Configurações da API Cal.com
-calcom:
-  api:
-    base-url: https://api.cal.com/penelope-corretagem
-    key: cal_live_e164e3c0a261292a215d34c31758a90c
-    webhook:
-      secret: 4835FiV4gc58TLmxcy5abK3i4z8BDCtzdh/rN7I60wQ=
 
 update:
   dir: uploads

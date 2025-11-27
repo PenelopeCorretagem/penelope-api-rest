@@ -10,7 +10,7 @@ import penelope.corretagem.penelopeapirest.data.domain.enums.Status;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "agendamentos")
+@Table(name = "visita")
 @Getter
 @Setter
 @AllArgsConstructor
@@ -45,5 +45,8 @@ public class AppointmentEntity {
     private LocalDateTime startDateTime;
 
     private LocalDateTime endDateTime;
+
+    @Column(name = "cal_booking_id")
+    private Long calBookingId;
 }
 

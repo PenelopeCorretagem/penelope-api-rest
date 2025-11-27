@@ -1,14 +1,19 @@
 package penelope.corretagem.penelopeapirest.data.domain.dto;
 
-import java.time.LocalDate;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import penelope.corretagem.penelopeapirest.data.domain.enums.Status;
+
+import java.time.LocalDateTime;
 
 public record AppointmentRequest(
         Long id,
-        UserRequest client,
-        UserRequest estateAgent,
-        EstateRequest estate,
-        String durationMinutes,
-        LocalDate dateAppointment,
-        String status
+        @JsonProperty("clientId") Long clientId,
+        @JsonProperty("estateAgentId") Long estateAgentId,
+        @JsonProperty("estateId") Long estateId,
+        @JsonProperty("durationMinutes") Integer durationMinutes,
+        @JsonProperty("startDateTime") LocalDateTime startDateTime,
+        @JsonProperty("endDateTime") LocalDateTime endDateTime,
+        Status status,
+        @JsonProperty("calBookingId") Long calBookingId
 ) {
 }

@@ -1,0 +1,183 @@
+package penelope.corretagem.penelopeapirest.clients;
+
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.stereotype.Component;
+import org.springframework.web.client.RestClient;
+import penelope.corretagem.penelopeapirest.data.domain.dto.ApiResponseWrapper;
+import penelope.corretagem.penelopeapirest.data.domain.dto.cal.CalUser;
+import penelope.corretagem.penelopeapirest.data.domain.dto.cal.booking.*;
+import penelope.corretagem.penelopeapirest.data.domain.dto.cal.eventtype.EventTypeRequest;
+import penelope.corretagem.penelopeapirest.data.domain.dto.cal.eventtype.EventTypeCalResponse;
+import java.time.LocalDate;
+import java.util.List;
+import java.util.Optional;
+
+@Component
+public class CalClient {
+
+  private final RestClient eventTypeRestClient;
+  private final RestClient bookingRestClient;
+
+  private static final ParameterizedTypeReference<ApiResponseWrapper<List<EventTypeCalResponse>>> WRAPPER_LIST_EVENT_TYPE =
+    new ParameterizedTypeReference<>() {};
+  private static final ParameterizedTypeReference<ApiResponseWrapper<EventTypeCalResponse>> WRAPPER_EVENT_TYPE =
+    new ParameterizedTypeReference<>() {};
+  private static final ParameterizedTypeReference<ApiResponseWrapper<List<BookingResponse>>> WRAPPER_LIST_BOOKINGS =
+    new ParameterizedTypeReference<>() {};
+  private static final ParameterizedTypeReference<ApiResponseWrapper<BookingResponse>> WRAPPER_BOOKING =
+    new ParameterizedTypeReference<>() {};
+  private static final ParameterizedTypeReference<ApiResponseWrapper<CalUser>> WRAPPER_CAL_USER =
+    new ParameterizedTypeReference<>() {};
+
+  public CalClient(
+    @Qualifier("calRestClientV1") RestClient eventTypeRestClient,
+    @Qualifier("calRestClientV2") RestClient bookingRestClient) {
+    this.eventTypeRestClient = eventTypeRestClient;
+    this.bookingRestClient = bookingRestClient;
+  }
+
+  public CalUser getAuthenticatedUser() {
+    return Optional.ofNullable(
+      eventTypeRestClient.get()
+        .uri("/v2/me")
+        .retrieve()
+        .body(WRAPPER_CAL_USER))
+    .map(ApiResponseWrapper::data)
+    .orElse(null);
+  }
+
+  public EventTypeCalResponse createEventType(EventTypeRequest request) {
+    return Optional.ofNullable(
+      eventTypeRestClient.post()
+        .uri("/v2/event-types")
+        .body(request)
+        .retrieve()
+        .body(WRAPPER_EVENT_TYPE))
+    .map(ApiResponseWrapper::data)
+    .orElse(null);
+  }
+
+  public List<EventTypeCalResponse> listEventTypes(String username) {
+
+    return Optional.ofNullable(
+      eventTypeRestClient.get()
+        .uri(uriBuilder -> uriBuilder
+          .path("/v2/event-types")
+          .queryParam("username", username) // Usa o parâmetro
+          .build())
+        .retrieve()
+        .body(WRAPPER_LIST_EVENT_TYPE))
+    .map(ApiResponseWrapper::data)
+    .orElse(List.of());
+  }
+
+  public EventTypeCalResponse getEventType(Long id) {
+    return Optional.ofNullable(
+      eventTypeRestClient.get()
+        .uri("/v2/event-types/{id}", id)
+        .retrieve()
+        .body(WRAPPER_EVENT_TYPE))
+    .map(ApiResponseWrapper::data)
+    .orElse(null);
+  }
+
+  public EventTypeCalResponse updateEventType(Long id, EventTypeRequest request) {
+    return Optional.ofNullable(
+      eventTypeRestClient.patch()
+        .uri("/v2/event-types/{id}", id)
+        .body(request)
+        .retrieve()
+        .body(WRAPPER_EVENT_TYPE))
+    .map(ApiResponseWrapper::data)
+    .orElse(null);
+  }
+
+  public void deleteEventType(Long id) {
+    eventTypeRestClient.delete()
+      .uri("/v2/event-types/{id}", id)
+      .retrieve()
+      .body(Void.class);
+  }
+
+  public BookingListResponse listBookings(
+    Long eventTypeId,
+    Long userId,
+    LocalDate dateFrom,
+    LocalDate dateTo,
+    Integer page,
+    Integer size) {
+
+    return Optional.ofNullable(
+      bookingRestClient.get()
+        .uri(uriBuilder -> {
+          var builder = uriBuilder.path("/v2/bookings");
+
+          if (eventTypeId != null) {
+            builder.queryParam("eventTypeId", eventTypeId);
+          }
+          if (userId != null) {
+            builder.queryParam("userId", userId);
+          }
+          if (dateFrom != null) {
+            builder.queryParam("dateFrom", dateFrom.toString());
+          }
+          if (dateTo != null) {
+            builder.queryParam("dateTo", dateTo.toString());
+          }
+          if (page != null) {
+            builder.queryParam("page", page);
+          }
+          if (size != null) {
+            builder.queryParam("size", size);
+          }
+
+          return builder.build();
+        })
+        .retrieve()
+        .body(WRAPPER_LIST_BOOKINGS))
+      .map(wrapper -> new BookingListResponse(wrapper.data(), wrapper.pagination()))
+      .orElse(null);
+  }
+
+  /**
+   * Busca um booking específico por ID
+   */
+  public BookingResponse getBooking(String uid) {
+    return Optional.ofNullable(
+      bookingRestClient.get()
+        .uri("/v2/bookings/{bookingUid}", uid)
+        .retrieve()
+        .body(WRAPPER_BOOKING))
+      .map(ApiResponseWrapper::data)
+      .orElse(null);
+  }
+
+  /**
+   * Atualiza/Reagenda um booking
+   */
+  public BookingResponse updateBooking(Long id, BookingUpdateRequest request) {
+    return Optional.ofNullable(
+      bookingRestClient.patch()
+        .uri("/v2/bookings/{id}", id)
+        .body(request)
+        .retrieve()
+        .body(WRAPPER_BOOKING))
+      .map(ApiResponseWrapper::data)
+      .orElse(null);
+  }
+
+  /**
+   * Cancela um booking
+   */
+  public BookingResponse cancelBooking(Long id, BookingCancelRequest request) {
+    return Optional.ofNullable(
+      bookingRestClient.post()
+        .uri("/v2/bookings/{id}/cancel", id)
+        .body(request)
+        .retrieve()
+        .body(WRAPPER_BOOKING))
+      .map(ApiResponseWrapper::data)
+      .orElse(null);
+  }
+}

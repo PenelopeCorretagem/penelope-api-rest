@@ -37,13 +37,14 @@ public interface AdvertisementRepository extends JpaRepository<AdvertisementEnti
 
     @Modifying
     @Transactional
-    @Query(value = "INSERT INTO anuncio (fk_empreendimento, fk_criador, fk_responsavel, ativo, data_fim) " +
-            "VALUES (:fkEstate, :fkCreator, :fkResponsible, :active, :endDate)", nativeQuery = true)
+    @Query(value = "INSERT INTO anuncio (fk_empreendimento, fk_criador, fk_responsavel, ativo, data_fim, fk_tipo_evento_cal) " +
+            "VALUES (:fkEstate, :fkCreator, :fkResponsible, :active, :endDate, :eventTypeId)", nativeQuery = true)
     void insertAdvertisementNative(@Param("fkEstate") Long fkEstate,
                                    @Param("fkCreator") Long fkCreator,
                                    @Param("fkResponsible") Long fkResponsible,
                                    @Param("active") Boolean active,
-                                   @Param("endDate") Date endDate);
+                                   @Param("endDate") Date endDate,
+                                   @Param("eventTypeId") Long eventTypeId);
 
     @Query(value = "SELECT LAST_INSERT_ID()", nativeQuery = true)
     Long getLastInsertId();
@@ -78,4 +79,6 @@ public interface AdvertisementRepository extends JpaRepository<AdvertisementEnti
         WHERE id = :id
         """, nativeQuery = true)
     void updateActive(@Param("id") Long id, @Param("active") Boolean active);
+
+    AdvertisementEntity findByEventTypeId(long eventTypeId);
 }
