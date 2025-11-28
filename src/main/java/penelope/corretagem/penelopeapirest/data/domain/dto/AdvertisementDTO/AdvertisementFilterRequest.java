@@ -6,4 +6,4 @@ public record AdvertisementFilterRequest(
     String tipo,
     Integer quartos,
     Boolean ativo
-) { }
+) {}

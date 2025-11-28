@@ -1,10 +1,8 @@
 package penelope.corretagem.penelopeapirest.service;
 
 import jakarta.transaction.Transactional;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-import penelope.corretagem.penelopeapirest.data.domain.dto.AdvertisementResponse;
 import penelope.corretagem.penelopeapirest.data.domain.dto.EstateCreateDTO.EstateCreateRequest;
 import penelope.corretagem.penelopeapirest.data.domain.entity.*;
 import penelope.corretagem.penelopeapirest.data.domain.repository.*;
@@ -29,14 +27,14 @@ public class AdvertisementComposerService {
 
     public AdvertisementComposerService(AddressRepository addressRepository,
                                         EstateRepository estateRepository,
-                                        /* CloudinaryService cloudinaryService, */
+                                        CloudinaryService cloudinaryService,
                                         AddressMapper addressMapper,
                                         ImageEstateRepository imageEstateRepository,
                                         AmenitiesEstateRepository amenitiesEstateRepository,
                                         AdvertisementRepository advertisementRepository, EventTypeService eventTypeService) {
         this.addressRepository = addressRepository;
         this.estateRepository = estateRepository;
-        /* this.cloudinaryService = cloudinaryService; */
+        this.cloudinaryService = cloudinaryService;
         this.addressMapper = addressMapper;
         this.imageEstateRepository = imageEstateRepository;
         this.amenitiesEstateRepository = amenitiesEstateRepository;
@@ -203,7 +201,7 @@ public class AdvertisementComposerService {
         }
 
         @Transactional
-        public void deactivateAdvertisement(Long advertisementId, Boolean active) {
+        public void updateAdvertisementStatus(Long advertisementId, Boolean active) {
 
             if (!advertisementRepository.existsById(advertisementId))
                 throw new RuntimeException("Anúncio não encontrado");
