@@ -100,36 +100,30 @@ public class CalClient {
       .body(Void.class);
   }
 
-  public BookingListResponse listBookings(
-    Long eventTypeId,
-    Long userId,
-    LocalDate dateFrom,
-    LocalDate dateTo,
-    Integer page,
-    Integer size) {
+  public BookingListResponse listBookings(BookingFilterRequest request) {
 
     return Optional.ofNullable(
       bookingRestClient.get()
         .uri(uriBuilder -> {
           var builder = uriBuilder.path("/v2/bookings");
 
-          if (eventTypeId != null) {
-            builder.queryParam("eventTypeId", eventTypeId);
+          if (request.eventTypeId() != null) {
+            builder.queryParam("eventTypeId", request.eventTypeId());
           }
-          if (userId != null) {
-            builder.queryParam("userId", userId);
+          if (request.userId() != null) {
+            builder.queryParam("userId", request.userId());
           }
-          if (dateFrom != null) {
-            builder.queryParam("dateFrom", dateFrom.toString());
+          if (request.dateFrom() != null) {
+            builder.queryParam("dateFrom", request.dateFrom().toString());
           }
-          if (dateTo != null) {
-            builder.queryParam("dateTo", dateTo.toString());
+          if (request.dateTo() != null) {
+            builder.queryParam("dateTo", request.dateTo().toString());
           }
-          if (page != null) {
-            builder.queryParam("page", page);
+          if (request.page() != null) {
+            builder.queryParam("page", request.page());
           }
-          if (size != null) {
-            builder.queryParam("size", size);
+          if (request.size() != null) {
+            builder.queryParam("size", request.size());
           }
 
           return builder.build();

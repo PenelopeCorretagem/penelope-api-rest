@@ -43,9 +43,6 @@ public class EstateEntity {
     @JoinColumn(name = "fk_endereco_stand", referencedColumnName = "id", nullable = true)
     private AddressEntity standAddress;
 
-    @Column(name = "cal_event_type_id")
-    private Long calEventTypeId;
-
     @OneToMany(
             mappedBy = "estate",
             cascade = CascadeType.ALL,

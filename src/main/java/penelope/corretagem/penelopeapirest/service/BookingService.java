@@ -5,8 +5,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import penelope.corretagem.penelopeapirest.clients.CalClient;
 import penelope.corretagem.penelopeapirest.data.domain.dto.cal.booking.*;
+import penelope.corretagem.penelopeapirest.data.domain.entity.AdvertisementEntity;
 import penelope.corretagem.penelopeapirest.data.domain.entity.AppointmentEntity;
 import penelope.corretagem.penelopeapirest.data.domain.entity.EstateEntity;
+import penelope.corretagem.penelopeapirest.data.domain.entity.EventTypeEntity;
+import penelope.corretagem.penelopeapirest.data.domain.repository.AdvertisementRepository;
 import penelope.corretagem.penelopeapirest.data.domain.repository.AppointmentRepository;
 import penelope.corretagem.penelopeapirest.data.domain.repository.EstateRepository;
 
@@ -21,14 +24,14 @@ public class BookingService {
 
     private final CalClient calClient;
     private final AppointmentRepository appointmentRepository;
-    private final EstateRepository estateRepository;
+    private final AdvertisementRepository advertisementRepository;
 
     public BookingService(CalClient calClient, 
                          AppointmentRepository appointmentRepository,
-                         EstateRepository estateRepository) {
+                          AdvertisementRepository advertisementRepository) {
         this.calClient = calClient;
         this.appointmentRepository = appointmentRepository;
-        this.estateRepository = estateRepository;
+        this.advertisementRepository = advertisementRepository;
     }
 
     /**
@@ -37,22 +40,24 @@ public class BookingService {
     public BookingListResponse listBookingsByEstate(Long estateId, LocalDate dateFrom, 
                                                    LocalDate dateTo, Integer page, Integer size) {
         logger.info("Listando agendamentos para o imóvel ID: {}", estateId);
-        
-        EstateEntity estate = estateRepository.findById(estateId)
-                .orElseThrow(() -> new RuntimeException("Imóvel não encontrado: " + estateId));
 
-        if (estate.getCalEventTypeId() == null) {
-            throw new RuntimeException("Imóvel não possui Event Type associado");
+        AdvertisementEntity advertisement = advertisementRepository.findByEstateId(estateId);
+        EventTypeEntity eventType = advertisement.getEventType();
+
+        if (eventType == null) {
+            throw new RuntimeException("Anúncio não possui Event Type associado");
         }
 
         try {
             return calClient.listBookings(
-                    estate.getCalEventTypeId(), 
-                    null, // userId 
-                    dateFrom, 
-                    dateTo, 
-                    page, 
-                    size
+                    new BookingFilterRequest(
+                            eventType.getId(),
+                            null, // userId
+                            dateFrom,
+                            dateTo,
+                            page,
+                            size
+                    )
             );
         } catch (Exception e) {
             logger.error("Erro ao listar agendamentos do imóvel {}: {}", estateId, e.getMessage(), e);
@@ -69,12 +74,14 @@ public class BookingService {
         
         try {
             return calClient.listBookings(
-                    null, // eventTypeId
-                    userId, 
-                    dateFrom, 
-                    dateTo, 
-                    page, 
-                    size
+                    new BookingFilterRequest(
+                            null, // eventTypeId
+                            userId,
+                            dateFrom,
+                            dateTo,
+                            page,
+                            size
+                    )
             );
         } catch (Exception e) {
             logger.error("Erro ao listar agendamentos do usuário {}: {}", userId, e.getMessage(), e);
@@ -91,7 +98,7 @@ public class BookingService {
         logger.info("Listando todos os agendamentos com filtros");
         
         try {
-            return calClient.listBookings(eventTypeId, userId, dateFrom, dateTo, page, size);
+            return calClient.listBookings(new BookingFilterRequest(eventTypeId, userId, dateFrom, dateTo, page, size));
         } catch (Exception e) {
             logger.error("Erro ao listar agendamentos: {}", e.getMessage(), e);
             throw new RuntimeException("Falha ao listar agendamentos: " + e.getMessage(), e);

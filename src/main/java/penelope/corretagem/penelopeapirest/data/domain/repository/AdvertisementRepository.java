@@ -55,7 +55,8 @@ public interface AdvertisementRepository extends JpaRepository<AdvertisementEnti
         SET fk_criador = :creator,
             fk_responsavel = :responsible,
             ativo = :active,
-            data_fim = :dataFim
+            data_fim = :dataFim,
+            fk_tipo_evento_cal = :eventTypeId
         WHERE fk_empreendimento = :estateId
         """, nativeQuery = true)
     void updateAdvertisement(
@@ -63,13 +64,14 @@ public interface AdvertisementRepository extends JpaRepository<AdvertisementEnti
             Long creator,
             Long responsible,
             Boolean active,
-            Date dataFim);
+            Date dataFim,
+            Long eventTypeId);
 
     @Query(value = """
         SELECT * FROM anuncio 
         WHERE fk_empreendimento = :estateId
         """, nativeQuery = true)
-    Optional<AdvertisementEntity> findByEstateId(Long estateId);
+    AdvertisementEntity findByEstateId(Long estateId);
 
     @Modifying
     @Transactional

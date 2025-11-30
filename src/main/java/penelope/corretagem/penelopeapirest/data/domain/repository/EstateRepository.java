@@ -25,7 +25,7 @@ public interface EstateRepository extends JpaRepository<EstateEntity, Long> {
     @Query(value = "SELECT LAST_INSERT_ID()", nativeQuery = true)
     Long getLastInsertId();
 
-    @Modifying
+    @Modifying(clearAutomatically = true)
     @Query(value = """
         UPDATE empreendimento 
         SET titulo = :title,
