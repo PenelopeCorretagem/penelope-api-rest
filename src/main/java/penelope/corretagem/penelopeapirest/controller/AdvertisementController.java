@@ -75,7 +75,7 @@ public class AdvertisementController {
             @PathVariable("id") Long estateId,
             @RequestBody EstateCreateRequest request) throws IOException {
 
-        Optional<AdvertisementEntity> response = composerService.updateAdvertisement(estateId, request);
+        AdvertisementEntity response = composerService.updateAdvertisement(estateId, request);
         return ResponseEntity.noContent().build();
     }
 

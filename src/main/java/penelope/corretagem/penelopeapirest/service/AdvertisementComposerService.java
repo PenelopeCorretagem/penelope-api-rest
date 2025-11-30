@@ -11,6 +11,7 @@ import penelope.corretagem.penelopeapirest.mapper.AddressMapper;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 
@@ -109,103 +110,157 @@ public class AdvertisementComposerService {
     }
 
     @Transactional
-    public Optional<AdvertisementEntity> updateAdvertisement(Long estateId, EstateCreateRequest estateCreateRequest
-    ) throws IOException {
-            var estate = estateRepository.findById(estateId)
-                    .orElseThrow(() -> new RuntimeException("Propriedade não encontrado"));
+    public AdvertisementEntity updateAdvertisement(Long estateId, EstateCreateRequest req) throws IOException {
+
+        var estate = estateRepository.findById(estateId)
+                .orElseThrow(() -> new RuntimeException("Propriedade não encontrado"));
+
+        boolean shouldUpdateEventType = hasEventTypeRelevantChanges(estate, req);
+
+        updateMainAddress(estate, req);
+        updateStandAddress(estate, req);
+
+        updateEstateBaseData(estateId, req);
+        updateAmenities(estateId, req);
+        updateImages(estateId, req);
+
+        if (shouldUpdateEventType) {
+            eventTypeService.updateEventTypeForEstate(estateId);
+            eventTypeService.createEventTypeForEstate(estateId);
+        }
+
+        AdvertisementEntity advertisement = advertisementRepository.findByEstateId(estateId);
+        updateAdvertisementInfo(estateId, req, advertisement.getEventType().getId());
+
+        return advertisementRepository.findByEstateId(estateId);
+    }
+
+    private boolean hasEventTypeRelevantChanges(EstateEntity estate, EstateCreateRequest req) {
+
+        // Mudança no título
+        if (!estate.getTitle().equals(req.title())) {
+            return true;
+        }
+
+        var oldStand = estate.getStandAddress();
+        var newStand = req.standAddress();
+
+        if (oldStand == null && newStand == null) return false;
+
+        if (oldStand == null || newStand == null) return true;
+
+        return !oldStand.getStreet().equals(newStand.street()) ||
+                !oldStand.getNumber().equals(newStand.number()) ||
+                !oldStand.getNeighborhood().equals(newStand.neighborhood()) ||
+                !oldStand.getCity().equals(newStand.city()) ||
+                !oldStand.getUf().equals(newStand.uf()) ||
+                !oldStand.getZipCode().equals(newStand.zipCode()) ||
+                !Objects.equals(oldStand.getComplement(), newStand.complement()) ||
+                !oldStand.getRegion().equals(newStand.region());
+    }
+
+
+    private void updateMainAddress(EstateEntity estate, EstateCreateRequest req) {
+
+        var addr = req.address();
+
+        addressRepository.updateAddress(
+                estate.getAddress().getId(),
+                addr.street(),
+                addr.number(),
+                addr.neighborhood(),
+                addr.city(),
+                addr.uf(),
+                addr.zipCode(),
+                addr.complement(),
+                addr.region()
+        );
+    }
+
+    private void updateStandAddress(EstateEntity estate, EstateCreateRequest req) {
+
+        var oldStand = estate.getStandAddress();
+        var newStandReq = req.standAddress();
+
+        if (oldStand != null && newStandReq != null) {
 
             addressRepository.updateAddress(
-                    estate.getAddress().getId(),
-                    estateCreateRequest.address().street(),
-                    estateCreateRequest.address().number(),
-                    estateCreateRequest.address().neighborhood(),
-                    estateCreateRequest.address().city(),
-                    estateCreateRequest.address().uf(),
-                    estateCreateRequest.address().zipCode(),
-                    estateCreateRequest.address().complement(),
-                    estateCreateRequest.address().region()
+                    oldStand.getId(),
+                    newStandReq.street(),
+                    newStandReq.number(),
+                    newStandReq.neighborhood(),
+                    newStandReq.city(),
+                    newStandReq.uf(),
+                    newStandReq.zipCode(),
+                    newStandReq.complement(),
+                    newStandReq.region()
             );
-
-
-            AddressEntity oldStandAddress = estate.getStandAddress();
-            var newStandReq = estateCreateRequest.standAddress();
-
-            if (oldStandAddress != null && newStandReq != null) {
-
-                addressRepository.updateAddress(
-                        oldStandAddress.getId(),
-                        newStandReq.street(),
-                        newStandReq.number(),
-                        newStandReq.neighborhood(),
-                        newStandReq.city(),
-                        newStandReq.uf(),
-                        newStandReq.zipCode(),
-                        newStandReq.complement(),
-                        newStandReq.region()
-                );
-            }
-
-            else if (oldStandAddress == null && newStandReq != null) {
-
-                var newStandAddress = addressMapper.toEntity(newStandReq);
-                var savedStand = addressRepository.save(newStandAddress);
-
-                estateRepository.updateEstateStandAddressId(
-                        estateId,
-                        savedStand.getId()
-                );
-            }
-
-            else if (oldStandAddress != null && newStandReq == null) {
-
-                Long standId = oldStandAddress.getId();
-
-                estateRepository.updateEstateStandAddressId(estateId, null);
-
-                addressRepository.deleteById(standId);
-            }
-
-            estateRepository.updateEstate(
-                    estateId,
-                    estateCreateRequest.title(),
-                    estateCreateRequest.description(),
-                    estateCreateRequest.area(),
-                    estateCreateRequest.numberOfRooms(),
-                    estateCreateRequest.type()
-            );
-
-            amenitiesEstateRepository.deleteAmenities(estateId);
-            for (Long featureId : estateCreateRequest.amenitiesIds()) {
-                amenitiesEstateRepository.insertFeatureNative(estateId, featureId);
-            }
-
-            imageEstateRepository.deleteImages(estateId);
-
-            for (int i = 0; i < estateCreateRequest.images().size(); i++) {
-                imageEstateRepository.insertImageNative(
-                        estateId,
-                        estateCreateRequest.imageType().get(i),
-                        estateCreateRequest.images().get(i)
-                );
-            }
-
-            advertisementRepository.updateAdvertisement(
-                    estateId,
-                    estateCreateRequest.advertisementCreateRequest().creator(),
-                    estateCreateRequest.advertisementCreateRequest().responsible(),
-                    estateCreateRequest.advertisementCreateRequest().active(),
-                    estateCreateRequest.advertisementCreateRequest().dataFim()
-            );
-
-            return advertisementRepository.findByEstateId(estateId);
         }
 
-        @Transactional
-        public void updateAdvertisementStatus(Long advertisementId, Boolean active) {
+        else if (oldStand == null && newStandReq != null) {
 
-            if (!advertisementRepository.existsById(advertisementId))
-                throw new RuntimeException("Anúncio não encontrado");
-
-            advertisementRepository.updateActive(advertisementId, active);
+            var saved = addressRepository.save(addressMapper.toEntity(newStandReq));
+            estateRepository.updateEstateStandAddressId(estate.getId(), saved.getId());
         }
+
+        else if (oldStand != null && newStandReq == null) {
+
+            Long standId = oldStand.getId();
+            estateRepository.updateEstateStandAddressId(estate.getId(), null);
+            addressRepository.deleteById(standId);
+        }
+    }
+
+    private void updateEstateBaseData(Long estateId, EstateCreateRequest req) {
+        estateRepository.updateEstate(
+                estateId,
+                req.title(),
+                req.description(),
+                req.area(),
+                req.numberOfRooms(),
+                req.type()
+        );
+    }
+
+    private void updateAmenities(Long estateId, EstateCreateRequest req) {
+        amenitiesEstateRepository.deleteAmenities(estateId);
+
+        for (Long featureId : req.amenitiesIds()) {
+            amenitiesEstateRepository.insertFeatureNative(estateId, featureId);
+        }
+    }
+
+    private void updateImages(Long estateId, EstateCreateRequest req) {
+        imageEstateRepository.deleteImages(estateId);
+
+        for (int i = 0; i < req.images().size(); i++) {
+            imageEstateRepository.insertImageNative(
+                    estateId,
+                    req.imageType().get(i),
+                    req.images().get(i)
+            );
+        }
+    }
+
+    private void updateAdvertisementInfo(Long estateId, EstateCreateRequest req, Long eventTypeId) {
+        var ad = req.advertisementCreateRequest();
+
+        advertisementRepository.updateAdvertisement(
+                estateId,
+                ad.creator(),
+                ad.responsible(),
+                ad.active(),
+                ad.dataFim(),
+                eventTypeId
+        );
+    }
+
+    @Transactional
+    public void updateAdvertisementStatus(Long advertisementId, Boolean active) {
+
+        if (!advertisementRepository.existsById(advertisementId))
+            throw new RuntimeException("Anúncio não encontrado");
+
+        advertisementRepository.updateActive(advertisementId, active);
+    }
 }
