@@ -84,7 +84,7 @@ public class AdvertisementController {
             @PathVariable("id") Long id,
             @RequestBody Boolean active) throws IOException {
 
-        composerService.deactivateAdvertisement(id, active);
+        composerService.updateAdvertisementStatus(id, active);
         return ResponseEntity.noContent().build();
     }
 

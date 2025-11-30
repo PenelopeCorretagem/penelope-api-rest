@@ -118,6 +118,7 @@ public class AppointmentService {
      */
     private UserResponse mapUserToResponse(UserEntity user) {
         return new UserResponse(
+                user.getId(),
                 user.getName(),
                 user.getEmail(),
                 null,
