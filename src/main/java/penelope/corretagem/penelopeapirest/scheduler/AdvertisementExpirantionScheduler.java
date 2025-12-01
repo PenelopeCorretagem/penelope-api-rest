@@ -17,7 +17,7 @@ public class AdvertisementExpirantionScheduler {
         this.advertisementRepository = advertisementRepository;
     }
 
-    @Scheduled(cron = "0 0/3 * * * *") // roda a cada 1 minuto
+    @Scheduled(cron = "0 0 0 * * *")
     @Transactional
     public void disableExpiredAdvertisements() {
 
