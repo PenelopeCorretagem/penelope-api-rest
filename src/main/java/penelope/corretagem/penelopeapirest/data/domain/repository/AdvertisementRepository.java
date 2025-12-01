@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 import penelope.corretagem.penelopeapirest.data.domain.entity.AdvertisementEntity;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -81,6 +82,24 @@ public interface AdvertisementRepository extends JpaRepository<AdvertisementEnti
         WHERE id = :id
         """, nativeQuery = true)
     void updateActive(@Param("id") Long id, @Param("active") Boolean active);
+
+    @Query("""
+    SELECT a
+    FROM AdvertisementEntity a
+    WHERE a.endDate < CURRENT_DATE
+      AND a.active = true
+    """)
+    List<AdvertisementEntity> findExpiredActiveAdvertisements();
+
+
+    @Modifying
+    @Transactional
+    @Query("""
+    UPDATE AdvertisementEntity a
+    SET a.active = false
+    WHERE a.id = :id
+    """)
+    void deactivateById(@Param("id") Long id);
 
     AdvertisementEntity findByEventTypeId(long eventTypeId);
 }

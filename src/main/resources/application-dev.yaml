@@ -8,16 +8,16 @@ server:
 
 spring:
   datasource:
+#    # URL do banco H2 em memória
+#    url: jdbc:h2:mem:penelope_test_db;mode=MYSQL
+#    driverClassName: org.h2.Driver
+#    username: sa
+#    password: penelope123
     # URL do banco H2 em memória
-    url: jdbc:h2:mem:penelope_test_db;mode=MYSQL
-    driverClassName: org.h2.Driver
-    username: sa
-    password: penelope123
-    # URL do banco H2 em memória
-#    url: jdbc:mysql://localhost:3306/penelopec?allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=UTC
-#    driverClassName: com.mysql.cj.jdbc.Driver
-#    username: root
-#    password: ${DB_PASSWORD}
+    url: jdbc:mysql://localhost:3306/penelopec?allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=UTC
+    driverClassName: com.mysql.cj.jdbc.Driver
+    username: root
+    password: ${DB_PASSWORD}
     h2:
       console:
         # Habilita o console do H2 para acessar o banco pelo navegador
