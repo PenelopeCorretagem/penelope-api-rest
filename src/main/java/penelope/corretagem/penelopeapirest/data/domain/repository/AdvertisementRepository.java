@@ -26,7 +26,7 @@ public interface AdvertisementRepository extends JpaRepository<AdvertisementEnti
     FROM AdvertisementEntity a
     JOIN FETCH a.property e
     JOIN FETCH e.address address
-    JOIN FETCH e.standAddress standAddress
+    LEFT JOIN FETCH e.standAddress standAddress
     LEFT JOIN FETCH a.creator creator
     LEFT JOIN FETCH a.responsible responsible
     LEFT JOIN FETCH e.images images

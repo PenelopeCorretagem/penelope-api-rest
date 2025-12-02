@@ -24,19 +24,28 @@ public class AdvertisementService {
 
     public List<AdvertisementResponse> getAllActiveAdvertisements(AdvertisementFilterRequest request) {
 
-        EstateEntity.Type tipo = null;
-        if (request.tipo() != null) {
-            tipo = EstateEntity.Type.valueOf(request.tipo().toUpperCase());
+        EstateEntity.Type type = null;
+        if (request.type() != null) {
+            type = EstateEntity.Type.valueOf(request.type().toUpperCase());
         }
 
-        // se o parâmetro for nulo, assume true
-        boolean ativoFinal = (request.ativo() == null) ? true : request.ativo();
+        boolean ativoFinal = request.active() == null || request.active();
 
-        Specification<AdvertisementEntity> spec = AdvertisementSpecifications.hasCidade(request.cidade())
-                .and(AdvertisementSpecifications.hasRegiao(request.regiao()))
-                .and(AdvertisementSpecifications.hasTipo(tipo))
-                .and(AdvertisementSpecifications.hasQuartos(request.quartos()))
-                .and((root, query, cb) -> cb.equal(root.get("active"), ativoFinal));
+        Specification<AdvertisementEntity> spec =
+                AdvertisementSpecifications.hasCidade(request.city())
+                        .and(AdvertisementSpecifications.hasRegiao(request.region()))
+                        .and(AdvertisementSpecifications.hasTipo(type))
+                        .and(AdvertisementSpecifications.hasQuartos(request.numberOfRooms()))
+                        .and(AdvertisementSpecifications.hasArea(request.area()))
+                        .and(AdvertisementSpecifications.hasTitulo(request.title()))
+                        .and(AdvertisementSpecifications.hasDescricao(request.description()))
+                        .and(AdvertisementSpecifications.isActive(ativoFinal))
+                        .and(AdvertisementSpecifications.createdAtEquals(request.createdAt()))
+                        .and(AdvertisementSpecifications.createdAtGreaterThan(request.createdAtMin()))
+                        .and(AdvertisementSpecifications.createdAtLessThan(request.createdAtMax()))
+                        .and(AdvertisementSpecifications.endDateEquals(request.endDate()))
+                        .and(AdvertisementSpecifications.endDateGreaterThan(request.endDateMin()))
+                        .and(AdvertisementSpecifications.endDateLessThan(request.endDateMax()));
 
         var anuncios = repository.findAll(spec);
 
@@ -44,6 +53,7 @@ public class AdvertisementService {
                 .map(AdvertisementResponseMapper::toDTO)
                 .collect(Collectors.toList());
     }
+
 
     public AdvertisementResponse getLatestAdvertisement() {
         return repository.findTopByOrderByCreatedAtDesc()
@@ -56,5 +66,4 @@ public class AdvertisementService {
                 .map(AdvertisementResponseMapper::toDTO)
                 .orElse(null);
     }
-
 }
