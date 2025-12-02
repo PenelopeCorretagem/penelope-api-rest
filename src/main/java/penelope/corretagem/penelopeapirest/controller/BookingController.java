@@ -15,7 +15,7 @@ import java.time.LocalDate;
 import java.time.OffsetDateTime;
 
 @RestController
-@RequestMapping("/api/bookings")
+@RequestMapping("/cal/bookings")
 @CrossOrigin(origins = "*")
 @Tag(name = "Cal Agendamentos", description = "Gerencia agendamentos")
 public class BookingController {

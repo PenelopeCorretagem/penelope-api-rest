@@ -29,7 +29,7 @@ import penelope.corretagem.penelopeapirest.data.domain.enums.Status;
 
 @Tag(name = "Agendamentos", description = "Gerenciamento de agendamentos integrado com Cal.com")
 @RestController
-@RequestMapping("/api/appointments")
+@RequestMapping("/appointments")
 @CrossOrigin(origins = "*")
 public class AppointmentController {
 

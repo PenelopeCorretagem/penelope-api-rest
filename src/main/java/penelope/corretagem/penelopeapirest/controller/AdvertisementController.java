@@ -19,7 +19,7 @@ import java.util.Optional;
 
 @Tag(name = "Anúncios")
 @RestController
-@RequestMapping("/anuncios")
+@RequestMapping("/advertisement")
 public class AdvertisementController {
 
     private final AdvertisementService service;
