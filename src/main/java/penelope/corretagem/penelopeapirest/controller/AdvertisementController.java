@@ -87,4 +87,5 @@ public class AdvertisementController {
         composerService.updateAdvertisementStatus(id, active);
         return ResponseEntity.noContent().build();
     }
+
 }
