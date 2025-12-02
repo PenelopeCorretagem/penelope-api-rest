@@ -31,9 +31,9 @@ public class AdvertisementController {
     }
 
     @GetMapping
-    public List<AdvertisementResponse> listAllActive(
+    public List<AdvertisementResponse> listAll(
             @ModelAttribute AdvertisementFilterRequest request) {
-        return service.getAllActiveAdvertisements(request);
+        return service.getAllAdvertisements(request);
     }
 
     @GetMapping("/latest")
@@ -87,5 +87,4 @@ public class AdvertisementController {
         composerService.updateAdvertisementStatus(id, active);
         return ResponseEntity.noContent().build();
     }
-
 }

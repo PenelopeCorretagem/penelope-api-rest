@@ -22,14 +22,12 @@ public class AdvertisementService {
         this.repository = repository;
     }
 
-    public List<AdvertisementResponse> getAllActiveAdvertisements(AdvertisementFilterRequest request) {
+    public List<AdvertisementResponse> getAllAdvertisements(AdvertisementFilterRequest request) {
 
         EstateEntity.Type type = null;
         if (request.type() != null) {
             type = EstateEntity.Type.valueOf(request.type().toUpperCase());
         }
-
-        boolean ativoFinal = request.active() == null || request.active();
 
         Specification<AdvertisementEntity> spec =
                 AdvertisementSpecifications.hasCidade(request.city())
@@ -39,7 +37,7 @@ public class AdvertisementService {
                         .and(AdvertisementSpecifications.hasArea(request.area()))
                         .and(AdvertisementSpecifications.hasTitulo(request.title()))
                         .and(AdvertisementSpecifications.hasDescricao(request.description()))
-                        .and(AdvertisementSpecifications.isActive(ativoFinal))
+                        .and(AdvertisementSpecifications.isActive(request.active()))
                         .and(AdvertisementSpecifications.createdAtEquals(request.createdAt()))
                         .and(AdvertisementSpecifications.createdAtGreaterThan(request.createdAtMin()))
                         .and(AdvertisementSpecifications.createdAtLessThan(request.createdAtMax()))
