@@ -14,6 +14,7 @@ import io.swagger.v3.oas.models.responses.ApiResponse;
 import io.swagger.v3.oas.models.media.Content;
 import io.swagger.v3.oas.models.media.MediaType;
 
+import io.swagger.v3.oas.models.security.SecurityRequirement;
 import org.springdoc.core.customizers.OperationCustomizer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -76,7 +77,7 @@ public class OpenApiConfig {
                 .components(new Components()
                         .addSchemas("ErrorResponse", errorSchema)
                         .addSchemas("UserResponse", userResponseSchema)
-                );
+                ).addSecurityItem(new SecurityRequirement().addList("bearerAuth"));
     }
 
     /**
