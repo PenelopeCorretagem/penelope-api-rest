@@ -75,7 +75,6 @@ public class SecurityConfig {
                                 .requestMatchers(antMatcher(HttpMethod.POST, "/users")).permitAll()
                                 .requestMatchers(antMatcher("/contact-us")).permitAll()
                                 .requestMatchers(antMatcher(HttpMethod.GET, "/advertisement")).permitAll()
-                                .requestMatchers(antMatcher("/amenities")).permitAll()
 //                        .requestMatchers(new AntPathRequestMatcher("/webjars/")).permitAll()
 
                                 // 3. CRUCIAL: Libera a rota de erro do Spring (senão você toma 403 no erro)
