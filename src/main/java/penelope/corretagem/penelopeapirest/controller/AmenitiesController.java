@@ -21,16 +21,13 @@ public class AmenitiesController {
 
     @GetMapping
     public ResponseEntity<List<AmenitiesResponse>> getAmenities() {
-        try {
-            List<AmenitiesResponse> amenities = amenitiesService.getAllAmenities();
 
-            if (amenities.isEmpty()) {
-                return ResponseEntity.noContent().build();
-            }
+        List<AmenitiesResponse> amenities = amenitiesService.getAllAmenities();
 
-            return ResponseEntity.ok(amenities);
-        } catch (Exception e) {
-            throw new RuntimeException("Erro ao buscar diferencias", e);
+        if (amenities.isEmpty()) {
+            return ResponseEntity.noContent().build();
         }
+
+        return ResponseEntity.ok(amenities);
     }
 }
