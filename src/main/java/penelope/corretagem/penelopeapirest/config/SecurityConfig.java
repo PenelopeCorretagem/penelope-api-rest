@@ -66,23 +66,23 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers(antMatcher("/auth/**")).permitAll()
+                                .requestMatchers(antMatcher("/auth/**")).permitAll()
 
-                        // 2. Libera o Swagger explicitamente com AntPathRequestMatcher
-                        .requestMatchers(antMatcher("/swagger-ui/**")).permitAll()
-                        .requestMatchers(antMatcher("/api-docs/**")).permitAll()
-                        .requestMatchers(antMatcher("/swagger-resources/")).permitAll()
-                        .requestMatchers(antMatcher(HttpMethod.POST, "/users")).permitAll()
-                        .requestMatchers(antMatcher("/contact-us")).permitAll()
-                        .requestMatchers(antMatcher(HttpMethod.GET, "/advertisement")).permitAll()
+                                // 2. Libera o Swagger explicitamente com AntPathRequestMatcher
+                                .requestMatchers(antMatcher("/swagger-ui/**")).permitAll()
+                                .requestMatchers(antMatcher("/api-docs/**")).permitAll()
+                                .requestMatchers(antMatcher("/swagger-resources/")).permitAll()
+                                .requestMatchers(antMatcher(HttpMethod.POST, "/users")).permitAll()
+                                .requestMatchers(antMatcher("/contact-us")).permitAll()
+                                .requestMatchers(antMatcher(HttpMethod.GET, "/advertisement")).permitAll()
 //                        .requestMatchers(new AntPathRequestMatcher("/webjars/")).permitAll()
 
-                        // 3. CRUCIAL: Libera a rota de erro do Spring (senão você toma 403 no erro)
-                        .requestMatchers(antMatcher("/error")).permitAll()
+                                // 3. CRUCIAL: Libera a rota de erro do Spring (senão você toma 403 no erro)
+                                .requestMatchers(antMatcher("/error")).permitAll()
 
-                        // 4. Libera H2 Console (se estiver usando)
-                        .requestMatchers(antMatcher("/h2-console/")).permitAll()
-                        .anyRequest().authenticated()
+                                // 4. Libera H2 Console (se estiver usando)
+                                .requestMatchers(antMatcher("/h2-console/")).permitAll()
+                                .anyRequest().authenticated()
                 ).addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class).build();
     }
 
