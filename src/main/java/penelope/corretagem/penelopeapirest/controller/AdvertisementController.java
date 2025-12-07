@@ -63,7 +63,7 @@ public class AdvertisementController {
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
-    @PostMapping(value = "/fotos", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PostMapping(value = "/photos", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<List<String>> uploadImages(
             @RequestPart("files") List<MultipartFile> files) throws IOException {
         List<String> result = composerService.uploadImages(files);
