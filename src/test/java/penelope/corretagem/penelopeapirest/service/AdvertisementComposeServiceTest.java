@@ -194,8 +194,9 @@ class AdvertisementComposeServiceTest {
     EstateCreateRequest request = createUpdateRequestWithSameTitle();
     EventTypeEntity eventType = createEventType();
     AdvertisementEntity advertisement = createAdvertisement(eventType);
+    advertisement.setProperty(estate);
 
-    when(estateRepository.findById(1L)).thenReturn(Optional.of(estate));
+    when(advertisementRepository.findById(1L)).thenReturn(Optional.of(advertisement));
     when(advertisementRepository.findByEstateId(1L)).thenReturn(advertisement);
     setupUpdateMocksWithoutEventType();
 
@@ -225,8 +226,9 @@ class AdvertisementComposeServiceTest {
     EstateCreateRequest request = createUpdateRequestWithStandAddress();
     EventTypeEntity eventType = createEventType();
     AdvertisementEntity advertisement = createAdvertisement(eventType);
+    advertisement.setProperty(estate);
 
-    when(estateRepository.findById(1L)).thenReturn(Optional.of(estate));
+    when(advertisementRepository.findById(1L)).thenReturn(Optional.of(advertisement));
     when(addressMapper.toEntity(any(AddressRequest.class))).thenReturn(newStandAddress);
     when(addressRepository.save(any(AddressEntity.class))).thenReturn(newStandAddress);
     when(advertisementRepository.findByEstateId(1L)).thenReturn(advertisement);
@@ -258,8 +260,9 @@ class AdvertisementComposeServiceTest {
     EstateCreateRequest request = createUpdateRequestWithoutStandAddress();
     EventTypeEntity eventType = createEventType();
     AdvertisementEntity advertisement = createAdvertisement(eventType);
+    advertisement.setProperty(estate);
 
-    when(estateRepository.findById(1L)).thenReturn(Optional.of(estate));
+    when(advertisementRepository.findById(1L)).thenReturn(Optional.of(advertisement));
     when(advertisementRepository.findByEstateId(1L)).thenReturn(advertisement);
     setupCommonUpdateMocks(request);
 
@@ -282,8 +285,9 @@ class AdvertisementComposeServiceTest {
     EstateCreateRequest request = createUpdateRequestWithDifferentStandAddress();
     EventTypeEntity eventType = createEventType();
     AdvertisementEntity advertisement = createAdvertisement(eventType);
+    advertisement.setProperty(estate);
 
-    when(estateRepository.findById(1L)).thenReturn(Optional.of(estate));
+    when(advertisementRepository.findById(1L)).thenReturn(Optional.of(advertisement));
     when(advertisementRepository.findByEstateId(1L)).thenReturn(advertisement);
     setupCommonUpdateMocks(request);
 
@@ -313,8 +317,9 @@ class AdvertisementComposeServiceTest {
     EstateCreateRequest request = createUpdateRequestWithNewTitle();
     EventTypeEntity eventType = createEventType();
     AdvertisementEntity advertisement = createAdvertisement(eventType);
+    advertisement.setProperty(estate);
 
-    when(estateRepository.findById(1L)).thenReturn(Optional.of(estate));
+    when(advertisementRepository.findById(1L)).thenReturn(Optional.of(advertisement));
     when(advertisementRepository.findByEstateId(1L)).thenReturn(advertisement);
     setupCommonUpdateMocks(request);
 
@@ -328,22 +333,22 @@ class AdvertisementComposeServiceTest {
   }
 
   @Test
-  @DisplayName("Deve lançar exceção quando propriedade não é encontrada no update")
-  void updateAdvertisement_shouldThrowExceptionWhenEstateNotFound() {
+  @DisplayName("Deve lançar exceção quando anúncio não é encontrado no update")
+  void updateAdvertisement_shouldThrowExceptionWhenAdvertisementNotFound() {
     // Arrange
-    Long estateId = 999L;
+    Long advertisementId = 999L;
     EstateCreateRequest request = createEstateRequest();
 
-    when(estateRepository.findById(estateId)).thenReturn(Optional.empty());
+    when(advertisementRepository.findById(advertisementId)).thenReturn(Optional.empty());
 
     // Act & Assert
     RuntimeException exception = assertThrows(
       RuntimeException.class,
-      () -> service.updateAdvertisement(estateId, request)
+      () -> service.updateAdvertisement(advertisementId, request)
     );
 
-    assertEquals("Propriedade não encontrado", exception.getMessage());
-    verify(advertisementRepository, never()).findByEstateId(anyLong());
+    assertEquals("Anúncio não encontrado", exception.getMessage());
+    verify(estateRepository, never()).updateEstate(anyLong(), anyString(), anyString(), anyDouble(), anyInt(), anyString());
   }
 
   @Test
