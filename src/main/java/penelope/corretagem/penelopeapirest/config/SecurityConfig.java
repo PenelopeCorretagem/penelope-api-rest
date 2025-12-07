@@ -34,16 +34,19 @@ public class SecurityConfig {
     }
 
     private static final String[] AUTH_WHITELIST = {
-            "/auth/",
-            "/webhooks/",
-            "/h2-console/",
-            "/v3/api-docs/",
-            "/api/v1/swagger-ui/",
-            "/swagger-ui.html",
-            "/swagger-resources/",
+            "/auth/**",
+            "/error",
+            "/contact-us",
+            "/cal",
+
+            // Swagger
+            "/swagger-ui/**",
+            "/api-docs/**",
+            "/swagger-resources/**",
             "/webjars/**",
-            "/configuration/ui",
-            "/configuration/security"
+
+            // H2
+            "/h2-console/**"
     };
 
     // Define o algoritmo de criptografia de senhas usando BCrypt
@@ -66,23 +69,16 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authorize -> authorize
-                                .requestMatchers(antMatcher("/auth/**")).permitAll()
+                        // Libera whitelist inteira
+                        .requestMatchers(AUTH_WHITELIST).permitAll()
 
-                                // 2. Libera o Swagger explicitamente com AntPathRequestMatcher
-                                .requestMatchers(antMatcher("/swagger-ui/**")).permitAll()
-                                .requestMatchers(antMatcher("/api-docs/**")).permitAll()
-                                .requestMatchers(antMatcher("/swagger-resources/")).permitAll()
-                                .requestMatchers(antMatcher(HttpMethod.POST, "/users")).permitAll()
-                                .requestMatchers(antMatcher("/contact-us")).permitAll()
-                                .requestMatchers(antMatcher(HttpMethod.GET, "/advertisement")).permitAll()
-//                        .requestMatchers(new AntPathRequestMatcher("/webjars/")).permitAll()
+                        // Libera POST /users
+                        .requestMatchers(antMatcher(HttpMethod.POST, "/users")).permitAll()
 
-                                // 3. CRUCIAL: Libera a rota de erro do Spring (senão você toma 403 no erro)
-                                .requestMatchers(antMatcher("/error")).permitAll()
+                        // Libera TODOS os GET /advertisement/**
+                        .requestMatchers(antMatcher(HttpMethod.GET, "/advertisement/**")).permitAll()
 
-                                // 4. Libera H2 Console (se estiver usando)
-                                .requestMatchers(antMatcher("/h2-console/")).permitAll()
-                                .anyRequest().authenticated()
+                        .anyRequest().authenticated()
                 ).addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class).build();
     }
 
