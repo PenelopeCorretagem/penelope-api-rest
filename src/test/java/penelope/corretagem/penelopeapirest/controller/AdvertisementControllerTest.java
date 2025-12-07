@@ -226,7 +226,7 @@ class AdvertisementControllerTest {
     when(composerService.uploadImages(anyList())).thenReturn(mockUrls);
 
     // Act
-    mockMvc.perform(multipart("/advertisement/fotos")
+    mockMvc.perform(multipart("/advertisement/photos")
         .file(file1)
         .file(file2)
         .contentType(MediaType.MULTIPART_FORM_DATA))
