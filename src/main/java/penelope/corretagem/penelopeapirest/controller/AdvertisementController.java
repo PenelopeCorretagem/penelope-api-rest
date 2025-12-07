@@ -22,70 +22,70 @@ import java.util.Optional;
 @RequestMapping("/advertisement")
 public class AdvertisementController {
 
-    private final AdvertisementService service;
-    private final AdvertisementComposerService composerService;
+  private final AdvertisementService service;
+  private final AdvertisementComposerService composerService;
 
-    public AdvertisementController(AdvertisementService service, AdvertisementComposerService composerService) {
-        this.service = service;
-        this.composerService = composerService;
+  public AdvertisementController(AdvertisementService service, AdvertisementComposerService composerService) {
+    this.service = service;
+    this.composerService = composerService;
+  }
+
+  @GetMapping
+  public List<AdvertisementResponse> listAll(
+    @ModelAttribute AdvertisementFilterRequest request) {
+    return service.getAllAdvertisements(request);
+  }
+
+  @GetMapping("/latest")
+  public ResponseEntity<AdvertisementResponse> getLatestAdvertisement() {
+    AdvertisementResponse latest = service.getLatestAdvertisement();
+    if (latest != null) {
+      return ResponseEntity.ok(latest);
+    } else {
+      return ResponseEntity.notFound().build();
     }
+  }
 
-    @GetMapping
-    public List<AdvertisementResponse> listAll(
-            @ModelAttribute AdvertisementFilterRequest request) {
-        return service.getAllAdvertisements(request);
+  @GetMapping("/{id}")
+  public ResponseEntity<AdvertisementResponse> getAdvertisementById(@PathVariable Long id) {
+    var response = service.getAdvertisementById(id);
+    if (response != null) {
+      return ResponseEntity.ok(response);
+    } else {
+      return ResponseEntity.notFound().build();
     }
+  }
 
-    @GetMapping("/latest")
-    public ResponseEntity<AdvertisementResponse> getLatestAdvertisement() {
-        AdvertisementResponse latest = service.getLatestAdvertisement();
-        if (latest != null) {
-            return ResponseEntity.ok(latest);
-        } else {
-            return ResponseEntity.notFound().build();
-        }
-    }
+  @PostMapping
+  public ResponseEntity<Optional<AdvertisementEntity>> createAdvertisement(
+    @RequestBody EstateCreateRequest request) throws IOException {
+    Optional<AdvertisementEntity> response = composerService.createAdvertisement(request);
+    return ResponseEntity.status(HttpStatus.CREATED).build();
+  }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<AdvertisementResponse> getAdvertisementById(@PathVariable Long id) {
-        var response = service.getAdvertisementById(id);
-        if (response != null) {
-            return ResponseEntity.ok(response);
-        } else {
-            return ResponseEntity.notFound().build();
-        }
-    }
+  @PostMapping(value = "/photos", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+  public ResponseEntity<List<String>> uploadImages(
+    @RequestPart("files") List<MultipartFile> files) throws IOException {
+    List<String> result = composerService.uploadImages(files);
+    return ResponseEntity.ok(result);
+  }
 
-    @PostMapping
-    public ResponseEntity<Optional<AdvertisementEntity>> createAdvertisement(
-            @RequestBody EstateCreateRequest request) throws IOException {
-        Optional<AdvertisementEntity> response = composerService.createAdvertisement(request);
-        return ResponseEntity.status(HttpStatus.CREATED).build();
-    }
+  @PutMapping("/{id}")
+  public ResponseEntity<Optional<AdvertisementEntity>> updateAdvertisement(
+    @PathVariable("id") Long advertisementId,
+    @RequestBody EstateCreateRequest request) throws IOException {
 
-    @PostMapping(value = "/photos", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<List<String>> uploadImages(
-            @RequestPart("files") List<MultipartFile> files) throws IOException {
-        List<String> result = composerService.uploadImages(files);
-        return ResponseEntity.ok(result);
-    }
+    AdvertisementEntity response = composerService.updateAdvertisement(advertisementId, request);
+    return ResponseEntity.noContent().build();
+  }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<Optional<AdvertisementEntity>> updateAdvertisement(
-            @PathVariable("id") Long estateId,
-            @RequestBody EstateCreateRequest request) throws IOException {
+  @PatchMapping("/{id}")
+  public ResponseEntity<Void> deactivateAdvertisement(
+    @PathVariable("id") Long id,
+    @RequestBody Boolean active) throws IOException {
 
-        AdvertisementEntity response = composerService.updateAdvertisement(estateId, request);
-        return ResponseEntity.noContent().build();
-    }
-
-    @PatchMapping("/{id}")
-    public ResponseEntity<Void> deactivateAdvertisement(
-            @PathVariable("id") Long id,
-            @RequestBody Boolean active) throws IOException {
-
-        composerService.updateAdvertisementStatus(id, active);
-        return ResponseEntity.noContent().build();
-    }
+    composerService.updateAdvertisementStatus(id, active);
+    return ResponseEntity.noContent().build();
+  }
 
 }
