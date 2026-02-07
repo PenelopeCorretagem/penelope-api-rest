@@ -1,0 +1,15 @@
+meta {
+  name: Listar ultimo anuncio
+  type: http
+  seq: 2
+}
+
+get {
+  url: http://localhost:8081/api/v1/anuncios/latest
+  body: none
+  auth: none
+}
+
+docs {
+  This request retrieves a list of users from the JSONPlaceholder API.
+}
