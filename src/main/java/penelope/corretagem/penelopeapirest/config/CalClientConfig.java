@@ -1,27 +1,27 @@
 package penelope.corretagem.penelopeapirest.config;
 
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.client.RestClient;
+import penelope.corretagem.penelopeapirest.config.properties.CalcomProperties;
 
 @Configuration
 public class CalClientConfig {
 
-  @Value("${calcom.api.base-url}")
-  private String baseUrl;
+  private final CalcomProperties prop;
 
-  @Value("${calcom.api.key}")
-  private String apiKey;
+  public CalClientConfig(CalcomProperties prop) {
+    this.prop = prop;
+  }
 
   @Bean
   @Qualifier("calRestClientV1")
   public RestClient calRestClientV1(RestClient.Builder builder) {
     return builder
-      .baseUrl(baseUrl)
-      .defaultHeader("Authorization", "Bearer " + apiKey)
-      .defaultHeader("cal-api-version", "2024-06-14")  // Versão para EventType
+      .baseUrl(prop.api().baseUrl())
+      .defaultHeader("Authorization", "Bearer " + prop.api().key())
+      .defaultHeader("cal-api-version", prop.api().versionV1())  // Versão para EventType
       .build();
   }
 
@@ -29,9 +29,9 @@ public class CalClientConfig {
   @Qualifier("calRestClientV2")
   public RestClient calRestClientV2(RestClient.Builder builder) {
     return builder
-      .baseUrl(baseUrl)
-      .defaultHeader("Authorization", "Bearer " + apiKey)
-      .defaultHeader("cal-api-version", "2024-08-13")  // Versão para Bookings
+      .baseUrl(prop.api().baseUrl())
+      .defaultHeader("Authorization", "Bearer " + prop.api().key())
+      .defaultHeader("cal-api-version", prop.api().versionV2())  // Versão para Bookings
       .build();
   }
 }
