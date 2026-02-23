@@ -10,11 +10,11 @@ import penelope.corretagem.penelopeapirest.data.domain.dto.UserRequest;
 import penelope.corretagem.penelopeapirest.data.domain.dto.UserResponse;
 import penelope.corretagem.penelopeapirest.data.domain.dto.UserUpdateRequest;
 import penelope.corretagem.penelopeapirest.data.domain.entity.UserEntity;
-import penelope.corretagem.penelopeapirest.service.exception.ClientMustNotPossessACreci;
-import penelope.corretagem.penelopeapirest.service.exception.UserEmailAlreadyExistsException;
-import penelope.corretagem.penelopeapirest.service.exception.InvalidTokenException;
-import penelope.corretagem.penelopeapirest.mapper.UserMapper;
 import penelope.corretagem.penelopeapirest.data.domain.repository.UserRepository;
+import penelope.corretagem.penelopeapirest.mapper.UserMapper;
+import penelope.corretagem.penelopeapirest.service.exception.ClientMustNotPossessACreci;
+import penelope.corretagem.penelopeapirest.service.exception.InvalidTokenException;
+import penelope.corretagem.penelopeapirest.service.exception.UserEmailAlreadyExistsException;
 import penelope.corretagem.penelopeapirest.service.exception.UserNotFoundException;
 
 import java.time.LocalDate;

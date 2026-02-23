@@ -8,7 +8,10 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import penelope.corretagem.penelopeapirest.data.domain.enums.Error;
-import penelope.corretagem.penelopeapirest.service.exception.*;
+import penelope.corretagem.penelopeapirest.service.exception.EstateNotFoundException;
+import penelope.corretagem.penelopeapirest.service.exception.InvalidTokenException;
+import penelope.corretagem.penelopeapirest.service.exception.UserEmailAlreadyExistsException;
+import penelope.corretagem.penelopeapirest.service.exception.UserNotFoundException;
 
 import java.util.HashMap;
 import java.util.Map;

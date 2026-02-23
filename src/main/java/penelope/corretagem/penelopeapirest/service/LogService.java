@@ -3,8 +3,8 @@ package penelope.corretagem.penelopeapirest.service;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
 import penelope.corretagem.penelopeapirest.data.domain.entity.LogEntity;
-import penelope.corretagem.penelopeapirest.event.UserRegisteredEvent;
 import penelope.corretagem.penelopeapirest.data.domain.repository.LogRepository;
+import penelope.corretagem.penelopeapirest.event.UserRegisteredEvent;
 
 @Service
 public class LogService {

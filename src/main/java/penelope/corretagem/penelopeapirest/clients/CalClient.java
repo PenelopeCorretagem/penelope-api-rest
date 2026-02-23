@@ -7,9 +7,9 @@ import org.springframework.web.client.RestClient;
 import penelope.corretagem.penelopeapirest.data.domain.dto.ApiResponseWrapper;
 import penelope.corretagem.penelopeapirest.data.domain.dto.cal.CalUser;
 import penelope.corretagem.penelopeapirest.data.domain.dto.cal.booking.*;
-import penelope.corretagem.penelopeapirest.data.domain.dto.cal.eventtype.EventTypeRequest;
 import penelope.corretagem.penelopeapirest.data.domain.dto.cal.eventtype.EventTypeCalResponse;
-import java.time.LocalDate;
+import penelope.corretagem.penelopeapirest.data.domain.dto.cal.eventtype.EventTypeRequest;
+
 import java.util.List;
 import java.util.Optional;
 

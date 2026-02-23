@@ -3,7 +3,6 @@ package penelope.corretagem.penelopeapirest.data.domain.dto;
 import penelope.corretagem.penelopeapirest.data.domain.dto.AdvertisementDTO.CreatorResponse;
 import penelope.corretagem.penelopeapirest.data.domain.dto.AdvertisementDTO.EventTypeResponse;
 import penelope.corretagem.penelopeapirest.data.domain.dto.AdvertisementDTO.ResponsibleResponse;
-import penelope.corretagem.penelopeapirest.data.domain.dto.cal.eventtype.EventTypeCalResponse;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;

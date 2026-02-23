@@ -1,6 +1,6 @@
 package penelope.corretagem.penelopeapirest.data.domain.specification;
 
-import jakarta.persistence.criteria.*;
+import jakarta.persistence.criteria.Join;
 import org.springframework.data.jpa.domain.Specification;
 import penelope.corretagem.penelopeapirest.data.domain.entity.AppointmentEntity;
 import penelope.corretagem.penelopeapirest.data.domain.entity.EstateEntity;

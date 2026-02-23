@@ -1,16 +1,11 @@
 package penelope.corretagem.penelopeapirest.service;
 
-import jakarta.transaction.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
 import penelope.corretagem.penelopeapirest.clients.CalClient;
-import penelope.corretagem.penelopeapirest.data.domain.dto.cal.booking.BookingFilterRequest;
-import penelope.corretagem.penelopeapirest.data.domain.dto.cal.booking.BookingListResponse;
-import penelope.corretagem.penelopeapirest.data.domain.dto.cal.booking.BookingUpdateRequest;
-import penelope.corretagem.penelopeapirest.data.domain.dto.cal.eventtype.EventTypeRequest;
 import penelope.corretagem.penelopeapirest.data.domain.dto.cal.eventtype.EventTypeCalResponse;
+import penelope.corretagem.penelopeapirest.data.domain.dto.cal.eventtype.EventTypeRequest;
 import penelope.corretagem.penelopeapirest.data.domain.entity.AdvertisementEntity;
 import penelope.corretagem.penelopeapirest.data.domain.entity.EstateEntity;
 import penelope.corretagem.penelopeapirest.data.domain.entity.EventTypeEntity;
@@ -18,9 +13,7 @@ import penelope.corretagem.penelopeapirest.data.domain.repository.AdvertisementR
 import penelope.corretagem.penelopeapirest.data.domain.repository.EstateRepository;
 import penelope.corretagem.penelopeapirest.data.domain.repository.EventTypeRepository;
 
-import javax.swing.text.html.Option;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class EventTypeService {

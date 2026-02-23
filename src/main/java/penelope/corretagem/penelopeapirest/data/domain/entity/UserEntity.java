@@ -1,10 +1,10 @@
 package penelope.corretagem.penelopeapirest.data.domain.entity;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import penelope.corretagem.penelopeapirest.data.domain.enums.AccessLevel;
 
 import java.math.BigDecimal;

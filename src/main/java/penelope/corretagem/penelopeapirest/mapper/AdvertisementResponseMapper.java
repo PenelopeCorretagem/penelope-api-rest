@@ -4,7 +4,6 @@ import penelope.corretagem.penelopeapirest.data.domain.dto.AdvertisementDTO.*;
 import penelope.corretagem.penelopeapirest.data.domain.dto.AdvertisementResponse;
 import penelope.corretagem.penelopeapirest.data.domain.dto.EstateResponse;
 import penelope.corretagem.penelopeapirest.data.domain.entity.AdvertisementEntity;
-import penelope.corretagem.penelopeapirest.data.domain.entity.AmenitiesEntity;
 
 import java.util.stream.Collectors;
 
