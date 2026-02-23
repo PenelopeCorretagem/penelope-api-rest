@@ -1,3 +1,10 @@
+server:
+  servlet:
+    context-path: /api
+  tomcat:
+    max-http-form-post-size: 20MB
+  port: ${PRODUCER_PORT:8080}
+
 spring:
   application:
     name: penelope-api-rest
@@ -19,11 +26,25 @@ spring:
       max-file-size: 10MB
       max-request-size: 20MB
 
-server:
-  servlet:
-    context-path: /api
-  tomcat:
-    max-http-form-post-size: 20MB
+  rabbitmq:
+    host: ${RABBITMQ_HOST:localhost}
+    port: ${RABBITMQ_PORT:5672}
+    username: ${RABBITMQ_DEFAULT_USER:guest}
+    password: ${RABBITMQ_DEFAULT_PASS:guest}
+    # Força a confirmação de que a mensagem foi entregue (Publisher Confirms)
+    publisher-confirm-type: correlated
+    publisher-returns: true
+    listener:
+      simple:
+        acknowledge-mode: auto
+        # Tenta reprocessar a mensagem até 3 vezes antes de jogar para a DLQ
+        concurrency: 3
+        max-concurrency: 10
+        retry:
+          enabled: true
+          initial-interval: 2000ms
+          max-attempts: 3
+          multiplier: 2.0
 
 springdoc:
   swagger-ui:
