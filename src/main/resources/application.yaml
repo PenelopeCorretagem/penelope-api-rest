@@ -9,9 +9,6 @@ spring:
   application:
     name: penelope-api-rest
 
-  config:
-    import: optional:file:.env
-
   profiles:
     active: ${SPRING_PROFILES_ACTIVE:dev}
 
@@ -45,6 +42,17 @@ spring:
           initial-interval: 2000ms
           max-attempts: 3
           multiplier: 2.0
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: ${EMAIL}
+    password: ${EMAIL_PASSWORD}
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
 
 springdoc:
   swagger-ui:
@@ -65,11 +73,11 @@ app:
     token:
       secret: ${JWT_API_KEY}
   cors:
-    allowed-origins: >
-      "http://localhost:8081", // Back
-      "http://localhost:3000",  // dev
-      "http://localhost:3001",  // homol
-      "http://localhost:3002"   // prod
+    allowed-origins:
+      - "http://localhost:8081" # Back
+      - "http://localhost:3000" # dev
+      - "http://localhost:3001" # homol
+      - "http://localhost:3002" # prod
 
 calcom:
   api:
@@ -84,15 +92,3 @@ cloudinary:
   cloud-name: ${CLOUDINARY_CLOUD_NAME}
   api-key: ${CLOUDINARY_API_KEY}
   api-secret: ${CLOUDINARY_API_SECRET}
-
-mail:
-  host: smtp.gmail.com
-  port: 587
-  username: ${EMAIL}
-  password: ${EMAIL_PASSWORD}
-  properties:
-    mail:
-      smtp:
-        auth: true
-        starttls:
-          enable: true

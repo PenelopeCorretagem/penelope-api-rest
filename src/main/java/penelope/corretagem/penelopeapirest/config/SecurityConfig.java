@@ -26,12 +26,12 @@ import static org.springframework.security.web.util.matcher.AntPathRequestMatche
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
+  final SecurityFilter securityFilter;
+  final CorsProperties corsProperties;
 
-  SecurityFilter securityFilter;
-  CorsProperties corsProperties;
-
-  public SecurityConfig(SecurityFilter securityFilter) {
+  public SecurityConfig(SecurityFilter securityFilter, CorsProperties corsProperties) {
     this.securityFilter = securityFilter;
+    this.corsProperties = corsProperties;
   }
 
   private static final String[] AUTH_WHITELIST = {

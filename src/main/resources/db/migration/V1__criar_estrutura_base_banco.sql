@@ -1,7 +1,3 @@
-CREATE DATABASE penelopec;
-
-USE penelopec;
-
 -- Tabela de endereços, associada à cidade
 CREATE TABLE endereco (
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -50,8 +46,8 @@ CREATE TABLE empreendimento (
 );
 
 CREATE TABLE tipo_evento (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    tittulo VARCHAR(100) NOT NULL,
+    id BIGINT PRIMARY KEY,
+    titulo VARCHAR(100) NOT NULL,
     slug VARCHAR(100) NOT NULL UNIQUE
 );
 
