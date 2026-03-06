@@ -1,15 +1,8 @@
 package penelope.corretagem.penelopeapirest.service;
 
 import org.springframework.stereotype.Service;
-import penelope.corretagem.penelopeapirest.data.domain.dto.EstateRequest;
-import penelope.corretagem.penelopeapirest.data.domain.dto.EstateResponse;
-import penelope.corretagem.penelopeapirest.data.domain.entity.EstateEntity;
-import penelope.corretagem.penelopeapirest.service.exception.EstateNotFoundException;
-import penelope.corretagem.penelopeapirest.mapper.EstateMapper;
 import penelope.corretagem.penelopeapirest.data.domain.repository.EstateRepository;
-
-import java.util.List;
-import java.util.stream.Collectors;
+import penelope.corretagem.penelopeapirest.mapper.EstateMapper;
 
 @Service
 public class EstateService {

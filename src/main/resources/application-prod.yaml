@@ -1,30 +1,34 @@
-server:
-  port: 8082
-
 spring:
   datasource:
-    # A URL do banco vem de uma variável de ambiente para segurança
-    url: ${DB_URL}
-    # O usuário do banco vem de uma variável de ambiente
-    username: ${DB_USERNAME}
-    # A senha do banco vem de uma variável de ambiente
+    url: jdbc:mysql://${DB_HOST}:${DB_PORT}/${DB_NAME}?allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=UTC
+    driverClassName: com.mysql.cj.jdbc.Driver
+    username: ${DB_USER}
     password: ${DB_PASSWORD}
-    driver-class-name: com.mysql.jdbc.Driver
+
+    hikari:
+      maximum-pool-size: 10
+      minimum-idle: 2
+      connection-timeout: 20000
+
+  h2:
+    console:
+      enabled: false
+  flyway:
+    enabled: true
+    baseline-on-migrate: true
+    baseline-version: 1 # Define que o estado atual do banco equivale à V1
   jpa:
-    hibernate:
-      # 'validate' verifica se o schema do banco corresponde às entidades.
-      ddl-auto: validate
+    show-sql: false
+    defer-datasource-initialization: false
     properties:
       hibernate:
-        # Dialeto específico para PostgreSQL para otimizar as queries
-        dialect: org.hibernate.dialect.MySQLDialect
+        dialect: org.hibernate.dialect.MySQL8Dialect
+        format_sql: false
+    hibernate:
+      ddl-auto: validate
 
-# Configuração de Logs para Produção
 logging:
   level:
-    # Nível de log INFO para o nosso pacote. Menos verboso que DEBUG.
+    root: INFO
     penelope.corretagem.penelopeapirest: INFO
-    # Nível de log WARN para o Spring, para registrar apenas avisos e erros.
-    org.springframework.web: WARN
-    # Nível de log WARN para o Hibernate.
-    org.hibernate: WARN
+    org.springframework.security: WARN

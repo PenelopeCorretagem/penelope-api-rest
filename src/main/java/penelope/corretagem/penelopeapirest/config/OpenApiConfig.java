@@ -1,19 +1,19 @@
 package penelope.corretagem.penelopeapirest.config;
 
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
+import io.swagger.v3.oas.annotations.enums.SecuritySchemeType;
 import io.swagger.v3.oas.annotations.info.Contact;
 import io.swagger.v3.oas.annotations.info.Info;
 import io.swagger.v3.oas.annotations.info.License;
+import io.swagger.v3.oas.annotations.security.SecurityScheme;
 import io.swagger.v3.oas.annotations.servers.Server;
 import io.swagger.v3.oas.annotations.tags.Tag;
-
 import io.swagger.v3.oas.models.Components;
 import io.swagger.v3.oas.models.OpenAPI;
-import io.swagger.v3.oas.models.media.Schema;
-import io.swagger.v3.oas.models.responses.ApiResponse;
 import io.swagger.v3.oas.models.media.Content;
 import io.swagger.v3.oas.models.media.MediaType;
-
+import io.swagger.v3.oas.models.media.Schema;
+import io.swagger.v3.oas.models.responses.ApiResponse;
 import io.swagger.v3.oas.models.security.SecurityRequirement;
 import org.springdoc.core.customizers.OperationCustomizer;
 import org.springframework.context.annotation.Bean;
@@ -46,6 +46,12 @@ import java.util.List;
                 @Tag(name = "Anúncios", description = "Gerencia os anúncios do sistema"),
                 @Tag(name = "Agendamentos", description = "Gerencia os agendamentos do usuário administrador")
         }
+)
+@SecurityScheme(
+  name = "bearerAuth", // Nome que usaremos para referenciar
+  type = SecuritySchemeType.HTTP,
+  scheme = "bearer",
+  bearerFormat = "JWT"
 )
 public class OpenApiConfig {
 

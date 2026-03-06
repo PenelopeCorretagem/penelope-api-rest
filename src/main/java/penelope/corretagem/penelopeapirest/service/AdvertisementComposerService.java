@@ -4,7 +4,9 @@ import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import penelope.corretagem.penelopeapirest.data.domain.dto.EstateCreateDTO.EstateCreateRequest;
-import penelope.corretagem.penelopeapirest.data.domain.entity.*;
+import penelope.corretagem.penelopeapirest.data.domain.entity.AddressEntity;
+import penelope.corretagem.penelopeapirest.data.domain.entity.AdvertisementEntity;
+import penelope.corretagem.penelopeapirest.data.domain.entity.EstateEntity;
 import penelope.corretagem.penelopeapirest.data.domain.repository.*;
 import penelope.corretagem.penelopeapirest.mapper.AddressMapper;
 

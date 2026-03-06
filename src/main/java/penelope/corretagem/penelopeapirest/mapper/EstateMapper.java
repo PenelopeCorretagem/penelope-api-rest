@@ -7,7 +7,10 @@ import penelope.corretagem.penelopeapirest.data.domain.dto.AdvertisementDTO.Amen
 import penelope.corretagem.penelopeapirest.data.domain.dto.AmenitiesRequest;
 import penelope.corretagem.penelopeapirest.data.domain.dto.EstateRequest;
 import penelope.corretagem.penelopeapirest.data.domain.dto.EstateResponse;
-import penelope.corretagem.penelopeapirest.data.domain.entity.*;
+import penelope.corretagem.penelopeapirest.data.domain.entity.AmenitiesEstateEntity;
+import penelope.corretagem.penelopeapirest.data.domain.entity.AmenitiesEstateId;
+import penelope.corretagem.penelopeapirest.data.domain.entity.EstateEntity;
+import penelope.corretagem.penelopeapirest.data.domain.entity.ImageEstateTypeEntity;
 
 import java.util.Set;
 import java.util.stream.Collectors;

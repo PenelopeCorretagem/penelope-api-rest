@@ -1,98 +1,40 @@
-# Configurações do Servidor para Desenvolvimento
-server:
-  # Usar uma porta diferente para não conflitar com outros serviços
-  port: 8081
-  tomcat:
-    max-http-form-post-size: 20MB
-  servlet:
-    context-path: /api/v1
-
-
 spring:
   datasource:
-    # URL do banco H2 em memória
-    url: jdbc:mysql://localhost:3306/penelopec?allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=UTC
-    driverClassName: com.mysql.cj.jdbc.Driver
-    username: root
-    password: ${DB_PASSWORD}
-    h2:
-      console:
-        # Habilita o console do H2 para acessar o banco pelo navegador
-        enabled: true
-        path: /h2-console
+    url: jdbc:h2:mem:penelopec;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE;MODE=MySQL
+    driverClassName: org.h2.Driver
+    username: sa
+    password:
 
-        # Inicialização de dados
-  sql:
-    init:
-      mode: always
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
 
-  servlet:
-    multipart:
-      max-file-size: 10MB
-      max-request-size: 20MB
+flyway:
+  enabled: false
+  clean-disabled: false
 
   jpa:
-    # Mostra o SQL gerado pelo Hibernate no console
     show-sql: true
     defer-datasource-initialization: true
     properties:
       hibernate:
-        dialect: org.hibernate.dialect.MySQL8Dialect
-        # Formata o SQL para melhor legibilidade
+        dialect: org.hibernate.dialect.H2Dialect
         format_sql: true
+        highlight_sql: true
     hibernate:
-      # Cria e destrói o esquema do banco a cada inicialização (útil para testes)
-      ddl-auto: update
-  mail:
-    host: smtp.gmail.com
-    port: 587
-    username: ${EMAIL}
-    password: ${EMAIL_PASSWORD}
-    properties:
-      mail:
-        smtp:
-          auth: true
-          starttls:
-            enable: true
+      ddl-auto: create-drop
+  sql:
+    init:
+      mode: never
 
 logging:
   level:
-    # Nível de log DEBUG para o nosso pacote, para ver mais detalhes
     penelope.corretagem.penelopeapirest: DEBUG
-    # Nível de log DEBUG para o Hibernate, para ver detalhes das operações com o banco
-    org:
-      hibernate: DEBUG
-      springframework:
-        web:
-          reactive:
-            function:
-              client:
-                ExchangeFunctions: TRACE
-        security: DEBUG
+    org.hibernate.SQL: DEBUG
+    org.springframework.web.reactive.function.client.ExchangeFunctions: TRACE
+    org.springframework.security: DEBUG
   file:
     name: logs/dev.log
-
   pattern:
     file: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
-
-api:
-  security:
-    token:
-      secret: ${JWT_API_KEY}
-
-app:
-  frontend:
-    url: http://localhost:3000
-
-# Configurações da API Cal.com
-calcom:
-  api:
-    base-url: https://api.cal.com
-    key: cal_live_caebf2c0a4609bb94af839480f4eaea1
-  webhook:
-    secret: 4835FiV4gc58TLmxcy5abK3i4z8BDCtzdh/rN7I60wQ=
-
-cloudinary:
-  cloud-name: ${CLOUDINARY_CLOUD_NAME}
-  api-key: ${CLOUDINARY_API_KEY}
-  api-secret: ${CLOUDINARY_API_SECRET}

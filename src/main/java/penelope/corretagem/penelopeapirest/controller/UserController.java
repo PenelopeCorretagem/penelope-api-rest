@@ -6,7 +6,9 @@ import jakarta.validation.constraints.NotNull;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import penelope.corretagem.penelopeapirest.data.domain.dto.*;
+import penelope.corretagem.penelopeapirest.data.domain.dto.UserRequest;
+import penelope.corretagem.penelopeapirest.data.domain.dto.UserResponse;
+import penelope.corretagem.penelopeapirest.data.domain.dto.UserUpdateRequest;
 import penelope.corretagem.penelopeapirest.service.UserService;
 
 import java.util.List;

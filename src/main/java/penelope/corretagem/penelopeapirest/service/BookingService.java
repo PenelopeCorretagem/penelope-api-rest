@@ -7,11 +7,9 @@ import penelope.corretagem.penelopeapirest.clients.CalClient;
 import penelope.corretagem.penelopeapirest.data.domain.dto.cal.booking.*;
 import penelope.corretagem.penelopeapirest.data.domain.entity.AdvertisementEntity;
 import penelope.corretagem.penelopeapirest.data.domain.entity.AppointmentEntity;
-import penelope.corretagem.penelopeapirest.data.domain.entity.EstateEntity;
 import penelope.corretagem.penelopeapirest.data.domain.entity.EventTypeEntity;
 import penelope.corretagem.penelopeapirest.data.domain.repository.AdvertisementRepository;
 import penelope.corretagem.penelopeapirest.data.domain.repository.AppointmentRepository;
-import penelope.corretagem.penelopeapirest.data.domain.repository.EstateRepository;
 
 import java.time.LocalDate;
 import java.time.OffsetDateTime;
