@@ -20,7 +20,7 @@ public class EventTypeEntity {
     @Id
     private Long id;
 
-    @Column(unique = true)
+    @Column(name = "titulo",unique = true)
     private String title;
 
     @Column(unique = true)

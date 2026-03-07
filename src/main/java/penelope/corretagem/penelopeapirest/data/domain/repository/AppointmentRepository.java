@@ -12,8 +12,6 @@ import java.util.Optional;
 
 public interface AppointmentRepository extends JpaRepository<AppointmentEntity, Long>, JpaSpecificationExecutor<AppointmentEntity> {
     
-    Optional<AppointmentEntity> findByCalBookingId(Long calBookingId);
-    
     List<AppointmentEntity> findByClientAndStatus(UserEntity client, Status status);
     
     Optional<AppointmentEntity> findByClientAndStartDateTime(UserEntity client, LocalDateTime startDateTime);

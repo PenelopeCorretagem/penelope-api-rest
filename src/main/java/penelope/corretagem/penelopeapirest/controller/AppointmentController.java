@@ -121,11 +121,7 @@ public class AppointmentController {
         try {
             // Buscar agendamento para validar e obter calBookingId
             AppointmentResponse appointment = appointmentService.getAppointment(id);
-            
-            if (appointment.calBookingId() == null) {
-                return ResponseEntity.badRequest()
-                    .body(Map.of("error", "Agendamento não possui integração Cal.com"));
-            }
+
 
             // Converter para OffsetDateTime
             java.time.OffsetDateTime newStartTime = request.startDateTime().atOffset(java.time.OffsetDateTime.now().getOffset());
@@ -139,7 +135,6 @@ public class AppointmentController {
             return ResponseEntity.ok(Map.of(
                 "message", "Reagendamento enviado para Cal.com. Aguarde atualização via webhook.",
                 "appointmentId", id,
-                "calBookingId", appointment.calBookingId(),
                 "newStartTime", newStartTime,
                 "newEndTime", newEndTime
             ));
@@ -158,11 +153,7 @@ public class AppointmentController {
         try {
             // Buscar agendamento para validar e obter calBookingId
             AppointmentResponse appointment = appointmentService.getAppointment(id);
-            
-            if (appointment.calBookingId() == null) {
-                return ResponseEntity.badRequest()
-                    .body(Map.of("error", "Agendamento não possui integração Cal.com"));
-            }
+
 
             // Cancelar via BookingService - webhook atualizará o status
             BookingResponse bookingResponse = bookingService.cancelBooking(id, reason);
@@ -170,7 +161,6 @@ public class AppointmentController {
             return ResponseEntity.ok(Map.of(
                 "message", "Cancelamento enviado para Cal.com. Aguarde atualização via webhook.",
                 "appointmentId", id,
-                "calBookingId", appointment.calBookingId(),
                 "reason", reason != null ? reason : "Sem motivo especificado"
             ));
         } catch (Exception e) {

@@ -5,6 +5,7 @@ import penelope.corretagem.penelopeapirest.data.domain.enums.AccessLevel;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Set;
 
 public record UserResponse(
@@ -18,7 +19,7 @@ public record UserResponse(
         String phone,
         String creci,
         AccessLevel accessLevel,
-        LocalDate dateCreation,
+        LocalDateTime dateCreation,
         boolean active,
         Set<AppointmentEntity> appointmentsClient,
         Set<AppointmentEntity> appointmentsEstateAgent
