@@ -7,6 +7,9 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.web.multipart.MultipartFile;
+import penelope.corretagem.penelopeapirest.core.address.Address;
+import penelope.corretagem.penelopeapirest.core.advertisement.Advertisement;
+import penelope.corretagem.penelopeapirest.core.estate.Estate;
 import penelope.corretagem.penelopeapirest.data.domain.dto.AddressRequest;
 import penelope.corretagem.penelopeapirest.data.domain.dto.EstateCreateDTO.AdvertisementCreateRequest;
 import penelope.corretagem.penelopeapirest.data.domain.dto.EstateCreateDTO.EstateCreateRequest;
@@ -60,21 +63,21 @@ class AdvertisementComposeServiceTest {
   void createAdvertisement_shouldCreateSuccessfully() throws IOException {
     // Arrange
     EstateCreateRequest request = createEstateRequest();
-    AddressEntity address = createAddress(1L);
-    AdvertisementEntity advertisement = createAdvertisement(createEventType());
+    Address address = createAddress(1L);
+    Advertisement advertisement = createAdvertisement(createEventType());
 
     when(addressMapper.toEntity(any(AddressRequest.class))).thenReturn(address);
-    when(addressRepository.save(any(AddressEntity.class))).thenReturn(address);
+    when(addressRepository.save(any(Address.class))).thenReturn(address);
     setupCommonCreateMocks(request);
     when(advertisementRepository.findById(1L)).thenReturn(Optional.of(advertisement));
 
     // Act
-    Optional<AdvertisementEntity> result = service.createAdvertisement(request);
+    Optional<Advertisement> result = service.createAdvertisement(request);
 
     // Assert
     assertTrue(result.isPresent());
     assertEquals(1L, result.get().getId());
-    verify(addressRepository).save(any(AddressEntity.class));
+    verify(addressRepository).save(any(Address.class));
     verify(estateRepository).createEstateNative(
       anyString(), anyString(), anyDouble(), anyInt(),
       anyString(), anyLong(), any());
@@ -87,25 +90,25 @@ class AdvertisementComposeServiceTest {
   void createAdvertisement_shouldCreateWithStandAddress() throws IOException {
     // Arrange
     EstateCreateRequest request = createEstateRequestWithStandAddress();
-    AddressEntity address = createAddress(1L);
-    AddressEntity standAddress = createAddress(2L);
-    AdvertisementEntity advertisement = createAdvertisement(createEventType());
+    Address address = createAddress(1L);
+    Address standAddress = createAddress(2L);
+    Advertisement advertisement = createAdvertisement(createEventType());
 
     when(addressMapper.toEntity(any(AddressRequest.class)))
       .thenReturn(address)
       .thenReturn(standAddress);
-    when(addressRepository.save(any(AddressEntity.class)))
+    when(addressRepository.save(any(Address.class)))
       .thenReturn(address)
       .thenReturn(standAddress);
     setupCommonCreateMocks(request);
     when(advertisementRepository.findById(1L)).thenReturn(Optional.of(advertisement));
 
     // Act
-    Optional<AdvertisementEntity> result = service.createAdvertisement(request);
+    Optional<Advertisement> result = service.createAdvertisement(request);
 
     // Assert
     assertTrue(result.isPresent());
-    verify(addressRepository, times(2)).save(any(AddressEntity.class));
+    verify(addressRepository, times(2)).save(any(Address.class));
     verify(estateRepository).createEstateNative(
       anyString(), anyString(), anyDouble(), anyInt(),
       anyString(), anyLong(), eq(2L));
@@ -116,16 +119,16 @@ class AdvertisementComposeServiceTest {
   void createAdvertisement_shouldCreateWithoutImages() throws IOException {
     // Arrange
     EstateCreateRequest request = createEstateRequestWithoutImages();
-    AddressEntity address = createAddress(1L);
-    AdvertisementEntity advertisement = createAdvertisement(createEventType());
+    Address address = createAddress(1L);
+    Advertisement advertisement = createAdvertisement(createEventType());
 
     when(addressMapper.toEntity(any(AddressRequest.class))).thenReturn(address);
-    when(addressRepository.save(any(AddressEntity.class))).thenReturn(address);
+    when(addressRepository.save(any(Address.class))).thenReturn(address);
     setupCreateMocksWithoutImages(request);
     when(advertisementRepository.findById(1L)).thenReturn(Optional.of(advertisement));
 
     // Act
-    Optional<AdvertisementEntity> result = service.createAdvertisement(request);
+    Optional<Advertisement> result = service.createAdvertisement(request);
 
     // Assert
     assertTrue(result.isPresent());
@@ -184,8 +187,8 @@ class AdvertisementComposeServiceTest {
   @DisplayName("Não deve recriar evento quando o título não é alterado")
   void updateAdvertisement_shouldNotRecreateEventWhenTitleUnchanged() throws IOException {
     // Arrange
-    AddressEntity address = createAddress(1L);
-    EstateEntity estate = new EstateEntity();
+    Address address = createAddress(1L);
+    Estate estate = new Estate();
     estate.setId(1L);
     estate.setTitle("Same Title");
     estate.setAddress(address);
@@ -193,7 +196,7 @@ class AdvertisementComposeServiceTest {
 
     EstateCreateRequest request = createUpdateRequestWithSameTitle();
     EventTypeEntity eventType = createEventType();
-    AdvertisementEntity advertisement = createAdvertisement(eventType);
+    Advertisement advertisement = createAdvertisement(eventType);
     advertisement.setProperty(estate);
 
     when(advertisementRepository.findById(1L)).thenReturn(Optional.of(advertisement));
@@ -201,7 +204,7 @@ class AdvertisementComposeServiceTest {
     setupUpdateMocksWithoutEventType();
 
     // Act
-    AdvertisementEntity result = service.updateAdvertisement(1L, request);
+    Advertisement result = service.updateAdvertisement(1L, request);
 
     // Assert
     assertNotNull(result);
@@ -215,31 +218,31 @@ class AdvertisementComposeServiceTest {
   @DisplayName("Deve adicionar endereço do stand quando não existia")
   void updateAdvertisement_shouldAddStandAddressWhenNull() throws IOException {
     // Arrange
-    AddressEntity mainAddress = createAddress(1L);
-    EstateEntity estate = new EstateEntity();
+    Address mainAddress = createAddress(1L);
+    Estate estate = new Estate();
     estate.setId(1L);
     estate.setTitle("Title");
     estate.setAddress(mainAddress);
     estate.setStandAddress(null);
 
-    AddressEntity newStandAddress = createAddress(2L);
+    Address newStandAddress = createAddress(2L);
     EstateCreateRequest request = createUpdateRequestWithStandAddress();
     EventTypeEntity eventType = createEventType();
-    AdvertisementEntity advertisement = createAdvertisement(eventType);
+    Advertisement advertisement = createAdvertisement(eventType);
     advertisement.setProperty(estate);
 
     when(advertisementRepository.findById(1L)).thenReturn(Optional.of(advertisement));
     when(addressMapper.toEntity(any(AddressRequest.class))).thenReturn(newStandAddress);
-    when(addressRepository.save(any(AddressEntity.class))).thenReturn(newStandAddress);
+    when(addressRepository.save(any(Address.class))).thenReturn(newStandAddress);
     when(advertisementRepository.findByEstateId(1L)).thenReturn(advertisement);
     setupCommonUpdateMocks(request);
 
     // Act
-    AdvertisementEntity result = service.updateAdvertisement(1L, request);
+    Advertisement result = service.updateAdvertisement(1L, request);
 
     // Assert
     assertNotNull(result);
-    verify(addressRepository).save(any(AddressEntity.class));
+    verify(addressRepository).save(any(Address.class));
     verify(estateRepository).updateEstateStandAddressId(1L, 2L);
     verify(eventTypeService).updateEventTypeForEstate(1L);
     verify(eventTypeService).createEventTypeForEstate(1L);
@@ -249,9 +252,9 @@ class AdvertisementComposeServiceTest {
   @DisplayName("Deve remover endereço do stand quando se torna null")
   void updateAdvertisement_shouldRemoveStandAddressWhenBecomesNull() throws IOException {
     // Arrange
-    AddressEntity mainAddress = createAddress(1L);
-    AddressEntity standAddress = createAddress(2L);
-    EstateEntity estate = new EstateEntity();
+    Address mainAddress = createAddress(1L);
+    Address standAddress = createAddress(2L);
+    Estate estate = new Estate();
     estate.setId(1L);
     estate.setTitle("Title");
     estate.setAddress(mainAddress);
@@ -259,7 +262,7 @@ class AdvertisementComposeServiceTest {
 
     EstateCreateRequest request = createUpdateRequestWithoutStandAddress();
     EventTypeEntity eventType = createEventType();
-    AdvertisementEntity advertisement = createAdvertisement(eventType);
+    Advertisement advertisement = createAdvertisement(eventType);
     advertisement.setProperty(estate);
 
     when(advertisementRepository.findById(1L)).thenReturn(Optional.of(advertisement));
@@ -267,7 +270,7 @@ class AdvertisementComposeServiceTest {
     setupCommonUpdateMocks(request);
 
     // Act
-    AdvertisementEntity result = service.updateAdvertisement(1L, request);
+    Advertisement result = service.updateAdvertisement(1L, request);
 
     // Assert
     assertNotNull(result);
@@ -281,10 +284,10 @@ class AdvertisementComposeServiceTest {
   @DisplayName("Deve atualizar endereço do stand quando já existe")
   void updateAdvertisement_shouldUpdateExistingStandAddress() throws IOException {
     // Arrange
-    EstateEntity estate = createEstateWithStandAddress();
+    Estate estate = createEstateWithStandAddress();
     EstateCreateRequest request = createUpdateRequestWithDifferentStandAddress();
     EventTypeEntity eventType = createEventType();
-    AdvertisementEntity advertisement = createAdvertisement(eventType);
+    Advertisement advertisement = createAdvertisement(eventType);
     advertisement.setProperty(estate);
 
     when(advertisementRepository.findById(1L)).thenReturn(Optional.of(advertisement));
@@ -292,7 +295,7 @@ class AdvertisementComposeServiceTest {
     setupCommonUpdateMocks(request);
 
     // Act
-    AdvertisementEntity result = service.updateAdvertisement(1L, request);
+    Advertisement result = service.updateAdvertisement(1L, request);
 
     // Assert
     assertNotNull(result);
@@ -308,15 +311,15 @@ class AdvertisementComposeServiceTest {
   @DisplayName("Deve recriar evento quando o título é alterado")
   void updateAdvertisement_shouldRecreateEventWhenTitleChanges() throws IOException {
     // Arrange
-    AddressEntity address = createAddress(1L);
-    EstateEntity estate = new EstateEntity();
+    Address address = createAddress(1L);
+    Estate estate = new Estate();
     estate.setId(1L);
     estate.setTitle("Old Title");
     estate.setAddress(address);
 
     EstateCreateRequest request = createUpdateRequestWithNewTitle();
     EventTypeEntity eventType = createEventType();
-    AdvertisementEntity advertisement = createAdvertisement(eventType);
+    Advertisement advertisement = createAdvertisement(eventType);
     advertisement.setProperty(estate);
 
     when(advertisementRepository.findById(1L)).thenReturn(Optional.of(advertisement));
@@ -324,7 +327,7 @@ class AdvertisementComposeServiceTest {
     setupCommonUpdateMocks(request);
 
     // Act
-    AdvertisementEntity result = service.updateAdvertisement(1L, request);
+    Advertisement result = service.updateAdvertisement(1L, request);
 
     // Assert
     assertNotNull(result);
@@ -446,14 +449,14 @@ class AdvertisementComposeServiceTest {
     );
   }
 
-  private AddressEntity createAddress(Long id) {
-    AddressEntity address = new AddressEntity();
+  private Address createAddress(Long id) {
+    Address address = new Address();
     address.setId(id);
     return address;
   }
 
-  private AdvertisementEntity createAdvertisement(EventTypeEntity eventType) {
-    AdvertisementEntity advertisement = new AdvertisementEntity();
+  private Advertisement createAdvertisement(EventTypeEntity eventType) {
+    Advertisement advertisement = new Advertisement();
     advertisement.setId(1L);
     advertisement.setEventType(eventType);
     return advertisement;
@@ -465,10 +468,10 @@ class AdvertisementComposeServiceTest {
     return eventType;
   }
 
-  private EstateEntity createEstateWithStandAddress() {
-    AddressEntity mainAddress = createAddress(1L);
+  private Estate createEstateWithStandAddress() {
+    Address mainAddress = createAddress(1L);
     
-    AddressEntity standAddress = new AddressEntity();
+    Address standAddress = new Address();
     standAddress.setId(2L);
     standAddress.setStreet("Old Street");
     standAddress.setNumber("100");
@@ -479,7 +482,7 @@ class AdvertisementComposeServiceTest {
     standAddress.setComplement("Old");
     standAddress.setRegion("Old Region");
 
-    EstateEntity estate = new EstateEntity();
+    Estate estate = new Estate();
     estate.setId(1L);
     estate.setTitle("Title");
     estate.setAddress(mainAddress);

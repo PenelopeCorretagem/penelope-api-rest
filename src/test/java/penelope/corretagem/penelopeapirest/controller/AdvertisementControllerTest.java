@@ -17,7 +17,7 @@ import penelope.corretagem.penelopeapirest.data.domain.dto.AddressRequest;
 import penelope.corretagem.penelopeapirest.data.domain.dto.AdvertisementResponse;
 import penelope.corretagem.penelopeapirest.data.domain.dto.EstateCreateDTO.AdvertisementCreateRequest;
 import penelope.corretagem.penelopeapirest.data.domain.dto.EstateCreateDTO.EstateCreateRequest;
-import penelope.corretagem.penelopeapirest.data.domain.entity.AdvertisementEntity;
+import penelope.corretagem.penelopeapirest.core.advertisement.Advertisement;
 import penelope.corretagem.penelopeapirest.service.AdvertisementComposerService;
 import penelope.corretagem.penelopeapirest.service.AdvertisementService;
 
@@ -185,7 +185,7 @@ class AdvertisementControllerTest {
   void shouldCreateAdvertisement() throws Exception {
     // Arrange
     EstateCreateRequest request = createMockEstateCreateRequest();
-    AdvertisementEntity mockEntity = new AdvertisementEntity();
+    Advertisement mockEntity = new Advertisement();
     mockEntity.setId(1L);
 
     when(composerService.createAdvertisement(ArgumentMatchers.any()))
@@ -245,7 +245,7 @@ class AdvertisementControllerTest {
     // Arrange
     Long estateId = 1L;
     EstateCreateRequest request = createMockEstateCreateRequest();
-    AdvertisementEntity mockEntity = new AdvertisementEntity();
+    Advertisement mockEntity = new Advertisement();
     mockEntity.setId(estateId);
 
     when(composerService.updateAdvertisement(eq(estateId), ArgumentMatchers.any()))

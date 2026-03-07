@@ -9,7 +9,7 @@ import org.springframework.web.multipart.MultipartFile;
 import penelope.corretagem.penelopeapirest.data.domain.dto.AdvertisementDTO.AdvertisementFilterRequest;
 import penelope.corretagem.penelopeapirest.data.domain.dto.AdvertisementResponse;
 import penelope.corretagem.penelopeapirest.data.domain.dto.EstateCreateDTO.EstateCreateRequest;
-import penelope.corretagem.penelopeapirest.data.domain.entity.AdvertisementEntity;
+import penelope.corretagem.penelopeapirest.core.advertisement.Advertisement;
 import penelope.corretagem.penelopeapirest.service.AdvertisementComposerService;
 import penelope.corretagem.penelopeapirest.service.AdvertisementService;
 
@@ -57,9 +57,9 @@ public class AdvertisementController {
   }
 
   @PostMapping
-  public ResponseEntity<Optional<AdvertisementEntity>> createAdvertisement(
+  public ResponseEntity<Optional<Advertisement>> createAdvertisement(
     @RequestBody EstateCreateRequest request) throws IOException {
-    Optional<AdvertisementEntity> response = composerService.createAdvertisement(request);
+    Optional<Advertisement> response = composerService.createAdvertisement(request);
     return ResponseEntity.status(HttpStatus.CREATED).build();
   }
 
@@ -71,11 +71,11 @@ public class AdvertisementController {
   }
 
   @PutMapping("/{id}")
-  public ResponseEntity<Optional<AdvertisementEntity>> updateAdvertisement(
+  public ResponseEntity<Optional<Advertisement>> updateAdvertisement(
     @PathVariable("id") Long advertisementId,
     @RequestBody EstateCreateRequest request) throws IOException {
 
-    AdvertisementEntity response = composerService.updateAdvertisement(advertisementId, request);
+    Advertisement response = composerService.updateAdvertisement(advertisementId, request);
     return ResponseEntity.noContent().build();
   }
 

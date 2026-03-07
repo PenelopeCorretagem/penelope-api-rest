@@ -1,10 +1,14 @@
-package penelope.corretagem.penelopeapirest.data.domain.entity;
+package penelope.corretagem.penelopeapirest.core.estate;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import penelope.corretagem.penelopeapirest.core.address.Address;
+import penelope.corretagem.penelopeapirest.core.amenities.AmenitiesEstate;
+import penelope.corretagem.penelopeapirest.data.domain.entity.AppointmentEntity;
+
 import java.util.Set;
 
 @Entity
@@ -13,7 +17,7 @@ import java.util.Set;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class EstateEntity {
+public class Estate {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -38,18 +42,18 @@ public class EstateEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "fk_endereco", referencedColumnName = "id", nullable = false)
-    private AddressEntity address;
+    private Address address;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "fk_endereco_stand", referencedColumnName = "id", nullable = true)
-    private AddressEntity standAddress;
+    private Address standAddress;
 
     @OneToMany(
             mappedBy = "estate",
             cascade = CascadeType.ALL,
             orphanRemoval = true,
             fetch = FetchType.LAZY)
-    private Set<ImageEstateEntity> images;
+    private Set<ImageEstate> images;
 
     @OneToMany(
             mappedBy = "estate",
@@ -63,7 +67,7 @@ public class EstateEntity {
             cascade = CascadeType.ALL,
             orphanRemoval = true,
             fetch = FetchType.LAZY)
-    private Set<AmenitiesEstateEntity> amenities;
+    private Set<AmenitiesEstate> amenities;
 
     @Getter
     public enum Type {

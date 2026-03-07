@@ -1,4 +1,4 @@
-package penelope.corretagem.penelopeapirest.data.domain.entity;
+package penelope.corretagem.penelopeapirest.core.amenities;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -9,12 +9,12 @@ import lombok.Setter;
 import java.util.Set;
 
 @Entity
-@Table(name = "tipo_imagem")
+@Table(name = "diferencial")
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class ImageEstateTypeEntity {
+public class Amenities {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,9 +24,9 @@ public class ImageEstateTypeEntity {
     private String description;
 
     @OneToMany(
-            mappedBy = "type",
+            mappedBy = "amenity",
             cascade = CascadeType.ALL,
             orphanRemoval = true,
             fetch = FetchType.LAZY)
-    private Set<ImageEstateEntity> images;
+    private Set<AmenitiesEstate> properties;
 }

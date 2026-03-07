@@ -3,16 +3,16 @@ package penelope.corretagem.penelopeapirest.mapper;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.ReportingPolicy;
+import penelope.corretagem.penelopeapirest.core.user.User;
 import penelope.corretagem.penelopeapirest.data.domain.dto.UserRequest;
 import penelope.corretagem.penelopeapirest.data.domain.dto.UserResponse;
-import penelope.corretagem.penelopeapirest.data.domain.entity.UserEntity;
 
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface UserMapper {
 
-    UserEntity toUserEntity(UserRequest userRequest);
+    User toUserEntity(UserRequest userRequest);
 
-    UserResponse toUserResponse(UserEntity userEntity);
+    UserResponse toUserResponse(User user);
 
-    UserEntity updateUserFromRequest(UserRequest userRequest, @MappingTarget UserEntity userEntity);
+    User updateUserFromRequest(UserRequest userRequest, @MappingTarget User user);
 }

@@ -1,4 +1,4 @@
-package penelope.corretagem.penelopeapirest.data.domain.entity;
+package penelope.corretagem.penelopeapirest.core.estate;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -12,7 +12,7 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class ImageEstateEntity {
+public class ImageEstate {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -20,11 +20,11 @@ public class ImageEstateEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "fk_empreendimento", referencedColumnName = "id", nullable = false)
-    private EstateEntity estate;
+    private Estate estate;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "fk_tipo_imagem", referencedColumnName = "id", nullable = false)
-    private ImageEstateTypeEntity type;
+    private ImageEstateType type;
 
     @Column(name = "url", nullable = false)
     private String url;

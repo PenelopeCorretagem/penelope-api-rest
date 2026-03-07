@@ -9,13 +9,13 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.jpa.domain.Specification;
+import penelope.corretagem.penelopeapirest.core.user.User;
 import penelope.corretagem.penelopeapirest.data.domain.dto.AdvertisementDTO.AdvertisementFilterRequest;
 import penelope.corretagem.penelopeapirest.data.domain.dto.AdvertisementResponse;
-import penelope.corretagem.penelopeapirest.data.domain.entity.AddressEntity;
-import penelope.corretagem.penelopeapirest.data.domain.entity.AdvertisementEntity;
-import penelope.corretagem.penelopeapirest.data.domain.entity.EstateEntity;
+import penelope.corretagem.penelopeapirest.core.address.Address;
+import penelope.corretagem.penelopeapirest.core.advertisement.Advertisement;
+import penelope.corretagem.penelopeapirest.core.estate.Estate;
 import penelope.corretagem.penelopeapirest.data.domain.entity.EventTypeEntity;
-import penelope.corretagem.penelopeapirest.data.domain.entity.UserEntity;
 import penelope.corretagem.penelopeapirest.data.domain.repository.AdvertisementRepository;
 
 import java.time.LocalDate;
@@ -37,13 +37,13 @@ class AdvertisementServiceTest {
   @InjectMocks
   private AdvertisementService service;
 
-  private AdvertisementEntity advertisementEntity;
+  private Advertisement advertisementEntity;
 
   @BeforeEach
   void setUp() {
-    EstateEntity estate = getEstateEntity();
+    Estate estate = getEstateEntity();
 
-    UserEntity user = new UserEntity();
+    User user = new User();
     user.setId(1L);
 
     EventTypeEntity eventType = new EventTypeEntity();
@@ -51,7 +51,7 @@ class AdvertisementServiceTest {
     eventType.setTitle("Teste Evento");
     eventType.setSlug("teste-evento");
 
-    advertisementEntity = new AdvertisementEntity();
+    advertisementEntity = new Advertisement();
     advertisementEntity.setId(1L);
     advertisementEntity.setActive(true);
     advertisementEntity.setEmphasis(false);
@@ -70,7 +70,7 @@ class AdvertisementServiceTest {
   void getAllAdvertisements_shouldReturnListOfAdvertisements() {
     // Arrange
     AdvertisementFilterRequest request = createEmptyFilterRequest();
-    when(repository.findAll(ArgumentMatchers.<Specification<AdvertisementEntity>>any()))
+    when(repository.findAll(ArgumentMatchers.<Specification<Advertisement>>any()))
       .thenReturn(Collections.singletonList(advertisementEntity));
 
     // Act
@@ -79,7 +79,7 @@ class AdvertisementServiceTest {
     // Assert
     assertNotNull(result);
     assertEquals(1, result.size());
-    verify(repository, times(1)).findAll(ArgumentMatchers.<Specification<AdvertisementEntity>>any());
+    verify(repository, times(1)).findAll(ArgumentMatchers.<Specification<Advertisement>>any());
   }
 
   @Test
@@ -89,7 +89,7 @@ class AdvertisementServiceTest {
     AdvertisementFilterRequest request = new AdvertisementFilterRequest(
       "Sao Paulo", null, "DISPONIVEL", null, true, null, null, null, null, null, null, null, null, null
     );
-    when(repository.findAll(ArgumentMatchers.<Specification<AdvertisementEntity>>any()))
+    when(repository.findAll(ArgumentMatchers.<Specification<Advertisement>>any()))
       .thenReturn(Collections.singletonList(advertisementEntity));
 
     // Act
@@ -98,7 +98,7 @@ class AdvertisementServiceTest {
     // Assert
     assertNotNull(result);
     assertEquals(1, result.size());
-    verify(repository, times(1)).findAll(ArgumentMatchers.<Specification<AdvertisementEntity>>any());
+    verify(repository, times(1)).findAll(ArgumentMatchers.<Specification<Advertisement>>any());
   }
 
   @Test
@@ -106,7 +106,7 @@ class AdvertisementServiceTest {
   void getAllAdvertisements_shouldReturnEmptyList() {
     // Arrange
     AdvertisementFilterRequest request = createEmptyFilterRequest();
-    when(repository.findAll(ArgumentMatchers.<Specification<AdvertisementEntity>>any()))
+    when(repository.findAll(ArgumentMatchers.<Specification<Advertisement>>any()))
       .thenReturn(List.of());
 
     // Act
@@ -115,16 +115,16 @@ class AdvertisementServiceTest {
     // Assert
     assertNotNull(result);
     assertTrue(result.isEmpty());
-    verify(repository, times(1)).findAll(ArgumentMatchers.<Specification<AdvertisementEntity>>any());
+    verify(repository, times(1)).findAll(ArgumentMatchers.<Specification<Advertisement>>any());
   }
 
   @Test
   @DisplayName("Deve retornar todos os anúncios quando há múltiplos resultados")
   void getAllAdvertisements_withMultipleResults_shouldReturnAll() {
     // Arrange
-    AdvertisementEntity ad2 = createSecondAdvertisement();
+    Advertisement ad2 = createSecondAdvertisement();
     AdvertisementFilterRequest request = createEmptyFilterRequest();
-    when(repository.findAll(ArgumentMatchers.<Specification<AdvertisementEntity>>any()))
+    when(repository.findAll(ArgumentMatchers.<Specification<Advertisement>>any()))
       .thenReturn(Arrays.asList(advertisementEntity, ad2));
 
     // Act
@@ -133,7 +133,7 @@ class AdvertisementServiceTest {
     // Assert
     assertNotNull(result);
     assertEquals(2, result.size());
-    verify(repository, times(1)).findAll(ArgumentMatchers.<Specification<AdvertisementEntity>>any());
+    verify(repository, times(1)).findAll(ArgumentMatchers.<Specification<Advertisement>>any());
   }
 
   // ========== Testes de filtros individuais ==========
@@ -145,7 +145,7 @@ class AdvertisementServiceTest {
     AdvertisementFilterRequest request = new AdvertisementFilterRequest(
       "Sao Paulo", null, null, null, null, null, null, null, null, null, null, null, null, null
     );
-    when(repository.findAll(ArgumentMatchers.<Specification<AdvertisementEntity>>any()))
+    when(repository.findAll(ArgumentMatchers.<Specification<Advertisement>>any()))
       .thenReturn(Collections.singletonList(advertisementEntity));
 
     // Act
@@ -154,7 +154,7 @@ class AdvertisementServiceTest {
     // Assert
     assertNotNull(result);
     assertEquals(1, result.size());
-    verify(repository, times(1)).findAll(ArgumentMatchers.<Specification<AdvertisementEntity>>any());
+    verify(repository, times(1)).findAll(ArgumentMatchers.<Specification<Advertisement>>any());
   }
 
   @Test
@@ -164,7 +164,7 @@ class AdvertisementServiceTest {
     AdvertisementFilterRequest request = new AdvertisementFilterRequest(
       null, "Sudeste", null, null, null, null, null, null, null, null, null, null, null, null
     );
-    when(repository.findAll(ArgumentMatchers.<Specification<AdvertisementEntity>>any()))
+    when(repository.findAll(ArgumentMatchers.<Specification<Advertisement>>any()))
       .thenReturn(Collections.singletonList(advertisementEntity));
 
     // Act
@@ -173,7 +173,7 @@ class AdvertisementServiceTest {
     // Assert
     assertNotNull(result);
     assertEquals(1, result.size());
-    verify(repository, times(1)).findAll(ArgumentMatchers.<Specification<AdvertisementEntity>>any());
+    verify(repository, times(1)).findAll(ArgumentMatchers.<Specification<Advertisement>>any());
   }
 
   @Test
@@ -183,7 +183,7 @@ class AdvertisementServiceTest {
     AdvertisementFilterRequest request = new AdvertisementFilterRequest(
       null, null, "DISPONIVEL", null, null, null, null, null, null, null, null, null, null, null
     );
-    when(repository.findAll(ArgumentMatchers.<Specification<AdvertisementEntity>>any()))
+    when(repository.findAll(ArgumentMatchers.<Specification<Advertisement>>any()))
       .thenReturn(Collections.singletonList(advertisementEntity));
 
     // Act
@@ -192,7 +192,7 @@ class AdvertisementServiceTest {
     // Assert
     assertNotNull(result);
     assertEquals(1, result.size());
-    verify(repository, times(1)).findAll(ArgumentMatchers.<Specification<AdvertisementEntity>>any());
+    verify(repository, times(1)).findAll(ArgumentMatchers.<Specification<Advertisement>>any());
   }
 
   @Test
@@ -202,7 +202,7 @@ class AdvertisementServiceTest {
     AdvertisementFilterRequest request = new AdvertisementFilterRequest(
       null, null, null, 3, null, null, null, null, null, null, null, null, null, null
     );
-    when(repository.findAll(ArgumentMatchers.<Specification<AdvertisementEntity>>any()))
+    when(repository.findAll(ArgumentMatchers.<Specification<Advertisement>>any()))
       .thenReturn(Collections.singletonList(advertisementEntity));
 
     // Act
@@ -211,7 +211,7 @@ class AdvertisementServiceTest {
     // Assert
     assertNotNull(result);
     assertEquals(1, result.size());
-    verify(repository, times(1)).findAll(ArgumentMatchers.<Specification<AdvertisementEntity>>any());
+    verify(repository, times(1)).findAll(ArgumentMatchers.<Specification<Advertisement>>any());
   }
 
   @Test
@@ -221,7 +221,7 @@ class AdvertisementServiceTest {
     AdvertisementFilterRequest request = new AdvertisementFilterRequest(
       null, null, null, null, true, null, null, null, null, null, null, null, null, null
     );
-    when(repository.findAll(ArgumentMatchers.<Specification<AdvertisementEntity>>any()))
+    when(repository.findAll(ArgumentMatchers.<Specification<Advertisement>>any()))
       .thenReturn(Collections.singletonList(advertisementEntity));
 
     // Act
@@ -230,7 +230,7 @@ class AdvertisementServiceTest {
     // Assert
     assertNotNull(result);
     assertEquals(1, result.size());
-    verify(repository, times(1)).findAll(ArgumentMatchers.<Specification<AdvertisementEntity>>any());
+    verify(repository, times(1)).findAll(ArgumentMatchers.<Specification<Advertisement>>any());
   }
 
   @Test
@@ -240,7 +240,7 @@ class AdvertisementServiceTest {
     AdvertisementFilterRequest request = new AdvertisementFilterRequest(
       null, null, null, null, false, null, null, null, null, null, null, null, null, null
     );
-    when(repository.findAll(ArgumentMatchers.<Specification<AdvertisementEntity>>any()))
+    when(repository.findAll(ArgumentMatchers.<Specification<Advertisement>>any()))
       .thenReturn(List.of());
 
     // Act
@@ -249,7 +249,7 @@ class AdvertisementServiceTest {
     // Assert
     assertNotNull(result);
     assertTrue(result.isEmpty());
-    verify(repository, times(1)).findAll(ArgumentMatchers.<Specification<AdvertisementEntity>>any());
+    verify(repository, times(1)).findAll(ArgumentMatchers.<Specification<Advertisement>>any());
   }
 
   @Test
@@ -259,7 +259,7 @@ class AdvertisementServiceTest {
     AdvertisementFilterRequest request = new AdvertisementFilterRequest(
       null, null, null, null, null, 100.0, null, null, null, null, null, null, null, null
     );
-    when(repository.findAll(ArgumentMatchers.<Specification<AdvertisementEntity>>any()))
+    when(repository.findAll(ArgumentMatchers.<Specification<Advertisement>>any()))
       .thenReturn(Collections.singletonList(advertisementEntity));
 
     // Act
@@ -268,7 +268,7 @@ class AdvertisementServiceTest {
     // Assert
     assertNotNull(result);
     assertEquals(1, result.size());
-    verify(repository, times(1)).findAll(ArgumentMatchers.<Specification<AdvertisementEntity>>any());
+    verify(repository, times(1)).findAll(ArgumentMatchers.<Specification<Advertisement>>any());
   }
 
   @Test
@@ -278,7 +278,7 @@ class AdvertisementServiceTest {
     AdvertisementFilterRequest request = new AdvertisementFilterRequest(
       null, null, null, null, null, null, "Teste", null, null, null, null, null, null, null
     );
-    when(repository.findAll(ArgumentMatchers.<Specification<AdvertisementEntity>>any()))
+    when(repository.findAll(ArgumentMatchers.<Specification<Advertisement>>any()))
       .thenReturn(Collections.singletonList(advertisementEntity));
 
     // Act
@@ -287,7 +287,7 @@ class AdvertisementServiceTest {
     // Assert
     assertNotNull(result);
     assertEquals(1, result.size());
-    verify(repository, times(1)).findAll(ArgumentMatchers.<Specification<AdvertisementEntity>>any());
+    verify(repository, times(1)).findAll(ArgumentMatchers.<Specification<Advertisement>>any());
   }
 
   @Test
@@ -297,7 +297,7 @@ class AdvertisementServiceTest {
     AdvertisementFilterRequest request = new AdvertisementFilterRequest(
       null, null, null, null, null, null, null, "Descrição", null, null, null, null, null, null
     );
-    when(repository.findAll(ArgumentMatchers.<Specification<AdvertisementEntity>>any()))
+    when(repository.findAll(ArgumentMatchers.<Specification<Advertisement>>any()))
       .thenReturn(Collections.singletonList(advertisementEntity));
 
     // Act
@@ -306,7 +306,7 @@ class AdvertisementServiceTest {
     // Assert
     assertNotNull(result);
     assertEquals(1, result.size());
-    verify(repository, times(1)).findAll(ArgumentMatchers.<Specification<AdvertisementEntity>>any());
+    verify(repository, times(1)).findAll(ArgumentMatchers.<Specification<Advertisement>>any());
   }
 
   // ========== Testes de filtros de data ==========
@@ -319,7 +319,7 @@ class AdvertisementServiceTest {
     AdvertisementFilterRequest request = new AdvertisementFilterRequest(
       null, null, null, null, null, null, null, null, date, null, null, null, null, null
     );
-    when(repository.findAll(ArgumentMatchers.<Specification<AdvertisementEntity>>any()))
+    when(repository.findAll(ArgumentMatchers.<Specification<Advertisement>>any()))
       .thenReturn(Collections.singletonList(advertisementEntity));
 
     // Act
@@ -328,7 +328,7 @@ class AdvertisementServiceTest {
     // Assert
     assertNotNull(result);
     assertEquals(1, result.size());
-    verify(repository, times(1)).findAll(ArgumentMatchers.<Specification<AdvertisementEntity>>any());
+    verify(repository, times(1)).findAll(ArgumentMatchers.<Specification<Advertisement>>any());
   }
 
   @Test
@@ -339,7 +339,7 @@ class AdvertisementServiceTest {
     AdvertisementFilterRequest request = new AdvertisementFilterRequest(
       null, null, null, null, null, null, null, null, null, date, null, null, null, null
     );
-    when(repository.findAll(ArgumentMatchers.<Specification<AdvertisementEntity>>any()))
+    when(repository.findAll(ArgumentMatchers.<Specification<Advertisement>>any()))
       .thenReturn(Collections.singletonList(advertisementEntity));
 
     // Act
@@ -348,7 +348,7 @@ class AdvertisementServiceTest {
     // Assert
     assertNotNull(result);
     assertEquals(1, result.size());
-    verify(repository, times(1)).findAll(ArgumentMatchers.<Specification<AdvertisementEntity>>any());
+    verify(repository, times(1)).findAll(ArgumentMatchers.<Specification<Advertisement>>any());
   }
 
   @Test
@@ -359,7 +359,7 @@ class AdvertisementServiceTest {
     AdvertisementFilterRequest request = new AdvertisementFilterRequest(
       null, null, null, null, null, null, null, null, null, null, date, null, null, null
     );
-    when(repository.findAll(ArgumentMatchers.<Specification<AdvertisementEntity>>any()))
+    when(repository.findAll(ArgumentMatchers.<Specification<Advertisement>>any()))
       .thenReturn(Collections.singletonList(advertisementEntity));
 
     // Act
@@ -368,7 +368,7 @@ class AdvertisementServiceTest {
     // Assert
     assertNotNull(result);
     assertEquals(1, result.size());
-    verify(repository, times(1)).findAll(ArgumentMatchers.<Specification<AdvertisementEntity>>any());
+    verify(repository, times(1)).findAll(ArgumentMatchers.<Specification<Advertisement>>any());
   }
 
   @Test
@@ -379,7 +379,7 @@ class AdvertisementServiceTest {
     AdvertisementFilterRequest request = new AdvertisementFilterRequest(
       null, null, null, null, null, null, null, null, null, null, null, date, null, null
     );
-    when(repository.findAll(ArgumentMatchers.<Specification<AdvertisementEntity>>any()))
+    when(repository.findAll(ArgumentMatchers.<Specification<Advertisement>>any()))
       .thenReturn(Collections.singletonList(advertisementEntity));
 
     // Act
@@ -388,7 +388,7 @@ class AdvertisementServiceTest {
     // Assert
     assertNotNull(result);
     assertEquals(1, result.size());
-    verify(repository, times(1)).findAll(ArgumentMatchers.<Specification<AdvertisementEntity>>any());
+    verify(repository, times(1)).findAll(ArgumentMatchers.<Specification<Advertisement>>any());
   }
 
   @Test
@@ -399,7 +399,7 @@ class AdvertisementServiceTest {
     AdvertisementFilterRequest request = new AdvertisementFilterRequest(
       null, null, null, null, null, null, null, null, null, null, null, null, date, null
     );
-    when(repository.findAll(ArgumentMatchers.<Specification<AdvertisementEntity>>any()))
+    when(repository.findAll(ArgumentMatchers.<Specification<Advertisement>>any()))
       .thenReturn(Collections.singletonList(advertisementEntity));
 
     // Act
@@ -408,7 +408,7 @@ class AdvertisementServiceTest {
     // Assert
     assertNotNull(result);
     assertEquals(1, result.size());
-    verify(repository, times(1)).findAll(ArgumentMatchers.<Specification<AdvertisementEntity>>any());
+    verify(repository, times(1)).findAll(ArgumentMatchers.<Specification<Advertisement>>any());
   }
 
   @Test
@@ -419,7 +419,7 @@ class AdvertisementServiceTest {
     AdvertisementFilterRequest request = new AdvertisementFilterRequest(
       null, null, null, null, null, null, null, null, null, null, null, null, null, date
     );
-    when(repository.findAll(ArgumentMatchers.<Specification<AdvertisementEntity>>any()))
+    when(repository.findAll(ArgumentMatchers.<Specification<Advertisement>>any()))
       .thenReturn(Collections.singletonList(advertisementEntity));
 
     // Act
@@ -428,7 +428,7 @@ class AdvertisementServiceTest {
     // Assert
     assertNotNull(result);
     assertEquals(1, result.size());
-    verify(repository, times(1)).findAll(ArgumentMatchers.<Specification<AdvertisementEntity>>any());
+    verify(repository, times(1)).findAll(ArgumentMatchers.<Specification<Advertisement>>any());
   }
 
   @Test
@@ -438,7 +438,7 @@ class AdvertisementServiceTest {
     AdvertisementFilterRequest request = new AdvertisementFilterRequest(
       "Sao Paulo", "Sudeste", "DISPONIVEL", 3, true, 100.0, null, null, null, null, null, null, null, null
     );
-    when(repository.findAll(ArgumentMatchers.<Specification<AdvertisementEntity>>any()))
+    when(repository.findAll(ArgumentMatchers.<Specification<Advertisement>>any()))
       .thenReturn(Collections.singletonList(advertisementEntity));
 
     // Act
@@ -447,7 +447,7 @@ class AdvertisementServiceTest {
     // Assert
     assertNotNull(result);
     assertEquals(1, result.size());
-    verify(repository, times(1)).findAll(ArgumentMatchers.<Specification<AdvertisementEntity>>any());
+    verify(repository, times(1)).findAll(ArgumentMatchers.<Specification<Advertisement>>any());
   }
 
   // ========== Testes de getLatestAdvertisement ==========
@@ -566,14 +566,14 @@ class AdvertisementServiceTest {
   void getAllAdvertisements_withAllFiltersNull_shouldCallRepository() {
     // Arrange
     AdvertisementFilterRequest request = createEmptyFilterRequest();
-    when(repository.findAll(ArgumentMatchers.<Specification<AdvertisementEntity>>any()))
+    when(repository.findAll(ArgumentMatchers.<Specification<Advertisement>>any()))
       .thenReturn(Collections.singletonList(advertisementEntity));
 
     // Act
     service.getAllAdvertisements(request);
 
     // Assert
-    verify(repository, times(1)).findAll(ArgumentMatchers.<Specification<AdvertisementEntity>>any());
+    verify(repository, times(1)).findAll(ArgumentMatchers.<Specification<Advertisement>>any());
   }
 
   @Test
@@ -609,14 +609,14 @@ class AdvertisementServiceTest {
   void getAllAdvertisements_shouldVerifyRepositoryInteraction() {
     // Arrange
     AdvertisementFilterRequest request = createEmptyFilterRequest();
-    when(repository.findAll(ArgumentMatchers.<Specification<AdvertisementEntity>>any()))
+    when(repository.findAll(ArgumentMatchers.<Specification<Advertisement>>any()))
       .thenReturn(List.of());
 
     // Act
     service.getAllAdvertisements(request);
 
     // Assert
-    verify(repository, times(1)).findAll(ArgumentMatchers.<Specification<AdvertisementEntity>>any());
+    verify(repository, times(1)).findAll(ArgumentMatchers.<Specification<Advertisement>>any());
     verifyNoMoreInteractions(repository);
   }
 
@@ -628,8 +628,8 @@ class AdvertisementServiceTest {
     );
   }
 
-  private AdvertisementEntity createSecondAdvertisement() {
-    AdvertisementEntity ad2 = new AdvertisementEntity();
+  private Advertisement createSecondAdvertisement() {
+    Advertisement ad2 = new Advertisement();
     ad2.setId(2L);
     ad2.setActive(true);
     ad2.setEmphasis(true);
@@ -642,8 +642,8 @@ class AdvertisementServiceTest {
     return ad2;
   }
 
-  private static EstateEntity getEstateEntity() {
-    AddressEntity address = new AddressEntity();
+  private static Estate getEstateEntity() {
+    Address address = new Address();
     address.setId(1L);
     address.setStreet("Rua Teste");
     address.setNumber("123");
@@ -653,13 +653,13 @@ class AdvertisementServiceTest {
     address.setZipCode("12345678");
     address.setRegion("Sudeste");
 
-    EstateEntity estate = new EstateEntity();
+    Estate estate = new Estate();
     estate.setId(1L);
     estate.setTitle("Teste");
     estate.setDescription("Descrição teste");
     estate.setArea(100.0);
     estate.setNumberOfRooms(3);
-    estate.setType(EstateEntity.Type.DISPONIVEL);
+    estate.setType(Estate.Type.DISPONIVEL);
     estate.setAddress(address);
     estate.setImages(new java.util.HashSet<>());
     estate.setAmenities(new java.util.HashSet<>());

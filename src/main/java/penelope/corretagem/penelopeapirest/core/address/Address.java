@@ -1,4 +1,4 @@
-package penelope.corretagem.penelopeapirest.data.domain.entity;
+package penelope.corretagem.penelopeapirest.core.address;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -12,7 +12,7 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class AddressEntity {
+public class Address {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

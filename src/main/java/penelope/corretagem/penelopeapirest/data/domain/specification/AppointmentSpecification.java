@@ -2,9 +2,9 @@ package penelope.corretagem.penelopeapirest.data.domain.specification;
 
 import jakarta.persistence.criteria.*;
 import org.springframework.data.jpa.domain.Specification;
+import penelope.corretagem.penelopeapirest.core.user.User;
 import penelope.corretagem.penelopeapirest.data.domain.entity.AppointmentEntity;
-import penelope.corretagem.penelopeapirest.data.domain.entity.EstateEntity;
-import penelope.corretagem.penelopeapirest.data.domain.entity.UserEntity;
+import penelope.corretagem.penelopeapirest.core.estate.Estate;
 import penelope.corretagem.penelopeapirest.data.domain.enums.Status;
 
 import java.time.LocalDateTime;
@@ -39,7 +39,7 @@ public class AppointmentSpecification {
             if (clientId == null) {
                 return criteriaBuilder.conjunction();
             }
-            Join<AppointmentEntity, UserEntity> client = root.join("client");
+            Join<AppointmentEntity, User> client = root.join("client");
             return criteriaBuilder.equal(client.get("id"), clientId);
         };
     }
@@ -49,7 +49,7 @@ public class AppointmentSpecification {
             if (estateAgentId == null) {
                 return criteriaBuilder.conjunction();
             }
-            Join<AppointmentEntity, UserEntity> agent = root.join("estateAgent");
+            Join<AppointmentEntity, User> agent = root.join("estateAgent");
             return criteriaBuilder.equal(agent.get("id"), estateAgentId);
         };
     }
@@ -59,7 +59,7 @@ public class AppointmentSpecification {
             if (estateId == null) {
                 return criteriaBuilder.conjunction();
             }
-            Join<AppointmentEntity, EstateEntity> estate = root.join("estate");
+            Join<AppointmentEntity, Estate> estate = root.join("estate");
             return criteriaBuilder.equal(estate.get("id"), estateId);
         };
     }
@@ -96,7 +96,7 @@ public class AppointmentSpecification {
             if (clientEmail == null || clientEmail.trim().isEmpty()) {
                 return criteriaBuilder.conjunction();
             }
-            Join<AppointmentEntity, UserEntity> client = root.join("client");
+            Join<AppointmentEntity, User> client = root.join("client");
             return criteriaBuilder.like(
                     criteriaBuilder.lower(client.get("email")), 
                     "%" + clientEmail.toLowerCase() + "%"
@@ -109,7 +109,7 @@ public class AppointmentSpecification {
             if (agentEmail == null || agentEmail.trim().isEmpty()) {
                 return criteriaBuilder.conjunction();
             }
-            Join<AppointmentEntity, UserEntity> agent = root.join("estateAgent");
+            Join<AppointmentEntity, User> agent = root.join("estateAgent");
             return criteriaBuilder.like(
                     criteriaBuilder.lower(agent.get("email")), 
                     "%" + agentEmail.toLowerCase() + "%"
@@ -122,7 +122,7 @@ public class AppointmentSpecification {
             if (estateTitle == null || estateTitle.trim().isEmpty()) {
                 return criteriaBuilder.conjunction();
             }
-            Join<AppointmentEntity, EstateEntity> estate = root.join("estate");
+            Join<AppointmentEntity, Estate> estate = root.join("estate");
             return criteriaBuilder.like(
                     criteriaBuilder.lower(estate.get("title")), 
                     "%" + estateTitle.toLowerCase() + "%"
@@ -165,7 +165,7 @@ public class AppointmentSpecification {
             if (clientName == null || clientName.trim().isEmpty()) {
                 return criteriaBuilder.conjunction();
             }
-            Join<AppointmentEntity, UserEntity> client = root.join("client");
+            Join<AppointmentEntity, User> client = root.join("client");
             return criteriaBuilder.like(
                     criteriaBuilder.lower(client.get("name")), 
                     "%" + clientName.toLowerCase() + "%"
@@ -178,7 +178,7 @@ public class AppointmentSpecification {
             if (agentName == null || agentName.trim().isEmpty()) {
                 return criteriaBuilder.conjunction();
             }
-            Join<AppointmentEntity, UserEntity> agent = root.join("estateAgent");
+            Join<AppointmentEntity, User> agent = root.join("estateAgent");
             return criteriaBuilder.like(
                     criteriaBuilder.lower(agent.get("name")), 
                     "%" + agentName.toLowerCase() + "%"

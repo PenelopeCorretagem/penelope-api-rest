@@ -5,11 +5,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import penelope.corretagem.penelopeapirest.core.user.User;
 import penelope.corretagem.penelopeapirest.data.domain.dto.UserAuthInfo;
 import penelope.corretagem.penelopeapirest.data.domain.dto.UserRequest;
 import penelope.corretagem.penelopeapirest.data.domain.dto.UserResponse;
 import penelope.corretagem.penelopeapirest.data.domain.dto.UserUpdateRequest;
-import penelope.corretagem.penelopeapirest.data.domain.entity.UserEntity;
 import penelope.corretagem.penelopeapirest.service.exception.ClientMustNotPossessACreci;
 import penelope.corretagem.penelopeapirest.service.exception.UserEmailAlreadyExistsException;
 import penelope.corretagem.penelopeapirest.service.exception.InvalidTokenException;
@@ -56,7 +56,7 @@ public class UserService {
             throw new ClientMustNotPossessACreci("Clientes não devem possuir Creci");
         }
 
-        UserEntity entity = userMapper.toUserEntity(userRequest);
+        User entity = userMapper.toUserEntity(userRequest);
         entity.setDateCreation(LocalDate.now());
         entity.setActive(true);
 
@@ -69,7 +69,7 @@ public class UserService {
 
     // Retorna todos os usuários cadastrados no sistema.
     public List<UserResponse> showAllUsers() {
-        List<UserEntity> users = userRepository.findAll();
+        List<User> users = userRepository.findAll();
         return users.stream()
                 .map(userMapper::toUserResponse)
                 .toList();
@@ -91,7 +91,7 @@ public class UserService {
     @Transactional
     public UserResponse updateUser(Long id, UserUpdateRequest req) {
 
-        UserEntity user = userRepository.findById(id)
+        User user = userRepository.findById(id)
                 .orElseThrow(UserNotFoundException::new);
 
         if (req.name() != null)
@@ -148,7 +148,7 @@ public class UserService {
 
     // Valida o token
     public void validatePasswordResetToken(String token) {
-        UserEntity user = userRepository.findByPasswordResetToken(token)
+        User user = userRepository.findByPasswordResetToken(token)
                 .orElseThrow(() -> new InvalidTokenException("Token inválido ou não encontrado."));
 
         // Verifica se o token expirou
@@ -162,7 +162,7 @@ public class UserService {
         // 1. Revalida o token para garantir que ainda é válido no momento da troca
         validatePasswordResetToken(token);
 
-        UserEntity user = userRepository.findByPasswordResetToken(token).get();
+        User user = userRepository.findByPasswordResetToken(token).get();
 
         // 2. Criptografa a nova senha
         user.setPassword(passwordEncoder.encode(newPassword));
@@ -178,7 +178,7 @@ public class UserService {
     public UserAuthInfo getUserAuthInfoFromToken(String token) {
         String email = tokenService.getEmailFromToken(token);
 
-        UserEntity user = userRepository.findByEmail(email)
+        User user = userRepository.findByEmail(email)
                 .orElseThrow(UserNotFoundException::new);
 
         return new UserAuthInfo(

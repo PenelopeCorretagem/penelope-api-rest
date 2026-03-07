@@ -6,19 +6,19 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import penelope.corretagem.penelopeapirest.application.dto.EstateResponse;
 import penelope.corretagem.penelopeapirest.data.domain.dto.*;
 import penelope.corretagem.penelopeapirest.data.domain.specification.AppointmentSpecification;
 import org.springframework.data.jpa.domain.Specification;
 import penelope.corretagem.penelopeapirest.data.domain.entity.AppointmentEntity;
-import penelope.corretagem.penelopeapirest.data.domain.entity.EstateEntity;
-import penelope.corretagem.penelopeapirest.data.domain.entity.UserEntity;
+import penelope.corretagem.penelopeapirest.core.estate.Estate;
+import penelope.corretagem.penelopeapirest.core.user.User;
 import penelope.corretagem.penelopeapirest.data.domain.enums.Status;
 import penelope.corretagem.penelopeapirest.data.domain.repository.AppointmentRepository;
 import penelope.corretagem.penelopeapirest.data.domain.repository.EstateRepository;
 import penelope.corretagem.penelopeapirest.data.domain.repository.UserRepository;
 
 import java.time.LocalDateTime;
-import java.util.Optional;
 
 @Service
 @Transactional
@@ -116,7 +116,7 @@ public class AppointmentService {
     /**
      * Mapeia User para UserResponse (simplificado)
      */
-    private UserResponse mapUserToResponse(UserEntity user) {
+    private UserResponse mapUserToResponse(User user) {
         return new UserResponse(
                 user.getId(),
                 user.getName(),
@@ -138,7 +138,7 @@ public class AppointmentService {
     /**
      * Mapeia Estate para EstateResponse (simplificado)
      */
-    private EstateResponse mapEstateToResponse(EstateEntity estate) {
+    private EstateResponse mapEstateToResponse(Estate estate) {
         return new EstateResponse(
                 estate.getId(),
                 estate.getTitle(),

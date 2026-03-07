@@ -1,4 +1,4 @@
-package penelope.corretagem.penelopeapirest.data.domain.entity;
+package penelope.corretagem.penelopeapirest.core.amenities;
 
 import jakarta.persistence.Embeddable;
 import lombok.AllArgsConstructor;

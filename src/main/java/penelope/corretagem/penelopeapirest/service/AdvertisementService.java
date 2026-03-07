@@ -4,8 +4,8 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import penelope.corretagem.penelopeapirest.data.domain.dto.AdvertisementDTO.AdvertisementFilterRequest;
 import penelope.corretagem.penelopeapirest.data.domain.dto.AdvertisementResponse;
-import penelope.corretagem.penelopeapirest.data.domain.entity.AdvertisementEntity;
-import penelope.corretagem.penelopeapirest.data.domain.entity.EstateEntity;
+import penelope.corretagem.penelopeapirest.core.advertisement.Advertisement;
+import penelope.corretagem.penelopeapirest.core.estate.Estate;
 import penelope.corretagem.penelopeapirest.data.domain.repository.AdvertisementRepository;
 import penelope.corretagem.penelopeapirest.data.domain.specification.AdvertisementSpecifications;
 import penelope.corretagem.penelopeapirest.mapper.AdvertisementResponseMapper;
@@ -24,12 +24,12 @@ public class AdvertisementService {
 
     public List<AdvertisementResponse> getAllAdvertisements(AdvertisementFilterRequest request) {
 
-        EstateEntity.Type type = null;
+        Estate.Type type = null;
         if (request.type() != null) {
-            type = EstateEntity.Type.valueOf(request.type().toUpperCase());
+            type = Estate.Type.valueOf(request.type().toUpperCase());
         }
 
-        Specification<AdvertisementEntity> spec =
+        Specification<Advertisement> spec =
                 AdvertisementSpecifications.hasCidade(request.city())
                         .and(AdvertisementSpecifications.hasRegiao(request.region()))
                         .and(AdvertisementSpecifications.hasTipo(type))

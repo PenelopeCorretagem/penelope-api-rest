@@ -1,6 +1,7 @@
 package penelope.corretagem.penelopeapirest.data.domain.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import penelope.corretagem.penelopeapirest.application.dto.EstateResponse;
 import penelope.corretagem.penelopeapirest.data.domain.enums.Status;
 
 import java.time.LocalDateTime;

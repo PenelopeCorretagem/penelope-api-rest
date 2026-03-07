@@ -2,16 +2,15 @@ package penelope.corretagem.penelopeapirest.mapper;
 
 import penelope.corretagem.penelopeapirest.data.domain.dto.AdvertisementDTO.*;
 import penelope.corretagem.penelopeapirest.data.domain.dto.AdvertisementResponse;
-import penelope.corretagem.penelopeapirest.data.domain.dto.EstateResponse;
-import penelope.corretagem.penelopeapirest.data.domain.entity.AdvertisementEntity;
-import penelope.corretagem.penelopeapirest.data.domain.entity.AmenitiesEntity;
+import penelope.corretagem.penelopeapirest.application.dto.EstateResponse;
+import penelope.corretagem.penelopeapirest.core.advertisement.Advertisement;
 
 import java.util.stream.Collectors;
 
 public class AdvertisementResponseMapper {
 
-    public static AdvertisementResponse toDTO(AdvertisementEntity anuncio) {
-        var empreendimento = anuncio.getProperty();
+    public static AdvertisementResponse toDTO(Advertisement anuncio) {
+        var empreendimento = anuncio.getEstate();
 
         // Endereço principal
         var addressDto = new AddressResponse(

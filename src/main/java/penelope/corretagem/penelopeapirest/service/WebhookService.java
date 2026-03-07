@@ -6,11 +6,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import penelope.corretagem.penelopeapirest.core.user.User;
 import penelope.corretagem.penelopeapirest.data.domain.dto.cal.CalWebhookRequest;
-import penelope.corretagem.penelopeapirest.data.domain.entity.AdvertisementEntity;
+import penelope.corretagem.penelopeapirest.core.advertisement.Advertisement;
 import penelope.corretagem.penelopeapirest.data.domain.entity.AppointmentEntity;
-import penelope.corretagem.penelopeapirest.data.domain.entity.EstateEntity;
-import penelope.corretagem.penelopeapirest.data.domain.entity.UserEntity;
+import penelope.corretagem.penelopeapirest.core.estate.Estate;
 import penelope.corretagem.penelopeapirest.data.domain.enums.Status;
 import penelope.corretagem.penelopeapirest.data.domain.repository.AdvertisementRepository;
 import penelope.corretagem.penelopeapirest.data.domain.repository.AppointmentRepository;
@@ -84,18 +84,18 @@ public class WebhookService {
 
         String hostEmail = webhook.payload().organizer().email();
 
-        UserEntity guest = webhook.payload().attendees().stream()
+        User guest = webhook.payload().attendees().stream()
                 .filter(attendee -> !attendee.email().equalsIgnoreCase(hostEmail))
                 .findFirst()
                 .flatMap(attendee -> userRepository.findByEmail(attendee.email()))
                 .orElseThrow(() -> new RuntimeException("Convidado do agendamento não encontrado"));
 
-        AdvertisementEntity advertisement = advertisementRepository.findByEventTypeId(webhook.payload().eventTypeId());
+        Advertisement advertisement = advertisementRepository.findByEventTypeId(webhook.payload().eventTypeId());
 
-        EstateEntity property = estateRepository.findById(advertisement.getProperty().getId())
+        Estate property = estateRepository.findById(advertisement.getEstate().getId())
                 .orElseThrow(() -> new RuntimeException("Imóvel não encontrado no banco de dados"));
 
-        UserEntity agent = userRepository.findById(advertisement.getResponsible().getId())
+        User agent = userRepository.findById(advertisement.getResponsible().getId())
                 .orElseThrow(() -> new RuntimeException("Corretor não encontrado no banco de dados"));
 
         AppointmentEntity newAppointment = new AppointmentEntity();
@@ -143,7 +143,7 @@ public class WebhookService {
                     .orElse(null);
 
             if (clientEmail != null) {
-                UserEntity client = userRepository.findByEmail(clientEmail).orElse(null);
+                User client = userRepository.findByEmail(clientEmail).orElse(null);
                 if (client != null) {
                     appointment = appointmentRepository.findByClientAndStatus(client, Status.PENDING)
                             .stream()
@@ -195,7 +195,7 @@ public class WebhookService {
                     .orElse(null);
 
             if (clientEmail != null) {
-                UserEntity client = userRepository.findByEmail(clientEmail).orElse(null);
+                User client = userRepository.findByEmail(clientEmail).orElse(null);
                 if (client != null) {
                     appointment = appointmentRepository.findByClientAndStartDateTime(
                             client, 

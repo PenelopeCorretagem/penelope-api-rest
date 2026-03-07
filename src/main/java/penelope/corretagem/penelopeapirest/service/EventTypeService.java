@@ -1,26 +1,19 @@
 package penelope.corretagem.penelopeapirest.service;
 
-import jakarta.transaction.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
 import penelope.corretagem.penelopeapirest.clients.CalClient;
-import penelope.corretagem.penelopeapirest.data.domain.dto.cal.booking.BookingFilterRequest;
-import penelope.corretagem.penelopeapirest.data.domain.dto.cal.booking.BookingListResponse;
-import penelope.corretagem.penelopeapirest.data.domain.dto.cal.booking.BookingUpdateRequest;
 import penelope.corretagem.penelopeapirest.data.domain.dto.cal.eventtype.EventTypeRequest;
 import penelope.corretagem.penelopeapirest.data.domain.dto.cal.eventtype.EventTypeCalResponse;
-import penelope.corretagem.penelopeapirest.data.domain.entity.AdvertisementEntity;
-import penelope.corretagem.penelopeapirest.data.domain.entity.EstateEntity;
+import penelope.corretagem.penelopeapirest.core.advertisement.Advertisement;
+import penelope.corretagem.penelopeapirest.core.estate.Estate;
 import penelope.corretagem.penelopeapirest.data.domain.entity.EventTypeEntity;
 import penelope.corretagem.penelopeapirest.data.domain.repository.AdvertisementRepository;
 import penelope.corretagem.penelopeapirest.data.domain.repository.EstateRepository;
 import penelope.corretagem.penelopeapirest.data.domain.repository.EventTypeRepository;
 
-import javax.swing.text.html.Option;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class EventTypeService {
@@ -45,7 +38,7 @@ public class EventTypeService {
     public EventTypeCalResponse createEventTypeForEstate(Long estateId) {
       logger.info("Criando Event Type para o imóvel ID: {}", estateId);
 
-      EstateEntity estate = estateRepository.findById(estateId)
+      Estate estate = estateRepository.findById(estateId)
         .orElseThrow(() -> new RuntimeException("Imóvel não encontrado: " + estateId));
 
       EventTypeRequest request = new EventTypeRequest(
@@ -69,7 +62,7 @@ public class EventTypeService {
             ));
             logger.info("Event Type criado com sucesso. ID: {} para imóvel: {}", response.id(), estateId);
 
-              AdvertisementEntity advertisement = advertisementRepository.findByEstateId(estateId);
+              Advertisement advertisement = advertisementRepository.findByEstateId(estateId);
                 if(advertisement != null){
                     advertisement.setEventType(eventType);
                     advertisementRepository.save(advertisement);
@@ -89,9 +82,9 @@ public class EventTypeService {
     public EventTypeCalResponse updateEventTypeForEstate(Long estateId) {
       logger.info("Atualizando Event Type para o imóvel ID: {}", estateId);
 
-      AdvertisementEntity advertisement =  advertisementRepository.findByEstateId(estateId);
+      Advertisement advertisement =  advertisementRepository.findByEstateId(estateId);
 
-      EstateEntity estate = estateRepository.findById(estateId)
+      Estate estate = estateRepository.findById(estateId)
         .orElseThrow(() -> new RuntimeException("Imóvel não encontrado: " + estateId));
 
       EventTypeEntity eventType = advertisement.getEventType();
@@ -156,7 +149,7 @@ public class EventTypeService {
     public void deleteEventTypeForEstate(Long estateId) {
       logger.info("Deletando Event Type para o imóvel ID: {}", estateId);
 
-      AdvertisementEntity advertisement =  advertisementRepository.findByEstateId(estateId);
+      Advertisement advertisement =  advertisementRepository.findByEstateId(estateId);
       EventTypeEntity eventType = advertisement.getEventType();
 
       if (eventType == null) {

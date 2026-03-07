@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import penelope.corretagem.penelopeapirest.core.estate.Estate;
+import penelope.corretagem.penelopeapirest.core.user.User;
 import penelope.corretagem.penelopeapirest.data.domain.enums.Status;
 
 import java.time.LocalDateTime;
@@ -22,15 +24,15 @@ public class AppointmentEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "fk_cliente", referencedColumnName = "id", nullable = false)
-    private UserEntity client;
+    private User client;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "fk_corretor", referencedColumnName = "id", nullable = false)
-    private UserEntity estateAgent;
+    private User estateAgent;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "fk_empreendimento", referencedColumnName = "id", nullable = false)
-    private EstateEntity estate;
+    private Estate estate;
 
     @Column(name = "duracao_minutos")
     private Integer durationMinutes;

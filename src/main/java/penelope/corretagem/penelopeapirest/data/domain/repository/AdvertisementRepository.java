@@ -7,18 +7,18 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
-import penelope.corretagem.penelopeapirest.data.domain.entity.AdvertisementEntity;
+import penelope.corretagem.penelopeapirest.core.advertisement.Advertisement;
 
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface AdvertisementRepository extends JpaRepository<AdvertisementEntity, Long>, JpaSpecificationExecutor<AdvertisementEntity> {
+public interface AdvertisementRepository extends JpaRepository<Advertisement, Long>, JpaSpecificationExecutor<Advertisement> {
 
     //Lista o ultimo anuncio cadastrado
     @Query("SELECT a FROM AdvertisementEntity a ORDER BY a.createdAt DESC Limit 1")
-    Optional<AdvertisementEntity> findTopByOrderByCreatedAtDesc();
+    Optional<Advertisement> findTopByOrderByCreatedAtDesc();
 
     // Lista um anuncio pelo ID
     @Query("""
@@ -34,7 +34,7 @@ public interface AdvertisementRepository extends JpaRepository<AdvertisementEnti
     LEFT JOIN FETCH e.amenities amenities
     WHERE a.id = :id
     """)
-    Optional<AdvertisementEntity> findByIdWithAllRelations(Long id);
+    Optional<Advertisement> findByIdWithAllRelations(Long id);
 
     @Modifying
     @Transactional
@@ -72,7 +72,7 @@ public interface AdvertisementRepository extends JpaRepository<AdvertisementEnti
         SELECT * FROM anuncio 
         WHERE fk_empreendimento = :estateId
         """, nativeQuery = true)
-    AdvertisementEntity findByEstateId(Long estateId);
+    Advertisement findByEstateId(Long estateId);
 
     @Modifying
     @Transactional
@@ -89,7 +89,7 @@ public interface AdvertisementRepository extends JpaRepository<AdvertisementEnti
     WHERE a.endDate < CURRENT_DATE
       AND a.active = true
     """)
-    List<AdvertisementEntity> findExpiredActiveAdvertisements();
+    List<Advertisement> findExpiredActiveAdvertisements();
 
 
     @Modifying
@@ -101,5 +101,5 @@ public interface AdvertisementRepository extends JpaRepository<AdvertisementEnti
     """)
     void deactivateById(@Param("id") Long id);
 
-    AdvertisementEntity findByEventTypeId(long eventTypeId);
+    Advertisement findByEventTypeId(long eventTypeId);
 }

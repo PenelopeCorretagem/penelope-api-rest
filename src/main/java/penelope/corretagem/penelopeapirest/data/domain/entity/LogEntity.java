@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import penelope.corretagem.penelopeapirest.core.user.User;
 
 import java.time.LocalDateTime;
 
@@ -25,7 +26,7 @@ public class LogEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "fk_usuario")
-    private UserEntity usuario;
+    private User usuario;
 
     @Column(nullable = false)
     private String detalhes;

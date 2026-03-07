@@ -3,9 +3,9 @@ package penelope.corretagem.penelopeapirest.data.domain.repository;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
-import penelope.corretagem.penelopeapirest.data.domain.entity.AddressEntity;
+import penelope.corretagem.penelopeapirest.core.address.Address;
 
-public interface AddressRepository extends JpaRepository<AddressEntity, Long> {
+public interface AddressRepository extends JpaRepository<Address, Long> {
     @Modifying
     @Query(value = """
         UPDATE endereco
