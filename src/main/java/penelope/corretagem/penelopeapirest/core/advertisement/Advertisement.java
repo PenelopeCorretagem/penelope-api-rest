@@ -1,6 +1,7 @@
 package penelope.corretagem.penelopeapirest.core.advertisement;
 
 import penelope.corretagem.penelopeapirest.core.estate.Estate;
+import penelope.corretagem.penelopeapirest.core.eventType.EventType;
 import penelope.corretagem.penelopeapirest.core.user.User;
 import penelope.corretagem.penelopeapirest.data.domain.entity.EventTypeEntity;
 
@@ -17,7 +18,7 @@ public class Advertisement {
     private Boolean active;
     private Boolean emphasis;
     private LocalDate endDate;
-    private EventTypeEntity eventType;
+    private EventType eventType;
 
     private Advertisement(
             Long id,
@@ -28,7 +29,7 @@ public class Advertisement {
             Boolean emphasis,
             LocalDate endDate,
             LocalDateTime createdAt,
-            EventTypeEntity eventType) {
+            EventType eventType) {
         this.id = id;
         this.estate = estate;
         this.creator = creator;
@@ -40,12 +41,11 @@ public class Advertisement {
         this.eventType = eventType;
     }
 
-    // 1. Factory Method para criar um NOVO anúncio (regra de negócio)
     public static Advertisement createNew(
             Estate estate,
             User creator,
             User responsible,
-            EventTypeEntity eventType,
+            EventType eventType,
             LocalDate endDate) {
 
         Boolean defaultActive = true;
@@ -64,7 +64,7 @@ public class Advertisement {
             Boolean emphasis,
             LocalDate endDate,
             LocalDateTime createdAt,
-            EventTypeEntity eventType) {
+            EventType eventType) {
 
         return new Advertisement(id, estate, creator, responsible, active, emphasis, endDate, createdAt, eventType);
     }
@@ -124,7 +124,10 @@ public class Advertisement {
         return createdAt;
     }
 
-    public EventTypeEntity getEventType() {
+    public EventType getEventType() {
         return eventType;
+    }
+
+    public void setEventType(EventTypeEntity eventType) {
     }
 }

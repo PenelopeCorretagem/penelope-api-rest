@@ -46,7 +46,9 @@ public class SecurityConfig {
             "/webjars/**",
 
             // H2
-            "/h2-console/**"
+            "/h2-console/**",
+
+            "/api/v2/anuncios/**",
     };
 
     // Define o algoritmo de criptografia de senhas usando BCrypt

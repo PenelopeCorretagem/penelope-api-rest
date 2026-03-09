@@ -5,8 +5,9 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import penelope.corretagem.penelopeapirest.core.estate.Estate;
+import penelope.corretagem.penelopeapirest.data.domain.entity.EstateEntity;
 
-public interface EstateRepository extends JpaRepository<Estate, Long> {
+public interface EstateRepository extends JpaRepository<EstateEntity, Long> {
 
     @Modifying
     @Query(value = "INSERT INTO empreendimento (titulo, descricao, area, quartos, tipo, fk_endereco, fk_endereco_stand) " +

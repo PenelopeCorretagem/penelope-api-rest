@@ -6,13 +6,14 @@ import org.mapstruct.ReportingPolicy;
 import penelope.corretagem.penelopeapirest.core.user.User;
 import penelope.corretagem.penelopeapirest.data.domain.dto.UserRequest;
 import penelope.corretagem.penelopeapirest.data.domain.dto.UserResponse;
+import penelope.corretagem.penelopeapirest.data.domain.entity.UserEntity;
 
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface UserMapper {
 
-    User toUserEntity(UserRequest userRequest);
+    UserEntity toUserEntity(UserRequest userRequest);
 
-    UserResponse toUserResponse(User user);
+    UserResponse toUserResponse(UserEntity user);
 
-    User updateUserFromRequest(UserRequest userRequest, @MappingTarget User user);
+    UserEntity updateUserFromRequest(UserRequest userRequest, @MappingTarget UserEntity user);
 }

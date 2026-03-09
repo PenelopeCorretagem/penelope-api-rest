@@ -1,31 +1,32 @@
 package penelope.corretagem.penelopeapirest.core.estate;
 
-import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-
-@Entity
-@Table(name = "imagem_empreendimento")
-@Getter
-@Setter
-@AllArgsConstructor
-@NoArgsConstructor
 public class ImageEstate {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private final Long id;
+    private final Estate estate;
+    private final ImageEstateType type;
+    private final String url;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "fk_empreendimento", referencedColumnName = "id", nullable = false)
-    private Estate estate;
+    private ImageEstate(Long id, Estate estate, ImageEstateType type, String url) {
+        this.id = id;
+        this.estate = estate;
+        this.type = type;
+        this.url = url;
+    }
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "fk_tipo_imagem", referencedColumnName = "id", nullable = false)
-    private ImageEstateType type;
+    public static ImageEstate createNew(Estate estate, ImageEstateType type, String url) {
+        if (url == null || url.isBlank()) {
+            throw new IllegalArgumentException("A URL da imagem não pode estar vazia.");
+        }
+        return new ImageEstate(null, estate, type, url);
+    }
 
-    @Column(name = "url", nullable = false)
-    private String url;
+    public static ImageEstate restore(Long id, Estate estate, ImageEstateType type, String url) {
+        return new ImageEstate(id, estate, type, url);
+    }
+
+    public Long getId() { return id; }
+    public Estate getEstate() { return estate; }
+    public ImageEstateType getType() { return type; }
+    public String getUrl() { return url; }
 }

@@ -1,30 +1,35 @@
 package penelope.corretagem.penelopeapirest.core.amenities;
 
-import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 import penelope.corretagem.penelopeapirest.core.estate.Estate;
 
-@Entity
-@Table(name = "diferencial_empreendimento")
-@Getter
-@Setter
-@AllArgsConstructor
-@NoArgsConstructor
 public class AmenitiesEstate {
-
-    @EmbeddedId
-    private AmenitiesEstateId id; // chave composta
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @MapsId("estate") // mapeia o campo estate da chave composta
-    @JoinColumn(name = "fk_empreendimento", referencedColumnName = "id", nullable = false)
+    private AmenitiesEstateId id;
     private Estate estate;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @MapsId("amenity") // mapeia o campo amenity da chave composta
-    @JoinColumn(name = "fk_diferencial", referencedColumnName = "id", nullable = false)
     private Amenities amenity;
+
+    private AmenitiesEstate(AmenitiesEstateId id, Estate estate, Amenities amenity) {
+        this.id = id;
+        this.estate = estate;
+        this.amenity = amenity;
+    }
+
+    public static AmenitiesEstate createNew(AmenitiesEstateId amenitiesEstateId, Estate estate, Amenities amenity){
+        return new AmenitiesEstate(amenitiesEstateId, estate,amenity);
+    }
+
+    public static AmenitiesEstate restore(AmenitiesEstateId amenitiesEstateId, Estate estate, Amenities amenity){
+        return new AmenitiesEstate(amenitiesEstateId, estate,amenity);
+    }
+
+    public AmenitiesEstateId getId() {
+        return id;
+    }
+
+    public Estate getEstate() {
+        return estate;
+    }
+
+    public Amenities getAmenity() {
+        return amenity;
+    }
 }

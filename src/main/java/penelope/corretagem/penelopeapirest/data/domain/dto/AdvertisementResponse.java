@@ -17,7 +17,7 @@ public record AdvertisementResponse(
         LocalDate endDate,
         CreatorResponse creator,
         ResponsibleResponse responsible,
-        EstateResponse property,
+        EstateResponse estate,
         EventTypeResponse eventTypeId
 ) {
     public static AdvertisementResponse fromDomain(Advertisement ad) {

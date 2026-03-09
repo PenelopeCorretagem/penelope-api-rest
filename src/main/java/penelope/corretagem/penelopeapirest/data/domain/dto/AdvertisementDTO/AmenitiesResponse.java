@@ -9,6 +9,7 @@ public record AmenitiesResponse(
     public static AmenitiesResponse fromDomain(Amenities amenities) {
         return new AmenitiesResponse(
                 amenities.getId(),
-                amenities.getDescription());
+                amenities.getDescription()
+                );
     }
 }

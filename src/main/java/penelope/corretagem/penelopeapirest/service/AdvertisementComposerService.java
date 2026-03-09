@@ -3,10 +3,10 @@ package penelope.corretagem.penelopeapirest.service;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-import penelope.corretagem.penelopeapirest.core.address.Address;
-import penelope.corretagem.penelopeapirest.core.advertisement.Advertisement;
-import penelope.corretagem.penelopeapirest.core.estate.Estate;
-import penelope.corretagem.penelopeapirest.data.domain.dto.EstateCreateDTO.EstateCreateRequest;
+import penelope.corretagem.penelopeapirest.application.dto.EstateCreateRequest;
+import penelope.corretagem.penelopeapirest.data.domain.entity.AddressEntity;
+import penelope.corretagem.penelopeapirest.data.domain.entity.AdvertisementEntity;
+import penelope.corretagem.penelopeapirest.data.domain.entity.EstateEntity;
 import penelope.corretagem.penelopeapirest.data.domain.repository.*;
 import penelope.corretagem.penelopeapirest.mapper.AddressMapper;
 
@@ -46,14 +46,14 @@ public class AdvertisementComposerService {
   }
 
   @Transactional
-  public Optional<Advertisement> createAdvertisement(EstateCreateRequest estateCreateRequest
+  public Optional<AdvertisementEntity> createAdvertisement(EstateCreateRequest estateCreateRequest
   ) throws IOException {
 
     var addressReq = estateCreateRequest.address();
-    Address address = addressMapper.toEntity(addressReq);
+    AddressEntity address = addressMapper.toEntity(addressReq);
     var savedAddress = addressRepository.save(address);
 
-    Address savedStandAddress = null;
+    AddressEntity savedStandAddress = null;
     if (estateCreateRequest.standAddress() != null) {
       savedStandAddress = addressRepository.save(addressMapper.toEntity(estateCreateRequest.standAddress()));
     }
@@ -112,12 +112,12 @@ public class AdvertisementComposerService {
   }
 
   @Transactional
-  public Advertisement updateAdvertisement(Long advertisementId, EstateCreateRequest req) throws IOException {
+  public AdvertisementEntity updateAdvertisement(Long advertisementId, EstateCreateRequest req) throws IOException {
 
-    Advertisement advertisementEntity = advertisementRepository.findById(advertisementId)
+    AdvertisementEntity advertisementEntity = advertisementRepository.findById(advertisementId)
       .orElseThrow(() -> new RuntimeException("Anúncio não encontrado"));
 
-    var estate = advertisementEntity.getProperty();
+    var estate = advertisementEntity.getEstate();
 
     Long estateId = estate.getId();
 
@@ -135,13 +135,13 @@ public class AdvertisementComposerService {
       eventTypeService.createEventTypeForEstate(estateId);
     }
 
-    Advertisement advertisement = advertisementRepository.findByEstateId(estateId);
+    AdvertisementEntity advertisement = advertisementRepository.findByEstateId(estateId);
     updateAdvertisementInfo(estateId, req, advertisement.getEventType().getId());
 
     return advertisementRepository.findByEstateId(estateId);
   }
 
-  private boolean hasEventTypeRelevantChanges(Estate estate, EstateCreateRequest req) {
+  private boolean hasEventTypeRelevantChanges(EstateEntity estate, EstateCreateRequest req) {
 
     // Mudança no título
     if (!estate.getTitle().equals(req.title())) {
@@ -166,7 +166,7 @@ public class AdvertisementComposerService {
   }
 
 
-  private void updateMainAddress(Estate estate, EstateCreateRequest req) {
+  private void updateMainAddress(EstateEntity estate, EstateCreateRequest req) {
 
     var addr = req.address();
 
@@ -183,7 +183,7 @@ public class AdvertisementComposerService {
     );
   }
 
-  private void updateStandAddress(Estate estate, EstateCreateRequest req) {
+  private void updateStandAddress(EstateEntity estate, EstateCreateRequest req) {
 
     var oldStand = estate.getStandAddress();
     var newStandReq = req.standAddress();
@@ -212,7 +212,7 @@ public class AdvertisementComposerService {
     else if (oldStand != null && newStandReq == null) {
 
       Long standId = oldStand.getId();
-      estateRepository.updateEstateStandAddressId(estate.getId(), null);
+//      estateRepository.updateEstateStandAddressId(estate.getId(), null);
       addressRepository.deleteById(standId);
     }
   }

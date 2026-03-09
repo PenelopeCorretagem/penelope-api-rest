@@ -6,10 +6,9 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import penelope.corretagem.penelopeapirest.data.domain.dto.AdvertisementDTO.AdvertisementFilterRequest;
-import penelope.corretagem.penelopeapirest.data.domain.dto.AdvertisementResponse;
-import penelope.corretagem.penelopeapirest.data.domain.dto.EstateCreateDTO.EstateCreateRequest;
+import penelope.corretagem.penelopeapirest.application.dto.EstateCreateRequest;
 import penelope.corretagem.penelopeapirest.core.advertisement.Advertisement;
+import penelope.corretagem.penelopeapirest.data.domain.entity.AdvertisementEntity;
 import penelope.corretagem.penelopeapirest.service.AdvertisementComposerService;
 import penelope.corretagem.penelopeapirest.service.AdvertisementService;
 
@@ -30,36 +29,36 @@ public class AdvertisementController {
     this.composerService = composerService;
   }
 
-  @GetMapping
-  public List<AdvertisementResponse> listAll(
-    @ModelAttribute AdvertisementFilterRequest request) {
-    return service.getAllAdvertisements(request);
-  }
+//  @GetMapping
+//  public List<AdvertisementResponse> listAll(
+//    @ModelAttribute AdvertisementFilterRequest request) {
+//    return service.getAllAdvertisements(request);
+//  }
 
-  @GetMapping("/latest")
-  public ResponseEntity<AdvertisementResponse> getLatestAdvertisement() {
-    AdvertisementResponse latest = service.getLatestAdvertisement();
-    if (latest != null) {
-      return ResponseEntity.ok(latest);
-    } else {
-      return ResponseEntity.notFound().build();
-    }
-  }
-
-  @GetMapping("/{id}")
-  public ResponseEntity<AdvertisementResponse> getAdvertisementById(@PathVariable Long id) {
-    var response = service.getAdvertisementById(id);
-    if (response != null) {
-      return ResponseEntity.ok(response);
-    } else {
-      return ResponseEntity.notFound().build();
-    }
-  }
+//  @GetMapping("/latest")
+//  public ResponseEntity<AdvertisementResponse> getLatestAdvertisement() {
+//    AdvertisementResponse latest = service.getLatestAdvertisement();
+//    if (latest != null) {
+//      return ResponseEntity.ok(latest);
+//    } else {
+//      return ResponseEntity.notFound().build();
+//    }
+//  }
+//
+//  @GetMapping("/{id}")
+//  public ResponseEntity<AdvertisementResponse> getAdvertisementById(@PathVariable Long id) {
+//    var response = service.getAdvertisementById(id);
+//    if (response != null) {
+//      return ResponseEntity.ok(response);
+//    } else {
+//      return ResponseEntity.notFound().build();
+//    }
+//  }
 
   @PostMapping
   public ResponseEntity<Optional<Advertisement>> createAdvertisement(
     @RequestBody EstateCreateRequest request) throws IOException {
-    Optional<Advertisement> response = composerService.createAdvertisement(request);
+    Optional<AdvertisementEntity> response = composerService.createAdvertisement(request);
     return ResponseEntity.status(HttpStatus.CREATED).build();
   }
 
@@ -75,7 +74,7 @@ public class AdvertisementController {
     @PathVariable("id") Long advertisementId,
     @RequestBody EstateCreateRequest request) throws IOException {
 
-    Advertisement response = composerService.updateAdvertisement(advertisementId, request);
+    AdvertisementEntity response = composerService.updateAdvertisement(advertisementId, request);
     return ResponseEntity.noContent().build();
   }
 

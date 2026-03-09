@@ -6,9 +6,10 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import penelope.corretagem.penelopeapirest.core.amenities.AmenitiesEstate;
+import penelope.corretagem.penelopeapirest.data.domain.entity.AmenitiesEstateEntity;
 
 public interface
-AmenitiesEstateRepository extends JpaRepository<AmenitiesEstate, Long> {
+AmenitiesEstateRepository extends JpaRepository<AmenitiesEstateEntity, Long> {
 
     @Modifying
     @Transactional

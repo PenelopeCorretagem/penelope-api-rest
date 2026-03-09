@@ -5,7 +5,7 @@ server:
   tomcat:
     max-http-form-post-size: 20MB
   servlet:
-    context-path: /api/v1
+    context-path: /
 
 
 spring:

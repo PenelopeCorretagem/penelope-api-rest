@@ -1,84 +1,149 @@
 package penelope.corretagem.penelopeapirest.core.estate;
 
-import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 import penelope.corretagem.penelopeapirest.core.address.Address;
 import penelope.corretagem.penelopeapirest.core.amenities.AmenitiesEstate;
-import penelope.corretagem.penelopeapirest.data.domain.entity.AppointmentEntity;
 
 import java.util.Set;
 
-@Entity
-@Table(name = "empreendimento")
-@Getter
-@Setter
-@AllArgsConstructor
-@NoArgsConstructor
 public class Estate {
+    private final Long id;
+    private final String title;
+    private final String description;
+    private final Double area;
+    private final Integer numberOfRooms;
+    private final Type type;
+    private final Address address;
+    private final Address standAddress;
+    private final Set<ImageEstate> images;
+    private final Set<AmenitiesEstate> amenities;
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Estate(
+            Long id,
+            String title,
+            String description,
+            Double area,
+            Integer numberOfRooms,
+            Type type,
+            Address address,
+            Address standAddress,
+            Set<ImageEstate> images,
+            Set<AmenitiesEstate> amenities
+    ) {
+        this.id = id;
+        this.title = title;
+        this.description = description;
+        this.area = area;
+        this.numberOfRooms = numberOfRooms;
+        this.type = type;
+        this.address = address;
+        this.standAddress = standAddress;
+        this.images = images;
+        this.amenities = amenities;
+    }
 
-    @Column(name = "titulo", nullable = false)
-    private String title;
+    public static Estate createNew(
+            Long id,
+            String title,
+            String description,
+            Double area,
+            Integer numberOfRooms,
+            Type type,
+            Address address,
+            Address standAddress,
+            Set<ImageEstate> images,
+            Set<AmenitiesEstate> amenities) {
+        return new Estate(
+                id,
+                title,
+                description,
+                area,
+                numberOfRooms,
+                type,
+                address,
+                standAddress,
+                images,
+                amenities
+        );
+    }
 
-    @Lob
-    @Column(name = "descricao", nullable = false)
-    private String description;
+    public static Estate restore(
+            Long id,
+            String title,
+            String description,
+            Double area,
+            Integer numberOfRooms,
+            Type type,
+            Address address,
+            Address standAddress,
+            Set<ImageEstate> images,
+            Set<AmenitiesEstate> amenities) {
+        return new Estate(
+                id,
+                title,
+                description,
+                area,
+                numberOfRooms,
+                type,
+                address,
+                standAddress,
+                images,
+                amenities
+        );
+    }
 
-    @Column(name = "area", nullable = false)
-    private Double area;
+    // Getters
+    public Long getId() {
+        return id;
+    }
 
-    @Column(name = "quartos", nullable = false)
-    private Integer numberOfRooms;
+    public String getTitle() {
+        return title;
+    }
 
-    @Column(name = "tipo", nullable = false)
-    @Enumerated(EnumType.STRING)
-    private Type type;
+    public String getDescription() {
+        return description;
+    }
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "fk_endereco", referencedColumnName = "id", nullable = false)
-    private Address address;
+    public Double getArea() {
+        return area;
+    }
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "fk_endereco_stand", referencedColumnName = "id", nullable = true)
-    private Address standAddress;
+    public Integer getNumberOfRooms() {
+        return numberOfRooms;
+    }
 
-    @OneToMany(
-            mappedBy = "estate",
-            cascade = CascadeType.ALL,
-            orphanRemoval = true,
-            fetch = FetchType.LAZY)
-    private Set<ImageEstate> images;
+    public Type getType() {
+        return type;
+    }
 
-    @OneToMany(
-            mappedBy = "estate",
-            cascade = CascadeType.ALL,
-            orphanRemoval = true,
-            fetch = FetchType.LAZY)
-    private Set<AppointmentEntity> appointments;
+    public Address getAddress() {
+        return address;
+    }
 
-    @OneToMany(
-            mappedBy = "estate",
-            cascade = CascadeType.ALL,
-            orphanRemoval = true,
-            fetch = FetchType.LAZY)
-    private Set<AmenitiesEstate> amenities;
+    public Address getStandAddress() {
+        return standAddress;
+    }
 
-    @Getter
     public enum Type {
         DISPONIVEL("Disponível"),
         EM_OBRAS("Em obras"),
         LANCAMENTO("Lançamento");
-
         private final String typeName;
 
         Type(String typeName) {
             this.typeName = typeName;
         }
+
+        public String getTypeName() {
+            return typeName;
+        }
+    }
+
+    public Set<ImageEstate> getImages() {
+        return images;
+    }
+
+    public Set<AmenitiesEstate> getAmenities() {
+        return amenities;
     }
 }

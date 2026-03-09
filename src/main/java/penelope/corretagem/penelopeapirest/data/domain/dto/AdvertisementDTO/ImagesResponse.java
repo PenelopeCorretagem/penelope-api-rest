@@ -11,7 +11,7 @@ public record ImagesResponse(
         return new ImagesResponse(
                 imageEstate.getId(),
                 imageEstate.getUrl(),
-                imageEstate.getUrl()
+                imageEstate.getType().getDescription()
         );
     }
 }

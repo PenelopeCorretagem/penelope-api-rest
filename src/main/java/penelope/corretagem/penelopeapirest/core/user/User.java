@@ -1,81 +1,174 @@
 package penelope.corretagem.penelopeapirest.core.user;
 
-import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.NoArgsConstructor;
-import lombok.AllArgsConstructor;
-import penelope.corretagem.penelopeapirest.data.domain.entity.AppointmentEntity;
 import penelope.corretagem.penelopeapirest.data.domain.enums.AccessLevel;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Date;
-import java.util.Set;
 
-@Entity
-@Table(name = "usuario")
-@Getter
-@Setter
-@AllArgsConstructor
-@NoArgsConstructor
 public class User {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    @Column(name = "nome_completo", nullable = false)
-    private String name;
-
-    @Column(name = "email", nullable = false, unique = true)
-    private String email;
-
-    @Column(name = "senha", nullable = false)
-    private String password;
-
-    @Column(name = "cpf", unique = true)
-    private String cpf;
-
-    @Column(name = "data_nascimento")
-    private LocalDate dateBirth;
-
-    @Column(name = "renda_mensal")
-    private BigDecimal monthlyIncome;
-
-    @Column(name = "telefone")
-    private String phone;
-
-    @Column(name = "creci")
-    private String creci;
-
-    @Enumerated(EnumType.STRING)
-    @Column(name = "nivel_acesso")
-    private AccessLevel accessLevel;
-
-    @Column(name = "data_criacao")
-    private LocalDate dateCreation;
-
-    @Column(name = "ativo")
-    private boolean active = true;
-
-    @OneToMany(
-            mappedBy = "client",
-            cascade = CascadeType.ALL,
-            orphanRemoval = true,
-            fetch = FetchType.LAZY)
-    private Set<AppointmentEntity> appointmentsClient;
-
-    @OneToMany(
-            mappedBy = "estateAgent",
-            cascade = CascadeType.ALL,
-            orphanRemoval = true,
-            fetch = FetchType.LAZY)
-    private Set<AppointmentEntity> appointmentsEstateAgent;
-
-    @Column
+    private final Long id;
+    private final String name;
+    private final String email;
+    private final String password;
+    private final String cpf;
+    private final LocalDate dateBirth;
+    private final BigDecimal monthlyIncome;
+    private final String phone;
+    private final String creci;
+    private final AccessLevel accessLevel;
+    private final LocalDate dateCreation;
+    private final boolean active;
     private String passwordResetToken;
-
-    @Column
     private Date passwordResetTokenExpiry;
+
+    private User(
+            Long id,
+            String name,
+            String email,
+            String password,
+            String cpf,
+            LocalDate dateBirth,
+            BigDecimal monthlyIncome,
+            String phone,
+            String creci,
+            AccessLevel accessLevel,
+            LocalDate dateCreation,
+            boolean active,
+            String passwordResetToken,
+            Date passwordResetTokenExpiry
+    ) {
+        this.id = id;
+        this.name = name;
+        this.email = email;
+        this.password = password;
+        this.cpf = cpf;
+        this.dateBirth = dateBirth;
+        this.monthlyIncome = monthlyIncome;
+        this.phone = phone;
+        this.creci = creci;
+        this.accessLevel = accessLevel;
+        this.dateCreation = dateCreation;
+        this.active = active;
+        this.passwordResetToken = passwordResetToken;
+        this.passwordResetTokenExpiry = passwordResetTokenExpiry;
+    }
+
+    public static User createNew(
+            String name,
+            String email,
+            String password,
+            String cpf,
+            LocalDate dateBirth,
+            BigDecimal monthlyIncome,
+            String phone,
+            String creci,
+            AccessLevel accessLevel
+    ) {
+        return new User(
+                null,
+                name,
+                email,
+                password,
+                cpf,
+                dateBirth,
+                monthlyIncome,
+                phone,
+                creci,
+                accessLevel,
+                LocalDate.now(),
+                true,
+                null,
+                null);
+    }
+
+    public static User restore(
+            Long id,
+            String name,
+            String email,
+            String password,
+            String cpf,
+            LocalDate dateBirth,
+            BigDecimal monthlyIncome,
+            String phone,
+            String creci,
+            AccessLevel accessLevel,
+            LocalDate dateCreation,
+            boolean active,
+            String passwordResetToken,
+            Date passwordResetTokenExpiry
+    ) {
+        return new User(
+                id,
+                name,
+                email,
+                password,
+                cpf,
+                dateBirth,
+                monthlyIncome,
+                phone,
+                creci,
+                accessLevel,
+                dateCreation,
+                active,
+                passwordResetToken,
+                passwordResetTokenExpiry
+        );
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public String getCpf() {
+        return cpf;
+    }
+
+    public LocalDate getDateBirth() {
+        return dateBirth;
+    }
+
+    public BigDecimal getMonthlyIncome() {
+        return monthlyIncome;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public String getCreci() {
+        return creci;
+    }
+
+    public AccessLevel getAccessLevel() {
+        return accessLevel;
+    }
+
+    public LocalDate getDateCreation() {
+        return dateCreation;
+    }
+
+    public boolean isActive() {
+        return active;
+    }
+
+    public String getPasswordResetToken() {
+        return passwordResetToken;
+    }
+
+    public Date getPasswordResetTokenExpiry() {
+        return passwordResetTokenExpiry;
+    }
 }

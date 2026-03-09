@@ -1,20 +1,21 @@
 package penelope.corretagem.penelopeapirest.service;
 
 import org.springframework.stereotype.Service;
-import penelope.corretagem.penelopeapirest.mapper.EstateMapper;
+//import penelope.corretagem.penelopeapirest.mapper.EstateMapper;
 import penelope.corretagem.penelopeapirest.data.domain.repository.EstateRepository;
 
 @Service
 public class EstateService {
 
   private final EstateRepository estateRepository;
-  private final EstateMapper estateMapper;
+//  private final EstateMapper estateMapper;
 
-  public EstateService(EstateRepository estateRepository,
-                       EstateMapper estateMapper) {
+  public EstateService(EstateRepository estateRepository
+//                       EstateMapper estateMapper
+  ) {
 
     this.estateRepository = estateRepository;
-    this.estateMapper = estateMapper;
+//    this.estateMapper = estateMapper;
   }
 
 //  public List<EstateResponse> getAllEstates() {

@@ -8,23 +8,25 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import penelope.corretagem.penelopeapirest.core.advertisement.Advertisement;
+import penelope.corretagem.penelopeapirest.data.domain.entity.AdvertisementEntity;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface AdvertisementRepository extends JpaRepository<Advertisement, Long>, JpaSpecificationExecutor<Advertisement> {
+public interface AdvertisementRepository extends JpaRepository<AdvertisementEntity, Long>, JpaSpecificationExecutor<AdvertisementEntity> {
 
     //Lista o ultimo anuncio cadastrado
     @Query("SELECT a FROM AdvertisementEntity a ORDER BY a.createdAt DESC Limit 1")
-    Optional<Advertisement> findTopByOrderByCreatedAtDesc();
+    Optional<AdvertisementEntity> findTopByOrderByCreatedAtDesc();
 
     // Lista um anuncio pelo ID
     @Query("""
     SELECT a
     FROM AdvertisementEntity a
-    JOIN FETCH a.property e
+    JOIN FETCH a.estate e
     JOIN FETCH e.address address
     LEFT JOIN FETCH e.standAddress standAddress
     LEFT JOIN FETCH a.creator creator
@@ -34,7 +36,7 @@ public interface AdvertisementRepository extends JpaRepository<Advertisement, Lo
     LEFT JOIN FETCH e.amenities amenities
     WHERE a.id = :id
     """)
-    Optional<Advertisement> findByIdWithAllRelations(Long id);
+    Optional<AdvertisementEntity> findByIdWithAllRelations(Long id);
 
     @Modifying
     @Transactional
@@ -44,7 +46,7 @@ public interface AdvertisementRepository extends JpaRepository<Advertisement, Lo
                                    @Param("fkCreator") Long fkCreator,
                                    @Param("fkResponsible") Long fkResponsible,
                                    @Param("active") Boolean active,
-                                   @Param("endDate") Date endDate,
+                                   @Param("endDate") LocalDate endDate,
                                    @Param("eventTypeId") Long eventTypeId);
 
     @Query(value = "SELECT LAST_INSERT_ID()", nativeQuery = true)
@@ -65,14 +67,14 @@ public interface AdvertisementRepository extends JpaRepository<Advertisement, Lo
             Long creator,
             Long responsible,
             Boolean active,
-            Date dataFim,
+            LocalDate dataFim,
             Long eventTypeId);
 
     @Query(value = """
         SELECT * FROM anuncio 
         WHERE fk_empreendimento = :estateId
         """, nativeQuery = true)
-    Advertisement findByEstateId(Long estateId);
+    AdvertisementEntity findByEstateId(Long estateId);
 
     @Modifying
     @Transactional
@@ -89,7 +91,7 @@ public interface AdvertisementRepository extends JpaRepository<Advertisement, Lo
     WHERE a.endDate < CURRENT_DATE
       AND a.active = true
     """)
-    List<Advertisement> findExpiredActiveAdvertisements();
+    List<AdvertisementEntity> findExpiredActiveAdvertisements();
 
 
     @Modifying
@@ -101,5 +103,5 @@ public interface AdvertisementRepository extends JpaRepository<Advertisement, Lo
     """)
     void deactivateById(@Param("id") Long id);
 
-    Advertisement findByEventTypeId(long eventTypeId);
+    AdvertisementEntity findByEventTypeId(long eventTypeId);
 }

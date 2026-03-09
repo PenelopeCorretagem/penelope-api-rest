@@ -3,9 +3,9 @@ package penelope.corretagem.penelopeapirest.service;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
-import penelope.corretagem.penelopeapirest.clients.CalClient;
+import penelope.corretagem.penelopeapirest.infrastructure.api.CalClient;
 import penelope.corretagem.penelopeapirest.data.domain.dto.cal.booking.*;
-import penelope.corretagem.penelopeapirest.core.advertisement.Advertisement;
+import penelope.corretagem.penelopeapirest.data.domain.entity.AdvertisementEntity;
 import penelope.corretagem.penelopeapirest.data.domain.entity.AppointmentEntity;
 import penelope.corretagem.penelopeapirest.data.domain.entity.EventTypeEntity;
 import penelope.corretagem.penelopeapirest.data.domain.repository.AdvertisementRepository;
@@ -39,7 +39,7 @@ public class BookingService {
                                                    LocalDate dateTo, Integer page, Integer size) {
         logger.info("Listando agendamentos para o imóvel ID: {}", estateId);
 
-        Advertisement advertisement = advertisementRepository.findByEstateId(estateId);
+        AdvertisementEntity advertisement = advertisementRepository.findByEstateId(estateId);
         EventTypeEntity eventType = advertisement.getEventType();
 
         if (eventType == null) {

@@ -1,32 +1,44 @@
 package penelope.corretagem.penelopeapirest.core.amenities;
 
-import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-
 import java.util.Set;
 
-@Entity
-@Table(name = "diferencial")
-@Getter
-@Setter
-@AllArgsConstructor
-@NoArgsConstructor
 public class Amenities {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @Column(name = "descricao", nullable = false, unique = true)
     private String description;
+    private Set<AmenitiesEstate> properties = null;
 
-    @OneToMany(
-            mappedBy = "amenity",
-            cascade = CascadeType.ALL,
-            orphanRemoval = true,
-            fetch = FetchType.LAZY)
-    private Set<AmenitiesEstate> properties;
+    private Amenities(
+            Long id,
+            String description,
+            Set<AmenitiesEstate> properties
+    ) {
+        this.id = id;
+        this.description = description;
+        this.properties = properties;
+    }
+
+    public Amenities(Long id, String description) {
+        this.id = id;
+        this.description = description;
+    }
+
+    public static Amenities createNew(Long id, String description, Set<AmenitiesEstate> amenitiesEstates) {
+        return new Amenities(id, description, amenitiesEstates);
+    }
+
+    public static Amenities restore(Long id, String description, Set<AmenitiesEstate> amenitiesEstates) {
+        return new Amenities(id, description, amenitiesEstates);
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public Set<AmenitiesEstate> getProperties() {
+        return properties;
+    }
 }

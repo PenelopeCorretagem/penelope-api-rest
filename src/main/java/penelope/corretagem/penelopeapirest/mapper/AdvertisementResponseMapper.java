@@ -4,12 +4,13 @@ import penelope.corretagem.penelopeapirest.data.domain.dto.AdvertisementDTO.*;
 import penelope.corretagem.penelopeapirest.data.domain.dto.AdvertisementResponse;
 import penelope.corretagem.penelopeapirest.application.dto.EstateResponse;
 import penelope.corretagem.penelopeapirest.core.advertisement.Advertisement;
+import penelope.corretagem.penelopeapirest.data.domain.entity.AdvertisementEntity;
 
 import java.util.stream.Collectors;
 
 public class AdvertisementResponseMapper {
 
-    public static AdvertisementResponse toDTO(Advertisement anuncio) {
+    public static AdvertisementResponse toDTO(AdvertisementEntity anuncio) {
         var empreendimento = anuncio.getEstate();
 
         // Endereço principal

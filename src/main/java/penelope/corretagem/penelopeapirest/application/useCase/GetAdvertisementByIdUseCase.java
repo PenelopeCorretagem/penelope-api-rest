@@ -1,15 +1,15 @@
 package penelope.corretagem.penelopeapirest.application.useCase;
 
 import penelope.corretagem.penelopeapirest.core.advertisement.Advertisement;
-import penelope.corretagem.penelopeapirest.core.advertisement.repository.AdvertisementRepository;
+import penelope.corretagem.penelopeapirest.core.advertisement.repository.IAdvertisementRepository;
 import penelope.corretagem.penelopeapirest.core.exception.ResourceNotFoundException;
 import penelope.corretagem.penelopeapirest.data.domain.dto.AdvertisementResponse;
 
 public class GetAdvertisementByIdUseCase {
 
-    private final AdvertisementRepository repository;
+    private final IAdvertisementRepository repository;
 
-    public GetAdvertisementByIdUseCase(AdvertisementRepository repository) {
+    public GetAdvertisementByIdUseCase(IAdvertisementRepository repository) {
         this.repository = repository;
     }
 

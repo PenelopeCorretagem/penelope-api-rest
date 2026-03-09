@@ -1,9 +1,10 @@
-package penelope.corretagem.penelopeapirest.service;
+package penelope.corretagem.penelopeapirest.scheduler;
 
 import jakarta.transaction.Transactional;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import penelope.corretagem.penelopeapirest.core.advertisement.Advertisement;
+import penelope.corretagem.penelopeapirest.data.domain.entity.AdvertisementEntity;
 import penelope.corretagem.penelopeapirest.data.domain.repository.AdvertisementRepository;
 
 import java.util.List;
@@ -21,10 +22,10 @@ public class AdvertisementExpirantionScheduler {
     @Transactional
     public void disableExpiredAdvertisements() {
 
-        List<Advertisement> expiredAds =
+        List<AdvertisementEntity> expiredAds =
                 advertisementRepository.findExpiredActiveAdvertisements();
 
-        for (Advertisement ad : expiredAds) {
+        for (AdvertisementEntity ad : expiredAds) {
             advertisementRepository.deactivateById(ad.getId());
         }
 

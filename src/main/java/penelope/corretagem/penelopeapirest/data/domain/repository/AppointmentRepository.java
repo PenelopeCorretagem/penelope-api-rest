@@ -4,6 +4,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import penelope.corretagem.penelopeapirest.core.user.User;
 import penelope.corretagem.penelopeapirest.data.domain.entity.AppointmentEntity;
+import penelope.corretagem.penelopeapirest.data.domain.entity.UserEntity;
 import penelope.corretagem.penelopeapirest.data.domain.enums.Status;
 
 import java.time.LocalDateTime;
@@ -14,7 +15,7 @@ public interface AppointmentRepository extends JpaRepository<AppointmentEntity, 
     
     Optional<AppointmentEntity> findByCalBookingId(Long calBookingId);
     
-    List<AppointmentEntity> findByClientAndStatus(User client, Status status);
+    List<AppointmentEntity> findByClientAndStatus(UserEntity client, Status status);
     
-    Optional<AppointmentEntity> findByClientAndStartDateTime(User client, LocalDateTime startDateTime);
+    Optional<AppointmentEntity> findByClientAndStartDateTime(UserEntity client, LocalDateTime startDateTime);
 }

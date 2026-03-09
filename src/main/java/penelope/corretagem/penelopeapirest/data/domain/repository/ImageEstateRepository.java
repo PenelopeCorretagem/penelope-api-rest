@@ -5,9 +5,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
-import penelope.corretagem.penelopeapirest.core.estate.ImageEstate;
+import penelope.corretagem.penelopeapirest.data.domain.entity.ImageEstateEntity;
 
-public interface ImageEstateRepository extends JpaRepository<ImageEstate, Long> {
+public interface ImageEstateRepository extends JpaRepository<ImageEstateEntity, Long> {
 
     @Modifying
     @Transactional
