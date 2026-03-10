@@ -23,8 +23,7 @@ public class EstateEntity {
     @Column(name = "titulo", nullable = false)
     private String title;
 
-    @Lob
-    @Column(name = "descricao", nullable = false)
+    @Column(name = "descricao", length = 150,nullable = false)
     private String description;
 
     @Column(name = "area", nullable = false)

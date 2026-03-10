@@ -49,6 +49,7 @@ logs/**
 # Arquivos de configuração locais
 *.swp
 *.swo
+*.env
 
 # Arquivos de IDEs
 /.idea/

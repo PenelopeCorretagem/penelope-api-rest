@@ -1,46 +1,48 @@
 -- Tabela de endereços, associada à cidade
 CREATE TABLE endereco (
-    id INT AUTO_INCREMENT PRIMARY KEY,
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
     rua VARCHAR(150) NOT NULL,
-    numero INT NOT NULL,
+    numero VARCHAR(5) NOT NULL,
     bairro VARCHAR(100),
     cidade VARCHAR(100) NOT NULL,
-    uf CHAR(2) NOT NULL,
+    uf VARCHAR(2) NOT NULL,
     regiao VARCHAR(100) NOT NULL,
-    cep CHAR(8) NOT NULL,
+    cep VARCHAR(8) NOT NULL,
     complemento VARCHAR(100)
 );
 
 -- Tabela de usuários do sistema
 CREATE TABLE usuario (
-    id INT AUTO_INCREMENT PRIMARY KEY,
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
     nome_completo VARCHAR(50) NOT NULL UNIQUE,
     email VARCHAR(100) UNIQUE NOT NULL,
     senha VARCHAR(255) NOT NULL,
-    cpf CHAR(11) UNIQUE,
+    cpf VARCHAR(11) UNIQUE,
     data_nascimento DATE NOT NULL,
     renda_mensal DECIMAL(10, 2),
     telefone VARCHAR(20),
     creci VARCHAR(20) UNIQUE,
     ativo TINYINT(1) DEFAULT 1,
     nivel_acesso ENUM('Administrador', 'Cliente') NOT NULL DEFAULT 'Cliente',
-    data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    token_redefinicao_senha VARCHAR(255),
+    data_expiracao_token DATETIME
 );
 
 -- Tabela de empreendimentos imobiliários
 CREATE TABLE empreendimento (
-    id INT AUTO_INCREMENT PRIMARY KEY,
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
     titulo VARCHAR(150) NOT NULL,
     descricao VARCHAR(150) NOT NULL,
-    area DECIMAL(10, 2) NOT NULL,
+    area DOUBLE NOT NULL,
     quartos INT NOT NULL,
     tipo ENUM(
         'Disponível',
         'Em obras',
         'Lançamento'
     ) NOT NULL,
-    fk_endereco INT NOT NULL,
-    fk_endereco_stand INT,
+    fk_endereco BIGINT NOT NULL,
+    fk_endereco_stand BIGINT,
     CONSTRAINT fk_empreendimento_endereco FOREIGN KEY (fk_endereco) REFERENCES endereco (id),
     CONSTRAINT fk_empreendimento_endereco_stand FOREIGN KEY (fk_endereco_stand) REFERENCES endereco (id)
 );
@@ -53,15 +55,15 @@ CREATE TABLE tipo_evento (
 
 -- Tabela de anúncios de empreendimentos
 CREATE TABLE anuncio (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    fk_empreendimento INT NOT NULL,
-    fk_criador INT,
-    fk_responsavel INT,
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    fk_empreendimento BIGINT NOT NULL,
+    fk_criador BIGINT,
+    fk_responsavel BIGINT,
     ativo TINYINT(1) DEFAULT 1,
     destaque TINYINT(1) DEFAULT 0,
     data_criacao DATETIME DEFAULT CURRENT_TIMESTAMP,
     data_fim DATE,
-    fk_tipo_evento INT,
+    fk_tipo_evento BIGINT,
     CONSTRAINT fk_anuncio_empreendimento FOREIGN KEY (fk_empreendimento) REFERENCES empreendimento (id) ON DELETE CASCADE,
     CONSTRAINT fk_anuncio_criador FOREIGN KEY (fk_criador) REFERENCES usuario (id) ON DELETE SET NULL,
     CONSTRAINT fk_anuncio_responsavel FOREIGN KEY (fk_responsavel) REFERENCES usuario (id) ON DELETE SET NULL,
@@ -69,14 +71,14 @@ CREATE TABLE anuncio (
 );
 
 CREATE TABLE tipo_imagem (
-    id INT AUTO_INCREMENT PRIMARY KEY,
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
     descricao VARCHAR(50) NOT NULL UNIQUE
 );
 
 CREATE TABLE imagem_empreendimento (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    fk_empreendimento INT NOT NULL,
-    fk_tipo_imagem INT NOT NULL,
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    fk_empreendimento BIGINT NOT NULL,
+    fk_tipo_imagem BIGINT NOT NULL,
     url VARCHAR(255) NOT NULL,
     CONSTRAINT fk_imagem_empreendimento FOREIGN KEY (fk_empreendimento) REFERENCES empreendimento (id) ON DELETE CASCADE,
     CONSTRAINT fk_imagem_tipo FOREIGN KEY (fk_tipo_imagem) REFERENCES tipo_imagem (id) ON DELETE CASCADE
@@ -84,14 +86,14 @@ CREATE TABLE imagem_empreendimento (
 
 -- Tabela de diferenciais dos empreendimentos
 CREATE TABLE diferencial (
-    id INT AUTO_INCREMENT PRIMARY KEY,
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
     descricao VARCHAR(100) NOT NULL UNIQUE
 );
 
 -- Tabela de associação entre empreendimento e diferencial
 CREATE TABLE diferencial_empreendimento (
-    fk_empreendimento INT NOT NULL,
-    fk_diferencial INT NOT NULL,
+    fk_empreendimento BIGINT NOT NULL,
+    fk_diferencial BIGINT NOT NULL,
     PRIMARY KEY (
              fk_empreendimento,
              fk_diferencial
@@ -102,10 +104,10 @@ CREATE TABLE diferencial_empreendimento (
 
 -- Tabela de visitas agendadas
 CREATE TABLE agendamento (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    fk_cliente INT NOT NULL,
-    fk_corretor INT NOT NULL,
-    fk_empreendimento INT NOT NULL,
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    fk_cliente BIGINT NOT NULL,
+    fk_corretor BIGINT NOT NULL,
+    fk_empreendimento BIGINT NOT NULL,
     duracao_minutos INT NOT NULL,
     data_agendamento DATETIME NOT NULL,
     status ENUM(
@@ -113,6 +115,8 @@ CREATE TABLE agendamento (
         'Concluído',
         'Cancelado'
     ) DEFAULT 'Agendado',
+    data_inicio DATETIME,
+    data_fim DATETIME,
     CONSTRAINT fk_agendamento_cliente FOREIGN KEY (fk_cliente) REFERENCES usuario (id),
     CONSTRAINT fk_agendamento_corretor FOREIGN KEY (fk_corretor) REFERENCES usuario (id),
     CONSTRAINT fk_agendamento_empreendimento FOREIGN KEY (fk_empreendimento) REFERENCES empreendimento (id)
@@ -120,8 +124,8 @@ CREATE TABLE agendamento (
 
 -- Tabela de logs de ações do sistema
 CREATE TABLE log(
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    fk_usuario INT,
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    fk_usuario BIGINT,
     origem VARCHAR(100) NOT NULL,
     detalhes VARCHAR(255) NOT NULL,
     data_hora TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
