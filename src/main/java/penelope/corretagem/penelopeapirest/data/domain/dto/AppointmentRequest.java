@@ -13,7 +13,6 @@ public record AppointmentRequest(
         @JsonProperty("durationMinutes") Integer durationMinutes,
         @JsonProperty("startDateTime") LocalDateTime startDateTime,
         @JsonProperty("endDateTime") LocalDateTime endDateTime,
-        Status status,
-        @JsonProperty("calBookingId") Long calBookingId
+        Status status
 ) {
 }

@@ -24,8 +24,8 @@ public class BookingService {
     private final AppointmentRepository appointmentRepository;
     private final AdvertisementRepository advertisementRepository;
 
-    public BookingService(CalClient calClient, 
-                         AppointmentRepository appointmentRepository,
+    public BookingService(CalClient calClient,
+                          AppointmentRepository appointmentRepository,
                           AdvertisementRepository advertisementRepository) {
         this.calClient = calClient;
         this.appointmentRepository = appointmentRepository;
@@ -35,8 +35,8 @@ public class BookingService {
     /**
      * Lista bookings por Event Type (imóvel)
      */
-    public BookingListResponse listBookingsByEstate(Long estateId, LocalDate dateFrom, 
-                                                   LocalDate dateTo, Integer page, Integer size) {
+    public BookingListResponse listBookingsByEstate(Long estateId, LocalDate dateFrom,
+                                                    LocalDate dateTo, Integer page, Integer size) {
         logger.info("Listando agendamentos para o imóvel ID: {}", estateId);
 
         AdvertisementEntity advertisement = advertisementRepository.findByEstateId(estateId);
@@ -66,10 +66,10 @@ public class BookingService {
     /**
      * Lista bookings por usuário
      */
-    public BookingListResponse listBookingsByUser(Long userId, LocalDate dateFrom, 
-                                                 LocalDate dateTo, Integer page, Integer size) {
+    public BookingListResponse listBookingsByUser(Long userId, LocalDate dateFrom,
+                                                  LocalDate dateTo, Integer page, Integer size) {
         logger.info("Listando agendamentos para o usuário ID: {}", userId);
-        
+
         try {
             return calClient.listBookings(
                     new BookingFilterRequest(
@@ -90,11 +90,11 @@ public class BookingService {
     /**
      * Lista todos os bookings com filtros opcionais
      */
-    public BookingListResponse listAllBookings(Long eventTypeId, Long userId, 
-                                              LocalDate dateFrom, LocalDate dateTo, 
-                                              Integer page, Integer size) {
+    public BookingListResponse listAllBookings(Long eventTypeId, Long userId,
+                                               LocalDate dateFrom, LocalDate dateTo,
+                                               Integer page, Integer size) {
         logger.info("Listando todos os agendamentos com filtros");
-        
+
         try {
             return calClient.listBookings(new BookingFilterRequest(eventTypeId, userId, dateFrom, dateTo, page, size));
         } catch (Exception e) {
@@ -108,7 +108,7 @@ public class BookingService {
      */
     public BookingResponse getBooking(String uid) {
         logger.info("Buscando agendamento ID: {}", uid);
-        
+
         try {
             return calClient.getBooking(uid);
         } catch (Exception e) {
@@ -120,31 +120,22 @@ public class BookingService {
     /**
      * Reagenda um booking existente
      */
-    public BookingResponse rescheduleBooking(Long appointmentId, OffsetDateTime newStartTime, 
-                                           OffsetDateTime newEndTime, String reason) {
+    public BookingResponse rescheduleBooking(Long appointmentId, OffsetDateTime newStartTime,
+                                             OffsetDateTime newEndTime, String reason) {
         logger.info("Reagendando appointment ID: {}", appointmentId);
-        
+
         // Buscar o agendamento local para obter o booking ID do Cal.com
         AppointmentEntity appointment = appointmentRepository.findById(appointmentId)
                 .orElseThrow(() -> new RuntimeException("Agendamento não encontrado: " + appointmentId));
 
-        if (appointment.getCalBookingId() == null) {
-            throw new RuntimeException("Agendamento não possui ID do Cal.com associado");
-        }
-
         BookingUpdateRequest request = new BookingUpdateRequest(newStartTime, newEndTime, reason);
 
         try {
-            BookingResponse response = calClient.updateBooking(appointment.getCalBookingId(), request);
-            
-            if (response != null) {
-                logger.info("Agendamento {} reagendado com sucesso no Cal.com", appointment.getCalBookingId());
-            }
-            
+            BookingResponse response = calClient.updateBooking(appointment.getId(), request);
             return response;
         } catch (Exception e) {
-            logger.error("Erro ao reagendar booking {} do appointment {}: {}", 
-                    appointment.getCalBookingId(), appointmentId, e.getMessage(), e);
+            logger.error("Erro ao reagendar booking {} do appointment {}: {}",
+                    appointment.getId(), appointmentId, e.getMessage(), e);
             throw new RuntimeException("Falha ao reagendar agendamento: " + e.getMessage(), e);
         }
     }
@@ -154,29 +145,24 @@ public class BookingService {
      */
     public BookingResponse cancelBooking(Long appointmentId, String reason) {
         logger.info("Cancelando appointment ID: {}", appointmentId);
-        
+
         // Buscar o agendamento local
         AppointmentEntity appointment = appointmentRepository.findById(appointmentId)
                 .orElseThrow(() -> new RuntimeException("Agendamento não encontrado: " + appointmentId));
 
-        if (appointment.getCalBookingId() == null) {
+        if (appointment.getId() == null) {
             throw new RuntimeException("Agendamento não possui ID do Cal.com associado");
         }
 
         BookingCancelRequest request = new BookingCancelRequest(reason, false);
 
         try {
-            BookingResponse response = calClient.cancelBooking(appointment.getCalBookingId(), request);
-            
-            if (response != null) {
-                logger.info("Agendamento {} cancelado com sucesso no Cal.com", appointment.getCalBookingId());
-                // O webhook BOOKING_CANCELLED irá atualizar o banco local
-            }
-            
+            BookingResponse response = calClient.cancelBooking(appointment.getId(), request);
+
             return response;
         } catch (Exception e) {
-            logger.error("Erro ao cancelar booking {} do appointment {}: {}", 
-                    appointment.getCalBookingId(), appointmentId, e.getMessage(), e);
+            logger.error("Erro ao cancelar booking {} do appointment {}: {}",
+                    appointment.getId(), appointmentId, e.getMessage(), e);
             throw new RuntimeException("Falha ao cancelar agendamento: " + e.getMessage(), e);
         }
     }

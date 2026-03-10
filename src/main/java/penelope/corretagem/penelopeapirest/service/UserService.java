@@ -17,7 +17,7 @@ import penelope.corretagem.penelopeapirest.service.exception.InvalidTokenExcepti
 import penelope.corretagem.penelopeapirest.service.exception.UserEmailAlreadyExistsException;
 import penelope.corretagem.penelopeapirest.service.exception.UserNotFoundException;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -57,7 +57,7 @@ public class UserService {
         }
 
         UserEntity entity = userMapper.toUserEntity(userRequest);
-        entity.setDateCreation(LocalDate.now());
+        entity.setDateCreation(LocalDateTime.now());
         entity.setActive(true);
 
         entity.setPassword(passwordEncoder.encode(userRequest.password()));

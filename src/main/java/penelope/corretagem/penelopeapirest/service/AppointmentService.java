@@ -65,7 +65,7 @@ public class AppointmentService {
             String clientEmail,
             String agentEmail,
             String estateTitle,
-            Boolean hasCalBooking,
+            Boolean hasId,
             Boolean onlyActive,
             Pageable pageable) {
         
@@ -73,14 +73,6 @@ public class AppointmentService {
             clientId, estateAgentId, estateId, status, startDate, endDate, 
             clientEmail, agentEmail, estateTitle
         );
-
-        if (hasCalBooking != null) {
-            if (hasCalBooking) {
-                spec = spec.and(AppointmentSpecification.hasCalBookingId());
-            } else {
-                spec = spec.and(AppointmentSpecification.hasNoCalBookingId());
-            }
-        }
 
         if (onlyActive != null && onlyActive) {
             spec = spec.and(AppointmentSpecification.isActive());
@@ -108,7 +100,6 @@ public class AppointmentService {
                 appointment.getStartDateTime(),
                 appointment.getEndDateTime(),
                 appointment.getStatus(),
-                appointment.getCalBookingId(),
                 appointment.getDateAppointment() != null ? appointment.getDateAppointment() : appointment.getStartDateTime(),
                 LocalDateTime.now()
         );

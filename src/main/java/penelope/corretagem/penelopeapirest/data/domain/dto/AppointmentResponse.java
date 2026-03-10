@@ -14,7 +14,6 @@ public record AppointmentResponse(
         @JsonProperty("startDateTime") LocalDateTime startDateTime,
         @JsonProperty("endDateTime") LocalDateTime endDateTime,
         Status status,
-        @JsonProperty("calBookingId") Long calBookingId,
         @JsonProperty("createdAt") LocalDateTime createdAt,
         @JsonProperty("updatedAt") LocalDateTime updatedAt
 ) {

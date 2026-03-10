@@ -130,16 +130,6 @@ public class AppointmentSpecification {
         };
     }
 
-    public static Specification<AppointmentEntity> hasCalBookingId() {
-        return (root, query, criteriaBuilder) -> 
-                criteriaBuilder.isNotNull(root.get("calBookingId"));
-    }
-
-    public static Specification<AppointmentEntity> hasNoCalBookingId() {
-        return (root, query, criteriaBuilder) -> 
-                criteriaBuilder.isNull(root.get("calBookingId"));
-    }
-
     public static Specification<AppointmentEntity> isActive() {
         return (root, query, criteriaBuilder) -> 
                 criteriaBuilder.notEqual(root.get("status"), Status.CANCELLED);

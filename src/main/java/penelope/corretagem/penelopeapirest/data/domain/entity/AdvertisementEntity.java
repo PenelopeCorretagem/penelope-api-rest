@@ -46,6 +46,6 @@ public class AdvertisementEntity {
     private LocalDateTime createdAt;
 
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "fk_tipo_evento_cal", referencedColumnName = "id", nullable = false)
+    @JoinColumn(name = "fk_tipo_evento", referencedColumnName = "id", nullable = false)
     private EventTypeEntity eventType;
 }

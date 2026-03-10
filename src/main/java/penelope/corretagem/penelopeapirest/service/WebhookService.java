@@ -106,7 +106,6 @@ public class WebhookService {
         newAppointment.setStartDateTime(webhook.payload().startTime().toLocalDateTime());
         newAppointment.setEndDateTime(webhook.payload().endTime().toLocalDateTime());
         newAppointment.setDateAppointment(webhook.payload().startTime().toLocalDateTime());
-        newAppointment.setCalBookingId(webhook.payload().bookingId());
 
         int duration = (int) Duration.between(
                 webhook.payload().startTime().toLocalDateTime(),
@@ -123,15 +122,15 @@ public class WebhookService {
         logger.info("Agendamento reagendado recebido: {}", webhook.payload().title());
 
         Optional<Map<String, String>> metadata = Optional.ofNullable(webhook.payload().metadata());
-        Long calBookingId = metadata
+        Long id = metadata
                 .map(md -> md.get("bookingId"))
                 .map(Long::parseLong)
                 .orElse(null);
 
         AppointmentEntity appointment = null;
 
-        if (calBookingId != null) {
-            appointment = appointmentRepository.findByCalBookingId(calBookingId)
+        if (id != null) {
+            appointment = appointmentRepository.findById(id)
                     .orElse(null);
         }
 
@@ -175,15 +174,15 @@ public class WebhookService {
         logger.info("Agendamento cancelado recebido: {}", webhook.payload().title());
 
         Optional<Map<String, String>> metadata = Optional.ofNullable(webhook.payload().metadata());
-        Long calBookingId = metadata
+        Long id = metadata
                 .map(md -> md.get("bookingId"))
                 .map(Long::parseLong)
                 .orElse(null);
 
         AppointmentEntity appointment = null;
 
-        if (calBookingId != null) {
-            appointment = appointmentRepository.findByCalBookingId(calBookingId)
+        if (id != null) {
+            appointment = appointmentRepository.findById(id)
                     .orElse(null);
         }
 

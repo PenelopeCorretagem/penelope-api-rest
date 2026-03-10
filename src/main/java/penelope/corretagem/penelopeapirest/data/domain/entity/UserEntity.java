@@ -9,6 +9,7 @@ import penelope.corretagem.penelopeapirest.data.domain.enums.AccessLevel;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.Set;
 
@@ -53,7 +54,7 @@ public class UserEntity {
     private AccessLevel accessLevel;
 
     @Column(name = "data_criacao")
-    private LocalDate dateCreation;
+    private LocalDateTime dateCreation;
 
     @Column(name = "ativo")
     private boolean active = true;
@@ -72,9 +73,9 @@ public class UserEntity {
             fetch = FetchType.LAZY)
     private Set<AppointmentEntity> appointmentsEstateAgent;
 
-    @Column
+    @Column(name = "token_redefinicao_senha")
     private String passwordResetToken;
 
-    @Column
+    @Column(name = "data_expiracao_token")
     private Date passwordResetTokenExpiry;
 }
