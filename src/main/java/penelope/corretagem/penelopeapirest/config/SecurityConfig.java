@@ -49,6 +49,9 @@ public class SecurityConfig {
             "/h2-console/**",
 
             "/api/v2/anuncios/**",
+            "/api/v2/imagens/**",
+            "/api/v2/diferenciais/**",
+            "/api/v2/usuarios/**"
     };
 
     // Define o algoritmo de criptografia de senhas usando BCrypt

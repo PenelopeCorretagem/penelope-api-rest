@@ -16,7 +16,7 @@
 //import penelope.corretagem.penelopeapirest.application.dto.AdvertisementCreateRequest;
 //import penelope.corretagem.penelopeapirest.application.dto.EstateCreateRequest;
 //import penelope.corretagem.penelopeapirest.data.domain.dto.AddressRequest;
-//import penelope.corretagem.penelopeapirest.data.domain.dto.AdvertisementResponse;
+//import penelope.corretagem.penelopeapirest.application.dto.AdvertisementResponse;
 //import penelope.corretagem.penelopeapirest.data.domain.dto.EstateCreateDTO.AdvertisementCreateRequest;
 //import penelope.corretagem.penelopeapirest.data.domain.dto.EstateCreateDTO.EstateCreateRequest;
 //import penelope.corretagem.penelopeapirest.core.advertisement.Advertisement;

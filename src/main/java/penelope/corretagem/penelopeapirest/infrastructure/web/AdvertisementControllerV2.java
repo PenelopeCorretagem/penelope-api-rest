@@ -1,14 +1,16 @@
 package penelope.corretagem.penelopeapirest.infrastructure.web;
 
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import penelope.corretagem.penelopeapirest.application.dto.EstateCreateRequest;
-import penelope.corretagem.penelopeapirest.application.useCase.*;
-import penelope.corretagem.penelopeapirest.core.dto.AdvertisementFilterRequest;
-import penelope.corretagem.penelopeapirest.data.domain.dto.AdvertisementResponse;
+import penelope.corretagem.penelopeapirest.application.dto.AdvertisementFilterRequest;
+import penelope.corretagem.penelopeapirest.application.dto.AdvertisementResponse;
+import penelope.corretagem.penelopeapirest.application.useCase.advertisement.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController("advertisementControllerV2")
 @RequestMapping("/api/v2/anuncios")
@@ -19,16 +21,20 @@ public class AdvertisementControllerV2 {
     private final GetAdvertisementByEstateIdUseCase getAdvertisementByEstateIdUseCase;
     private final GetLatestAdvertisementUseCase getLatestAdvertisementUseCase;
     private final CreateAdvertisementUseCase createAdvertisementUseCase;
+    private final UpdateAdvertisementUseCase updateAdvertisementUseCase;
+    private final ChangeAdvertisementStatusUseCase changeAdvertisementStatusUseCase;
 
     public AdvertisementControllerV2(
             GetAdvertisementByIdUseCase getAdvertisementByIdUseCase,
-            GetAllAdvertisementsUseCase getAllAdvertisementsUseCase, GetAdvertisementByEstateIdUseCase getAdvertisementByEstateIdUseCase, GetLatestAdvertisementUseCase getLatestAdvertisementUseCase, CreateAdvertisementUseCase createAdvertisementUseCase
+            GetAllAdvertisementsUseCase getAllAdvertisementsUseCase, GetAdvertisementByEstateIdUseCase getAdvertisementByEstateIdUseCase, GetLatestAdvertisementUseCase getLatestAdvertisementUseCase, CreateAdvertisementUseCase createAdvertisementUseCase, UpdateAdvertisementUseCase updateAdvertisementUseCase, ChangeAdvertisementStatusUseCase changeAdvertisementStatusUseCase
     ) {
         this.getAdvertisementByIdUseCase = getAdvertisementByIdUseCase;
         this.getAllAdvertisementsUseCase = getAllAdvertisementsUseCase;
         this.getAdvertisementByEstateIdUseCase = getAdvertisementByEstateIdUseCase;
         this.getLatestAdvertisementUseCase = getLatestAdvertisementUseCase;
         this.createAdvertisementUseCase = createAdvertisementUseCase;
+        this.updateAdvertisementUseCase = updateAdvertisementUseCase;
+        this.changeAdvertisementStatusUseCase = changeAdvertisementStatusUseCase;
     }
 
     @GetMapping("/{id}")
@@ -66,5 +72,29 @@ public class AdvertisementControllerV2 {
         var response = AdvertisementResponse.fromDomain(savedAdvertisement);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<?> update(
+            @PathVariable Long id,
+            @RequestBody @Valid EstateCreateRequest request) {
+
+        var updatedAdvertisement = updateAdvertisementUseCase.execute(id, request);
+        return ResponseEntity.ok(updatedAdvertisement);
+    }
+
+    @PatchMapping("/{id}/status")
+    public ResponseEntity<Void> updateStatus(
+            @PathVariable Long id,
+            @RequestBody Map<String, Boolean> statusRequest) {
+
+        Boolean isActive = statusRequest.get("active");
+
+        if (isActive == null) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        changeAdvertisementStatusUseCase.execute(id, isActive);
+        return ResponseEntity.noContent().build();
     }
 }

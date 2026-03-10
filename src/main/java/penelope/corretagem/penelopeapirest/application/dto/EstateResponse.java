@@ -2,7 +2,6 @@ package penelope.corretagem.penelopeapirest.application.dto;
 
 import penelope.corretagem.penelopeapirest.core.estate.Estate;
 import penelope.corretagem.penelopeapirest.data.domain.dto.AdvertisementDTO.AddressResponse;
-import penelope.corretagem.penelopeapirest.data.domain.dto.AdvertisementDTO.AmenitiesResponse;
 import penelope.corretagem.penelopeapirest.data.domain.dto.AdvertisementDTO.ImagesResponse;
 import penelope.corretagem.penelopeapirest.data.domain.dto.AdvertisementDTO.StandAddressResponse;
 

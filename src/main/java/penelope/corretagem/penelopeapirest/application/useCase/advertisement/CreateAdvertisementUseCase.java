@@ -1,14 +1,21 @@
-package penelope.corretagem.penelopeapirest.application.useCase;
+package penelope.corretagem.penelopeapirest.application.useCase.advertisement;
 
 import org.springframework.stereotype.Service;
 import penelope.corretagem.penelopeapirest.application.dto.EstateCreateRequest;
 import penelope.corretagem.penelopeapirest.core.address.Address;
 import penelope.corretagem.penelopeapirest.core.advertisement.Advertisement;
 import penelope.corretagem.penelopeapirest.core.advertisement.repository.IAdvertisementRepository;
+import penelope.corretagem.penelopeapirest.core.amenities.Amenities;
+import penelope.corretagem.penelopeapirest.core.amenities.AmenitiesEstate;
 import penelope.corretagem.penelopeapirest.core.estate.Estate;
-import penelope.corretagem.penelopeapirest.core.eventType.IEventTypeGateway;
+import penelope.corretagem.penelopeapirest.core.estate.ImageEstate;
+import penelope.corretagem.penelopeapirest.core.estate.ImageEstateType;
+import penelope.corretagem.penelopeapirest.core.gateway.IEventTypeGateway;
 import penelope.corretagem.penelopeapirest.core.user.User;
 import penelope.corretagem.penelopeapirest.core.user.repository.IUserRepository;
+
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 public class CreateAdvertisementUseCase {
@@ -65,6 +72,32 @@ public class CreateAdvertisementUseCase {
             );
         }
 
+        Set<AmenitiesEstate> domainAmenities = request.amenitiesIds() != null ?
+                request.amenitiesIds().stream()
+                        .map(id -> {
+                            var amenity = new Amenities(id, null);
+                            return AmenitiesEstate.createNew(null, null, amenity);
+                        })
+                        .collect(Collectors.toSet()) : new java.util.HashSet<>();
+
+        Set<ImageEstate> domainImages = new java.util.HashSet<>();
+        if (request.images() != null && request.imageType() != null) {
+
+            for (int i = 0; i < request.images().size(); i++) {
+                String imageUrl = request.images().get(i);
+                Long typeId = request.imageType().get(i).longValue();
+
+                var imageTypeDomain = ImageEstateType.restore(typeId, null, null);
+
+                var imageEstate = ImageEstate.createNew(
+                        null,
+                        imageTypeDomain,
+                        imageUrl
+                );
+                domainImages.add(imageEstate);
+            }
+        }
+
         var estate = Estate.createNew(
                 null,
                 request.title(),
@@ -74,8 +107,8 @@ public class CreateAdvertisementUseCase {
                 Estate.Type.valueOf(request.type()),
                 address,
                 standAddress,
-                null,
-                null
+                domainImages,
+                domainAmenities
         );
 
         var eventTypeDomain = eventTypeGateway.generateForEstate(estate);

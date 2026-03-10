@@ -1,6 +1,5 @@
-package penelope.corretagem.penelopeapirest.data.domain.dto;
+package penelope.corretagem.penelopeapirest.application.dto;
 
-import penelope.corretagem.penelopeapirest.application.dto.EstateResponse;
 import penelope.corretagem.penelopeapirest.core.advertisement.Advertisement;
 import penelope.corretagem.penelopeapirest.data.domain.dto.AdvertisementDTO.CreatorResponse;
 import penelope.corretagem.penelopeapirest.data.domain.dto.AdvertisementDTO.EventTypeResponse;

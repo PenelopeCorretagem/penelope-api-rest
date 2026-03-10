@@ -9,8 +9,8 @@ import org.springframework.web.multipart.MultipartFile;
 import penelope.corretagem.penelopeapirest.application.dto.EstateCreateRequest;
 import penelope.corretagem.penelopeapirest.core.advertisement.Advertisement;
 import penelope.corretagem.penelopeapirest.data.domain.entity.AdvertisementEntity;
-import penelope.corretagem.penelopeapirest.service.AdvertisementComposerService;
-import penelope.corretagem.penelopeapirest.service.AdvertisementService;
+//import penelope.corretagem.penelopeapirest.service.AdvertisementComposerService;
+//import penelope.corretagem.penelopeapirest.service.AdvertisementService;
 
 import java.io.IOException;
 import java.util.List;
@@ -21,13 +21,13 @@ import java.util.Optional;
 @RequestMapping("/advertisement")
 public class AdvertisementController {
 
-  private final AdvertisementService service;
-  private final AdvertisementComposerService composerService;
-
-  public AdvertisementController(AdvertisementService service, AdvertisementComposerService composerService) {
-    this.service = service;
-    this.composerService = composerService;
-  }
+//  private final AdvertisementService service;
+//  private final AdvertisementComposerService composerService;
+//
+//  public AdvertisementController(AdvertisementService service, AdvertisementComposerService composerService) {
+//    this.service = service;
+//    this.composerService = composerService;
+//  }
 
 //  @GetMapping
 //  public List<AdvertisementResponse> listAll(
@@ -54,37 +54,37 @@ public class AdvertisementController {
 //      return ResponseEntity.notFound().build();
 //    }
 //  }
-
-  @PostMapping
-  public ResponseEntity<Optional<Advertisement>> createAdvertisement(
-    @RequestBody EstateCreateRequest request) throws IOException {
-    Optional<AdvertisementEntity> response = composerService.createAdvertisement(request);
-    return ResponseEntity.status(HttpStatus.CREATED).build();
-  }
-
-  @PostMapping(value = "/photos", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-  public ResponseEntity<List<String>> uploadImages(
-    @RequestPart("files") List<MultipartFile> files) throws IOException {
-    List<String> result = composerService.uploadImages(files);
-    return ResponseEntity.ok(result);
-  }
-
-  @PutMapping("/{id}")
-  public ResponseEntity<Optional<Advertisement>> updateAdvertisement(
-    @PathVariable("id") Long advertisementId,
-    @RequestBody EstateCreateRequest request) throws IOException {
-
-    AdvertisementEntity response = composerService.updateAdvertisement(advertisementId, request);
-    return ResponseEntity.noContent().build();
-  }
-
-  @PatchMapping("/{id}")
-  public ResponseEntity<Void> deactivateAdvertisement(
-    @PathVariable("id") Long id,
-    @RequestBody Boolean active) throws IOException {
-
-    composerService.updateAdvertisementStatus(id, active);
-    return ResponseEntity.noContent().build();
-  }
+//
+//  @PostMapping
+//  public ResponseEntity<Optional<Advertisement>> createAdvertisement(
+//    @RequestBody EstateCreateRequest request) throws IOException {
+//    Optional<AdvertisementEntity> response = composerService.createAdvertisement(request);
+//    return ResponseEntity.status(HttpStatus.CREATED).build();
+//  }
+//
+//  @PostMapping(value = "/photos", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+//  public ResponseEntity<List<String>> uploadImages(
+//    @RequestPart("files") List<MultipartFile> files) throws IOException {
+//    List<String> result = composerService.uploadImages(files);
+//    return ResponseEntity.ok(result);
+//  }
+//
+//  @PutMapping("/{id}")
+//  public ResponseEntity<Optional<Advertisement>> updateAdvertisement(
+//    @PathVariable("id") Long advertisementId,
+//    @RequestBody EstateCreateRequest request) throws IOException {
+//
+//    AdvertisementEntity response = composerService.updateAdvertisement(advertisementId, request);
+//    return ResponseEntity.noContent().build();
+//  }
+//
+//  @PatchMapping("/{id}")
+//  public ResponseEntity<Void> deactivateAdvertisement(
+//    @PathVariable("id") Long id,
+//    @RequestBody Boolean active) throws IOException {
+//
+//    composerService.updateAdvertisementStatus(id, active);
+//    return ResponseEntity.noContent().build();
+//  }
 
 }

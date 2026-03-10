@@ -1,4 +1,4 @@
-package penelope.corretagem.penelopeapirest.data.domain.dto.AdvertisementDTO;
+package penelope.corretagem.penelopeapirest.application.dto;
 
 import penelope.corretagem.penelopeapirest.core.amenities.Amenities;
 

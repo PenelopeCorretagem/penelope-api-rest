@@ -8,17 +8,19 @@ import java.util.Date;
 
 public class User {
     private final Long id;
-    private final String name;
-    private final String email;
-    private final String password;
-    private final String cpf;
-    private final LocalDate dateBirth;
-    private final BigDecimal monthlyIncome;
-    private final String phone;
-    private final String creci;
-    private final AccessLevel accessLevel;
     private final LocalDate dateCreation;
-    private final boolean active;
+    private final AccessLevel accessLevel;
+    private final String creci;
+
+    private String name;
+    private String email;
+    private String password;
+    private String cpf;
+    private LocalDate dateBirth;
+    private BigDecimal monthlyIncome;
+    private String phone;
+    private boolean active;
+
     private String passwordResetToken;
     private Date passwordResetTokenExpiry;
 
@@ -114,6 +116,40 @@ public class User {
                 passwordResetToken,
                 passwordResetTokenExpiry
         );
+    }
+
+    public void updateInformation(
+            String name, String email, String cpf,
+            LocalDate dateBirth, BigDecimal monthlyIncome, String phone) {
+
+        if (name != null) this.name = name;
+        if (email != null) this.email = email;
+        if (cpf != null) this.cpf = cpf;
+        if (dateBirth != null) this.dateBirth = dateBirth;
+        if (monthlyIncome != null) this.monthlyIncome = monthlyIncome;
+        if (phone != null) this.phone = phone;
+    }
+
+    public void generatePasswordResetToken(String token, Date expiryDate) {
+        this.passwordResetToken = token;
+        this.passwordResetTokenExpiry = expiryDate;
+    }
+
+    public void applyNewPassword(String newEncryptedPassword) {
+
+        if (this.passwordResetTokenExpiry == null || this.passwordResetTokenExpiry.before(new Date())) {
+            throw new RuntimeException("Token expirado ou inválido. Por favor, solicite uma nova redefinição de senha.");
+        }
+
+        this.password = newEncryptedPassword;
+        this.passwordResetToken = null;       // Limpa o token para não ser usado de novo
+        this.passwordResetTokenExpiry = null; // Limpa a data de expiração
+    }
+
+    public void changePassword(String newEncryptedPassword) {
+        if (newEncryptedPassword != null) {
+            this.password = newEncryptedPassword;
+        }
     }
 
     public Long getId() {

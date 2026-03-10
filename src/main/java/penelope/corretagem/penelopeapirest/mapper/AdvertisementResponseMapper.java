@@ -1,9 +1,9 @@
 package penelope.corretagem.penelopeapirest.mapper;
 
+import penelope.corretagem.penelopeapirest.application.dto.AmenitiesResponse;
 import penelope.corretagem.penelopeapirest.data.domain.dto.AdvertisementDTO.*;
-import penelope.corretagem.penelopeapirest.data.domain.dto.AdvertisementResponse;
+import penelope.corretagem.penelopeapirest.application.dto.AdvertisementResponse;
 import penelope.corretagem.penelopeapirest.application.dto.EstateResponse;
-import penelope.corretagem.penelopeapirest.core.advertisement.Advertisement;
 import penelope.corretagem.penelopeapirest.data.domain.entity.AdvertisementEntity;
 
 import java.util.stream.Collectors;

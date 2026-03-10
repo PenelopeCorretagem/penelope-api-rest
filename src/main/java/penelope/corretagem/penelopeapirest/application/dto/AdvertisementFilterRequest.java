@@ -1,4 +1,4 @@
-package penelope.corretagem.penelopeapirest.core.dto;
+package penelope.corretagem.penelopeapirest.application.dto;
 
 import java.time.LocalDate;
 

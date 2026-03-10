@@ -7,13 +7,13 @@ import java.util.Set;
 
 public class Estate {
     private final Long id;
-    private final String title;
-    private final String description;
-    private final Double area;
-    private final Integer numberOfRooms;
-    private final Type type;
-    private final Address address;
-    private final Address standAddress;
+    private String title;
+    private String description;
+    private Double area;
+    private Integer numberOfRooms;
+    private Type type;
+    private Address address;
+    private Address standAddress;
     private final Set<ImageEstate> images;
     private final Set<AmenitiesEstate> amenities;
 
@@ -145,5 +145,22 @@ public class Estate {
 
     public Set<AmenitiesEstate> getAmenities() {
         return amenities;
+    }
+
+    public void updateAllDetails(String title, String description, Double area, Integer numberOfRooms, Type type,
+                                 Address address, Address standAddress, Set<ImageEstate> images, Set<AmenitiesEstate> amenities) {
+        this.title = title;
+        this.description = description;
+        this.area = area;
+        this.numberOfRooms = numberOfRooms;
+        this.type = type;
+        this.address = address;
+        this.standAddress = standAddress;
+
+        this.images.clear();
+        if (images != null) this.images.addAll(images);
+
+        this.amenities.clear();
+        if (amenities != null) this.amenities.addAll(amenities);
     }
 }

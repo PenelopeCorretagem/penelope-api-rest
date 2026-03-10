@@ -1,9 +1,9 @@
-package penelope.corretagem.penelopeapirest.application.useCase;
+package penelope.corretagem.penelopeapirest.application.useCase.advertisement;
 
 import penelope.corretagem.penelopeapirest.core.advertisement.Advertisement;
 import penelope.corretagem.penelopeapirest.core.advertisement.repository.IAdvertisementRepository;
 import penelope.corretagem.penelopeapirest.core.exception.ResourceNotFoundException;
-import penelope.corretagem.penelopeapirest.data.domain.dto.AdvertisementResponse;
+import penelope.corretagem.penelopeapirest.application.dto.AdvertisementResponse;
 
 public class GetAdvertisementByIdUseCase {
 

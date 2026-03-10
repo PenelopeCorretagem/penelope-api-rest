@@ -1,8 +1,8 @@
-package penelope.corretagem.penelopeapirest.application.useCase;
+package penelope.corretagem.penelopeapirest.application.useCase.advertisement;
 
 import org.springframework.stereotype.Service;
 import penelope.corretagem.penelopeapirest.core.advertisement.repository.IAdvertisementRepository;
-import penelope.corretagem.penelopeapirest.data.domain.dto.AdvertisementResponse;
+import penelope.corretagem.penelopeapirest.application.dto.AdvertisementResponse;
 
 @Service
 public class GetLatestAdvertisementUseCase {

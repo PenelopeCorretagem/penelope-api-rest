@@ -7,7 +7,7 @@
 //import penelope.corretagem.penelopeapirest.core.amenities.AmenitiesEstateId;
 //import penelope.corretagem.penelopeapirest.core.estate.Estate;
 //import penelope.corretagem.penelopeapirest.core.estate.ImageEstateType;
-//import penelope.corretagem.penelopeapirest.data.domain.dto.AdvertisementDTO.AmenitiesResponse;
+//import penelope.corretagem.penelopeapirest.application.dto.AmenitiesResponse;
 //import penelope.corretagem.penelopeapirest.data.domain.dto.AmenitiesRequest;
 //import penelope.corretagem.penelopeapirest.data.domain.dto.EstateRequest;
 //import penelope.corretagem.penelopeapirest.application.dto.EstateResponse;

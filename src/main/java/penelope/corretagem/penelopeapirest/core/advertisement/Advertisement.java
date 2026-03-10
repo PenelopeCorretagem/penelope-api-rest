@@ -69,28 +69,6 @@ public class Advertisement {
         return new Advertisement(id, estate, creator, responsible, active, emphasis, endDate, createdAt, eventType);
     }
 
-    public void deactivate() {
-        if (!this.active) {
-            throw new IllegalArgumentException("O anúncio já está inativo.");
-        }
-        this.active = false;
-    }
-
-    public void renewAdvertisement(LocalDate newEndDate) {
-        if (newEndDate.isBefore(LocalDate.now())) {
-            throw new IllegalArgumentException("A nova data deve ser no futuro.");
-        }
-        this.endDate = newEndDate;
-        this.active = true; // Renovar automaticamente reativa o anúncio
-    }
-
-    public void changeResponsible(User newResponsible) {
-        if (newResponsible == null) {
-            throw new IllegalArgumentException("O responsável não pode ser nulo.");
-        }
-        this.responsible = newResponsible;
-    }
-
     //Getters
     public Long getId() {
         return id;
@@ -128,6 +106,16 @@ public class Advertisement {
         return eventType;
     }
 
-    public void setEventType(EventTypeEntity eventType) {
+    public void setEventType(EventType eventType) {
+        this.eventType = eventType;
+    }
+
+    public void updateInfo(Boolean active, LocalDate endDate) {
+        this.active = active;
+        this.endDate = endDate;
+    }
+
+    public void setActive(Boolean active) {
+        this.active = active;
     }
 }

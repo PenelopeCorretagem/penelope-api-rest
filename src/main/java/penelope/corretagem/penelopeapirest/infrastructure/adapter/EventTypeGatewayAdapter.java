@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 import penelope.corretagem.penelopeapirest.infrastructure.api.CalClient;
 import penelope.corretagem.penelopeapirest.core.estate.Estate;
 import penelope.corretagem.penelopeapirest.core.eventType.EventType;
-import penelope.corretagem.penelopeapirest.core.eventType.IEventTypeGateway;
+import penelope.corretagem.penelopeapirest.core.gateway.IEventTypeGateway;
 import penelope.corretagem.penelopeapirest.data.domain.dto.cal.eventtype.EventTypeCalResponse;
 import penelope.corretagem.penelopeapirest.data.domain.dto.cal.eventtype.EventTypeRequest;
 
@@ -52,6 +52,46 @@ public class EventTypeGatewayAdapter implements IEventTypeGateway {
         } catch (Exception e) {
             logger.error("Erro ao criar Event Type no Cal.com para o imóvel {}: {}", estate.getTitle(), e.getMessage(), e);
             throw new RuntimeException("Falha ao criar Event Type: " + e.getMessage(), e);
+        }
+    }
+
+    @Override
+    public EventType recreateForEstate(EventType currentEventType, Estate newEstate) {
+        logger.info("Ocultando Event Type antigo e gerando um novo para o imóvel ID: {}", newEstate.getId());
+
+        try {
+
+            EventTypeRequest hideRequest = new EventTypeRequest(
+                    currentEventType.getTitle(),
+                    currentEventType.getSlug(),
+                    60,
+                    newEstate.getDescription(),
+                    true,
+                    120,
+                    false
+            );
+            calClient.updateEventType(currentEventType.getId(), hideRequest);
+
+            EventTypeRequest createRequest = new EventTypeRequest(
+                    newEstate.getTitle(),
+                    generateSlugFromTitle(newEstate.getTitle()),
+                    60,
+                    newEstate.getDescription(),
+                    false, // <-- HIDDEN FALSE
+                    120,
+                    false
+            );
+            var response = calClient.createEventType(createRequest);
+
+            return EventType.restore(
+                    response.id(),
+                    response.title(),
+                    response.slug()
+            );
+
+        } catch (Exception e) {
+            logger.error("Erro ao recriar Event Type no Cal.com: {}", e.getMessage(), e);
+            throw new RuntimeException("Falha ao atualizar calendário: " + e.getMessage(), e);
         }
     }
 

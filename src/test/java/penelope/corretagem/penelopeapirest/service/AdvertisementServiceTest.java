@@ -11,7 +11,7 @@
 //import org.springframework.data.jpa.domain.Specification;
 //import penelope.corretagem.penelopeapirest.core.user.User;
 //import penelope.corretagem.penelopeapirest.data.domain.dto.AdvertisementDTO.AdvertisementFilterRequest;
-//import penelope.corretagem.penelopeapirest.data.domain.dto.AdvertisementResponse;
+//import penelope.corretagem.penelopeapirest.application.dto.AdvertisementResponse;
 //import penelope.corretagem.penelopeapirest.core.address.Address;
 //import penelope.corretagem.penelopeapirest.core.advertisement.Advertisement;
 //import penelope.corretagem.penelopeapirest.core.estate.Estate;

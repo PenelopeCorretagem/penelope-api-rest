@@ -129,9 +129,7 @@ public class AppointmentService {
                 user.getCreci(),
                 user.getAccessLevel(),
                 user.getDateCreation(),
-                user.isActive(),
-                null,
-                null
+                user.isActive()
         );
     }
 

@@ -5,21 +5,26 @@ import penelope.corretagem.penelopeapirest.core.address.Address;
 import penelope.corretagem.penelopeapirest.core.advertisement.Advertisement;
 import penelope.corretagem.penelopeapirest.core.amenities.Amenities;
 import penelope.corretagem.penelopeapirest.core.amenities.AmenitiesEstate;
+import penelope.corretagem.penelopeapirest.core.amenities.AmenitiesEstateId;
 import penelope.corretagem.penelopeapirest.core.estate.Estate;
 import penelope.corretagem.penelopeapirest.core.estate.ImageEstate;
 import penelope.corretagem.penelopeapirest.core.estate.ImageEstateType;
 import penelope.corretagem.penelopeapirest.core.eventType.EventType;
 import penelope.corretagem.penelopeapirest.infrastructure.entity.*;
+import penelope.corretagem.penelopeapirest.infrastructure.repository.IAmenitiesJpaRepository;
 
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Component
 public class AdvertisementInfrastructureMapper {
 
     private final UserInfrastructureMapper userMapper;
+    private final IAmenitiesJpaRepository amenitiesJpaRepository;
 
-    public AdvertisementInfrastructureMapper(UserInfrastructureMapper userMapper) {
+    public AdvertisementInfrastructureMapper(UserInfrastructureMapper userMapper, IAmenitiesJpaRepository amenitiesJpaRepository) {
         this.userMapper = userMapper;
+        this.amenitiesJpaRepository = amenitiesJpaRepository;
     }
 
     public Advertisement toDomain(AdvertisementJpaEntity jpaEntity) {
@@ -45,14 +50,14 @@ public class AdvertisementInfrastructureMapper {
         if (jpa.getImages() != null) {
             imagesDomain = jpa.getImages().stream()
                     .map(this::toImageEstateDomain)
-                    .collect(java.util.stream.Collectors.toSet());
+                    .collect(Collectors.toSet());
         }
 
         Set<AmenitiesEstate> amenitiesDomain = null;
         if (jpa.getAmenities() != null) {
             amenitiesDomain = jpa.getAmenities().stream()
                     .map(this::toAmenitiesEstateDomain)
-                    .collect(java.util.stream.Collectors.toSet());
+                    .collect(Collectors.toSet());
         }
 
         return Estate.restore(
@@ -140,7 +145,7 @@ public class AdvertisementInfrastructureMapper {
         if (domain == null) return null;
 
         var entity = new AdvertisementJpaEntity();
-       entity.setId(domain.getId());
+        entity.setId(domain.getId());
 
         EstateJpaEntity estateEntity = toEstateEntity(domain.getEstate());
 
@@ -175,6 +180,41 @@ public class AdvertisementInfrastructureMapper {
         entity.setAddress(toAddressEntity(domain.getAddress()));
         entity.setStandAddress(toAddressEntity(domain.getStandAddress()));
 
+        if (domain.getAmenities() != null && !domain.getAmenities().isEmpty()) {
+            Set<AmenitiesEstateJpaEntity> amenitiesSet = domain.getAmenities().stream().map(amenitiesEstateDomain -> {
+                var relacionamento = new AmenitiesEstateJpaEntity();
+
+                relacionamento.setId(new AmenitiesEstateId());
+
+                var amenityEntity = amenitiesJpaRepository.getReferenceById(amenitiesEstateDomain.getAmenity().getId());
+
+                relacionamento.setAmenity(amenityEntity);
+                relacionamento.setEstate(entity);
+
+                return relacionamento;
+            }).collect(Collectors.toSet());
+
+            entity.setAmenities(amenitiesSet);
+        }
+
+        if (domain.getImages() != null && !domain.getImages().isEmpty()) {
+            Set<ImageEstateJpaEntity> imagesSet = domain.getImages().stream().map(imgDomain -> {
+                var imgEntity = new ImageEstateJpaEntity();
+
+                imgEntity.setUrl(imgDomain.getUrl());
+
+                var typeEntity = new ImageEstateTypeJpaEntity();
+                typeEntity.setId(imgDomain.getType().getId());
+
+                imgEntity.setType(typeEntity);
+                imgEntity.setEstate(entity);
+
+                return imgEntity;
+            }).collect(Collectors.toSet());
+
+            entity.setImages(imagesSet);
+        }
+
         return entity;
     }
 
@@ -205,5 +245,4 @@ public class AdvertisementInfrastructureMapper {
 
         return entity;
     }
-
- }
+}
