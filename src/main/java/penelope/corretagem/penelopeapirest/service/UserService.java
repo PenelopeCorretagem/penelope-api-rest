@@ -17,7 +17,6 @@ import penelope.corretagem.penelopeapirest.service.exception.InvalidTokenExcepti
 import penelope.corretagem.penelopeapirest.service.exception.UserEmailAlreadyExistsException;
 import penelope.corretagem.penelopeapirest.service.exception.UserNotFoundException;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;

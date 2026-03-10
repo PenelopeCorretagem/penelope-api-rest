@@ -119,9 +119,8 @@ public class AppointmentController {
             @Parameter(description = "ID do agendamento") @PathVariable Long id,
             @Valid @RequestBody AppointmentUpdateRequest request) {
         try {
-            // Buscar agendamento para validar e obter calBookingId
+            // Buscar agendamento para validar e obter dados necessários
             AppointmentResponse appointment = appointmentService.getAppointment(id);
-
 
             // Converter para OffsetDateTime
             java.time.OffsetDateTime newStartTime = request.startDateTime().atOffset(java.time.OffsetDateTime.now().getOffset());

@@ -34,7 +34,7 @@ CREATE TABLE empreendimento (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     titulo VARCHAR(150) NOT NULL,
     descricao VARCHAR(150) NOT NULL,
-    area FLOAT NOT NULL,
+    area DOUBLE NOT NULL,
     quartos INT NOT NULL,
     tipo ENUM(
         'Disponível',

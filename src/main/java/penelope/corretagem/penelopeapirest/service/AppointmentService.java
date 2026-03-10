@@ -74,14 +74,6 @@ public class AppointmentService {
             clientEmail, agentEmail, estateTitle
         );
 
-        if (hasId != null) {
-            if (hasId) {
-                spec = spec.and(AppointmentSpecification.hasId());
-            } else {
-                spec = spec.and(AppointmentSpecification.hasNoId());
-            }
-        }
-
         if (onlyActive != null && onlyActive) {
             spec = spec.and(AppointmentSpecification.isActive());
         }
