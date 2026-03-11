@@ -5,7 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import penelope.corretagem.penelopeapirest.data.domain.entity.AppointmentEntity;
+//import penelope.corretagem.penelopeapirest.data.domain.entity.AppointmentEntity;
 
 import java.util.Set;
 
@@ -54,12 +54,12 @@ public class EstateJpaEntity {
             fetch = FetchType.LAZY)
     private Set<ImageEstateJpaEntity> images;
 
-    @OneToMany(
-            mappedBy = "estate",
-            cascade = CascadeType.ALL,
-            orphanRemoval = true,
-            fetch = FetchType.LAZY)
-    private Set<AppointmentEntity> appointments;
+//    @OneToMany(
+//            mappedBy = "estate",
+//            cascade = CascadeType.ALL,
+//            orphanRemoval = true,
+//            fetch = FetchType.LAZY)
+//    private Set<AppointmentEntity> appointments;
 
     @OneToMany(
             mappedBy = "estate",

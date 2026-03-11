@@ -1,9 +1,6 @@
 package penelope.corretagem.penelopeapirest.application.dto;
 
 import penelope.corretagem.penelopeapirest.core.estate.Estate;
-import penelope.corretagem.penelopeapirest.data.domain.dto.AdvertisementDTO.AddressResponse;
-import penelope.corretagem.penelopeapirest.data.domain.dto.AdvertisementDTO.ImagesResponse;
-import penelope.corretagem.penelopeapirest.data.domain.dto.AdvertisementDTO.StandAddressResponse;
 
 import java.util.Set;
 import java.util.stream.Collectors; // Necessário para mapear as listas/sets

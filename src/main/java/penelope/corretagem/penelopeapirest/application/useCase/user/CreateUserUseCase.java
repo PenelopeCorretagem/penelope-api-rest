@@ -4,12 +4,10 @@ import org.springframework.stereotype.Service;
 import penelope.corretagem.penelopeapirest.core.gateway.IPasswordEncoderGateway;
 import penelope.corretagem.penelopeapirest.core.user.User;
 import penelope.corretagem.penelopeapirest.core.user.repository.IUserRepository;
-import penelope.corretagem.penelopeapirest.data.domain.dto.UserRequest;
-import penelope.corretagem.penelopeapirest.data.domain.dto.UserResponse;
-import penelope.corretagem.penelopeapirest.service.exception.ClientMustNotPossessACreci;
-import penelope.corretagem.penelopeapirest.service.exception.UserEmailAlreadyExistsException;
-
-import java.time.LocalDate;
+import penelope.corretagem.penelopeapirest.application.dto.UserRequest;
+import penelope.corretagem.penelopeapirest.application.dto.UserResponse;
+import penelope.corretagem.penelopeapirest.oldArchiteture.service.exception.ClientMustNotPossessACreci;
+import penelope.corretagem.penelopeapirest.oldArchiteture.service.exception.UserEmailAlreadyExistsException;
 
 @Service
 public class CreateUserUseCase {

@@ -1,9 +1,6 @@
 package penelope.corretagem.penelopeapirest.application.dto;
 
 import penelope.corretagem.penelopeapirest.core.advertisement.Advertisement;
-import penelope.corretagem.penelopeapirest.data.domain.dto.AdvertisementDTO.CreatorResponse;
-import penelope.corretagem.penelopeapirest.data.domain.dto.AdvertisementDTO.EventTypeResponse;
-import penelope.corretagem.penelopeapirest.data.domain.dto.AdvertisementDTO.ResponsibleResponse;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;

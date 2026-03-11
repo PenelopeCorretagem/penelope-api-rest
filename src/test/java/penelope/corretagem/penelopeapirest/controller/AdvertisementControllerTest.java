@@ -15,20 +15,13 @@
 //import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 //import penelope.corretagem.penelopeapirest.application.dto.AdvertisementCreateRequest;
 //import penelope.corretagem.penelopeapirest.application.dto.EstateCreateRequest;
-//import penelope.corretagem.penelopeapirest.data.domain.dto.AddressRequest;
+//import penelope.corretagem.penelopeapirest.application.dto.AddressRequest;
 //import penelope.corretagem.penelopeapirest.application.dto.AdvertisementResponse;
-//import penelope.corretagem.penelopeapirest.data.domain.dto.EstateCreateDTO.AdvertisementCreateRequest;
-//import penelope.corretagem.penelopeapirest.data.domain.dto.EstateCreateDTO.EstateCreateRequest;
-//import penelope.corretagem.penelopeapirest.core.advertisement.Advertisement;
-//import penelope.corretagem.penelopeapirest.data.domain.entity.AdvertisementEntity;
-//import penelope.corretagem.penelopeapirest.service.AdvertisementComposerService;
-//import penelope.corretagem.penelopeapirest.service.AdvertisementService;
 //
 //import java.time.LocalDate;
 //import java.time.LocalDateTime;
 //import java.util.ArrayList;
 //import java.util.Arrays;
-//import java.util.Date;
 //import java.util.List;
 //import java.util.Optional;
 //

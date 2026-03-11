@@ -10,7 +10,7 @@
 //import penelope.corretagem.penelopeapirest.core.address.Address;
 //import penelope.corretagem.penelopeapirest.core.advertisement.Advertisement;
 //import penelope.corretagem.penelopeapirest.core.estate.Estate;
-//import penelope.corretagem.penelopeapirest.data.domain.dto.AddressRequest;
+//import penelope.corretagem.penelopeapirest.application.dto.AddressRequest;
 //import penelope.corretagem.penelopeapirest.data.domain.dto.EstateCreateDTO.AdvertisementCreateRequest;
 //import penelope.corretagem.penelopeapirest.data.domain.dto.EstateCreateDTO.EstateCreateRequest;
 //import penelope.corretagem.penelopeapirest.data.domain.dto.cal.eventtype.EventTypeCalResponse;

@@ -5,11 +5,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import penelope.corretagem.penelopeapirest.application.dto.ForgotPasswordRequest;
 import penelope.corretagem.penelopeapirest.application.dto.ResetPasswordRequest;
+import penelope.corretagem.penelopeapirest.application.dto.UserAuthInfoResponse;
 import penelope.corretagem.penelopeapirest.application.useCase.user.*;
-import penelope.corretagem.penelopeapirest.data.domain.dto.UserAuthInfo;
-import penelope.corretagem.penelopeapirest.data.domain.dto.UserRequest;
-import penelope.corretagem.penelopeapirest.data.domain.dto.UserResponse;
-import penelope.corretagem.penelopeapirest.data.domain.dto.UserUpdateRequest;
+import penelope.corretagem.penelopeapirest.application.dto.UserRequest;
+import penelope.corretagem.penelopeapirest.application.dto.UserResponse;
+import penelope.corretagem.penelopeapirest.application.dto.UserUpdateRequest;
 
 import java.util.List;
 
@@ -54,7 +54,7 @@ public class UserControllerV2 {
     }
 
     @GetMapping("/me")
-    public ResponseEntity<UserAuthInfo> getUserAuthInfo(@RequestHeader("Authorization") String tokenHeader) {
+    public ResponseEntity<UserAuthInfoResponse> getUserAuthInfo(@RequestHeader("Authorization") String tokenHeader) {
 
         String rawToken = tokenHeader.replace("Bearer ", "");
         var response = getUserAuthInfoUseCase.execute(rawToken);

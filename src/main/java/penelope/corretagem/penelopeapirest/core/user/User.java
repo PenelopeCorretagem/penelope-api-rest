@@ -1,6 +1,6 @@
 package penelope.corretagem.penelopeapirest.core.user;
 
-import penelope.corretagem.penelopeapirest.data.domain.enums.AccessLevel;
+import penelope.corretagem.penelopeapirest.core.user.valueObject.AccessLevel;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;

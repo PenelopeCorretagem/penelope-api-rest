@@ -3,7 +3,7 @@ package penelope.corretagem.penelopeapirest.application.useCase.user;
 import org.springframework.stereotype.Service;
 import penelope.corretagem.penelopeapirest.core.gateway.IPasswordEncoderGateway;
 import penelope.corretagem.penelopeapirest.core.user.repository.IUserRepository;
-import penelope.corretagem.penelopeapirest.service.exception.InvalidTokenException;
+import penelope.corretagem.penelopeapirest.oldArchiteture.service.exception.InvalidTokenException;
 
 @Service
 public class ResetPasswordUseCase {

@@ -2,5 +2,6 @@ package penelope.corretagem.penelopeapirest.core.gateway;
 
 public interface IPasswordEncoderGateway {
     String encode(String rawPassword);
-    // boolean matches(String rawPassword, String encodedPassword); -> para usar no login depois
+
+    boolean matches(String rawPassword, String encodedPassword);
 }

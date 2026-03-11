@@ -5,8 +5,8 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
-import penelope.corretagem.penelopeapirest.data.domain.entity.AppointmentEntity;
-import penelope.corretagem.penelopeapirest.data.domain.enums.AccessLevel;
+//import penelope.corretagem.penelopeapirest.data.domain.entity.AppointmentEntity;
+import penelope.corretagem.penelopeapirest.core.user.valueObject.AccessLevel;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -59,19 +59,19 @@ public class UserJpaEntity {
     @Column(name = "ativo")
     private boolean active = true;
 
-    @OneToMany(
-            mappedBy = "client",
-            cascade = CascadeType.ALL,
-            orphanRemoval = true,
-            fetch = FetchType.LAZY)
-    private Set<AppointmentEntity> appointmentsClient;
-
-    @OneToMany(
-            mappedBy = "estateAgent",
-            cascade = CascadeType.ALL,
-            orphanRemoval = true,
-            fetch = FetchType.LAZY)
-    private Set<AppointmentEntity> appointmentsEstateAgent;
+//    @OneToMany(
+//            mappedBy = "client",
+//            cascade = CascadeType.ALL,
+//            orphanRemoval = true,
+//            fetch = FetchType.LAZY)
+//    private Set<AppointmentEntity> appointmentsClient;
+//
+//    @OneToMany(
+//            mappedBy = "estateAgent",
+//            cascade = CascadeType.ALL,
+//            orphanRemoval = true,
+//            fetch = FetchType.LAZY)
+//    private Set<AppointmentEntity> appointmentsEstateAgent;
 
     @Column
     private String passwordResetToken;

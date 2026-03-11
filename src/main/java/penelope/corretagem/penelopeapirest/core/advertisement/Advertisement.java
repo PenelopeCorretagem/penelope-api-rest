@@ -3,7 +3,6 @@ package penelope.corretagem.penelopeapirest.core.advertisement;
 import penelope.corretagem.penelopeapirest.core.estate.Estate;
 import penelope.corretagem.penelopeapirest.core.eventType.EventType;
 import penelope.corretagem.penelopeapirest.core.user.User;
-import penelope.corretagem.penelopeapirest.data.domain.entity.EventTypeEntity;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;

@@ -7,8 +7,8 @@ import penelope.corretagem.penelopeapirest.infrastructure.api.CalClient;
 import penelope.corretagem.penelopeapirest.core.estate.Estate;
 import penelope.corretagem.penelopeapirest.core.eventType.EventType;
 import penelope.corretagem.penelopeapirest.core.gateway.IEventTypeGateway;
-import penelope.corretagem.penelopeapirest.data.domain.dto.cal.eventtype.EventTypeCalResponse;
-import penelope.corretagem.penelopeapirest.data.domain.dto.cal.eventtype.EventTypeRequest;
+import penelope.corretagem.penelopeapirest.oldArchiteture.domain.dto.cal.eventtype.EventTypeCalResponse;
+import penelope.corretagem.penelopeapirest.oldArchiteture.domain.dto.cal.eventtype.EventTypeRequest;
 
 @Component
 public class EventTypeGatewayAdapter implements IEventTypeGateway {

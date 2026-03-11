@@ -4,11 +4,11 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClient;
-import penelope.corretagem.penelopeapirest.data.domain.dto.ApiResponseWrapper;
-import penelope.corretagem.penelopeapirest.data.domain.dto.cal.CalUser;
-import penelope.corretagem.penelopeapirest.data.domain.dto.cal.booking.*;
-import penelope.corretagem.penelopeapirest.data.domain.dto.cal.eventtype.EventTypeRequest;
-import penelope.corretagem.penelopeapirest.data.domain.dto.cal.eventtype.EventTypeCalResponse;
+import penelope.corretagem.penelopeapirest.oldArchiteture.domain.dto.ApiResponseWrapper;
+import penelope.corretagem.penelopeapirest.oldArchiteture.domain.dto.cal.CalUser;
+import penelope.corretagem.penelopeapirest.oldArchiteture.domain.dto.cal.booking.*;
+import penelope.corretagem.penelopeapirest.oldArchiteture.domain.dto.cal.eventtype.EventTypeRequest;
+import penelope.corretagem.penelopeapirest.oldArchiteture.domain.dto.cal.eventtype.EventTypeCalResponse;
 
 import java.util.List;
 import java.util.Optional;
