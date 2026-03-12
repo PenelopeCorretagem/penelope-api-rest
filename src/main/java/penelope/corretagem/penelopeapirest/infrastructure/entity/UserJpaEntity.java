@@ -1,17 +1,17 @@
 package penelope.corretagem.penelopeapirest.infrastructure.entity;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.NoArgsConstructor;
-import lombok.AllArgsConstructor;
-//import penelope.corretagem.penelopeapirest.data.domain.entity.AppointmentEntity;
-import penelope.corretagem.penelopeapirest.core.user.valueObject.AccessLevel;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Date;
-import java.util.Set;
+
+import penelope.corretagem.penelopeapirest.core.user.valueObject.AccessLevel;
 
 @Entity
 @Table(name = "usuario")
@@ -54,7 +54,7 @@ public class UserJpaEntity {
     private AccessLevel accessLevel;
 
     @Column(name = "data_criacao")
-    private LocalDate dateCreation;
+    private LocalDateTime dateCreation;
 
     @Column(name = "ativo")
     private boolean active = true;
@@ -73,9 +73,9 @@ public class UserJpaEntity {
 //            fetch = FetchType.LAZY)
 //    private Set<AppointmentEntity> appointmentsEstateAgent;
 
-    @Column
+    @Column(name = "token_redefinicao_senha")
     private String passwordResetToken;
 
-    @Column
+    @Column(name = "data_expiracao_token")
     private Date passwordResetTokenExpiry;
 }

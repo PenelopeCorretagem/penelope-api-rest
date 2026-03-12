@@ -5,7 +5,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-//import penelope.corretagem.penelopeapirest.data.domain.entity.AppointmentEntity;
 
 import java.util.Set;
 
@@ -23,8 +22,7 @@ public class EstateJpaEntity {
     @Column(name = "titulo", nullable = false)
     private String title;
 
-    @Lob
-    @Column(name = "descricao", nullable = false)
+    @Column(name = "descricao", length = 150,nullable = false)
     private String description;
 
     @Column(name = "area", nullable = false)

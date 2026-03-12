@@ -16,7 +16,7 @@ import java.time.ZoneOffset;
 @Component
 public class TokenGatewayAdapter implements ITokenGateway {
 
-    @Value("${api.security.token.secret}")
+    @Value("${app.security.token.secret}")
     private String secret;
 
     // Gera um token JWT contendo informações do usuário autenticado.
