@@ -6,10 +6,9 @@ import org.springframework.transaction.annotation.Transactional;
 import penelope.corretagem.penelopeapirest.core.advertisement.Advertisement;
 import penelope.corretagem.penelopeapirest.core.advertisement.repository.IAdvertisementRepository;
 import penelope.corretagem.penelopeapirest.application.dto.AdvertisementFilterRequest;
+import penelope.corretagem.penelopeapirest.core.amenities.AmenitiesEstateId;
 import penelope.corretagem.penelopeapirest.core.estate.Estate;
-import penelope.corretagem.penelopeapirest.infrastructure.entity.AdvertisementJpaEntity;
-import penelope.corretagem.penelopeapirest.infrastructure.entity.EstateJpaEntity;
-import penelope.corretagem.penelopeapirest.infrastructure.entity.EventTypeJpaEntity;
+import penelope.corretagem.penelopeapirest.infrastructure.entity.*;
 import penelope.corretagem.penelopeapirest.infrastructure.mapper.AdvertisementInfrastructureMapper;
 import penelope.corretagem.penelopeapirest.infrastructure.repository.IAddressJpaRepository;
 import penelope.corretagem.penelopeapirest.infrastructure.repository.IAdvertisementJpaRepository;
@@ -174,11 +173,11 @@ public class AdvertisementRepositoryAdapter implements IAdvertisementRepository 
 
         for (Long incomingId : incomingAmenityIds) {
             if (!currentAmenityIds.contains(incomingId)) {
-                var newRel = new penelope.corretagem.penelopeapirest.infrastructure.entity.AmenitiesEstateJpaEntity();
-                newRel.setId(new penelope.corretagem.penelopeapirest.core.amenities.AmenitiesEstateId());
+                var newRel = new AmenitiesEstateJpaEntity();
+                newRel.setId(new AmenitiesEstateId());
                 newRel.setEstate(existingEstate);
 
-                var amenityRef = new penelope.corretagem.penelopeapirest.infrastructure.entity.AmenitiesJpaEntity();
+                var amenityRef = new AmenitiesJpaEntity();
                 amenityRef.setId(incomingId);
                 newRel.setAmenity(amenityRef);
 
@@ -189,11 +188,11 @@ public class AdvertisementRepositoryAdapter implements IAdvertisementRepository 
         existingEstate.getImages().clear();
         if (estateDomain.getImages() != null) {
             for (var imgDomain : estateDomain.getImages()) {
-                var imgEntity = new penelope.corretagem.penelopeapirest.infrastructure.entity.ImageEstateJpaEntity();
+                var imgEntity = new ImageEstateJpaEntity();
                 imgEntity.setUrl(imgDomain.getUrl());
                 imgEntity.setEstate(existingEstate);
 
-                var typeEntity = new penelope.corretagem.penelopeapirest.infrastructure.entity.ImageEstateTypeJpaEntity();
+                var typeEntity = new ImageEstateTypeJpaEntity();
                 typeEntity.setId(imgDomain.getType().getId());
                 imgEntity.setType(typeEntity);
 
