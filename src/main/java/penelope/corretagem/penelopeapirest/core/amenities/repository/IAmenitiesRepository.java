@@ -5,4 +5,5 @@ import java.util.List;
 
 public interface IAmenitiesRepository {
     List<Amenities> findAll();
+    Amenities findById(Long id);
 }

@@ -46,6 +46,6 @@ public class AdvertisementJpaEntity {
     private LocalDateTime createdAt;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "fk_tipo_evento_cal")
+    @JoinColumn(name = "fk_tipo_evento")
     private EventTypeJpaEntity eventType;
 }

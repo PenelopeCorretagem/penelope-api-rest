@@ -14,7 +14,7 @@ flyway:
   enabled: false
   clean-disabled: false
 
-  jpa:
+jpa:
     show-sql: true
     defer-datasource-initialization: true
     properties:
@@ -23,8 +23,8 @@ flyway:
         format_sql: true
         highlight_sql: true
     hibernate:
-      ddl-auto: create-drop
-  sql:
+      ddl-auto: update
+sql:
     init:
       mode: never
 

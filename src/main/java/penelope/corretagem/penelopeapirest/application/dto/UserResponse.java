@@ -9,14 +9,12 @@ public record UserResponse(
         Long id,
         String name,
         String email,
-        String password,
         String cpf,
         LocalDate dateBirth,
         BigDecimal monthlyIncome,
         String phone,
         String creci,
         AccessLevel accessLevel,
-        LocalDate dateCreation,
         boolean active
 ) {
 }

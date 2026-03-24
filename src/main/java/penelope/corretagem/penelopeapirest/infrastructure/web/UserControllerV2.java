@@ -12,9 +12,10 @@ import penelope.corretagem.penelopeapirest.application.dto.UserResponse;
 import penelope.corretagem.penelopeapirest.application.dto.UserUpdateRequest;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
-@RequestMapping("api/v2/usuarios")
+@RequestMapping("/users")
 public class UserControllerV2 {
 
     private final GetAllUsersUseCase getAllUsersUseCase;
@@ -38,7 +39,7 @@ public class UserControllerV2 {
     }
 
     @GetMapping
-    public ResponseEntity<List<UserResponse>> getAll(){
+    public ResponseEntity<List<UserResponse>> getAll() {
 
         var response = getAllUsersUseCase.execute();
 
@@ -46,18 +47,9 @@ public class UserControllerV2 {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<UserResponse> getUserById(@PathVariable Long id){
+    public ResponseEntity<UserResponse> getUserById(@PathVariable Long id) {
 
         var response = getUserByIdUseCase.execute(id);
-
-        return ResponseEntity.ok(response);
-    }
-
-    @GetMapping("/me")
-    public ResponseEntity<UserAuthInfoResponse> getUserAuthInfo(@RequestHeader("Authorization") String tokenHeader) {
-
-        String rawToken = tokenHeader.replace("Bearer ", "");
-        var response = getUserAuthInfoUseCase.execute(rawToken);
 
         return ResponseEntity.ok(response);
     }
@@ -80,15 +72,19 @@ public class UserControllerV2 {
         return ResponseEntity.noContent().build();
     }
 
-    @PostMapping("/esqueci-senha")
-    public ResponseEntity<Void> forgotPassword(@RequestBody ForgotPasswordRequest request) {
+    @PostMapping("/forgot-password")
+    public ResponseEntity<Map<String, String>> forgotPassword(@RequestBody ForgotPasswordRequest request) {
         generatePasswordResetTokenUseCase.execute(request.email());
-        return ResponseEntity.noContent().build();
+        var responseBody = Map.of("message", "Se o e-mail estiver cadastrado, um código de verificação será enviado.");
+        return ResponseEntity.ok(responseBody);
     }
 
-    @PostMapping("/redefinir-senha")
-    public ResponseEntity<Void> resetPassword(@RequestBody ResetPasswordRequest request) {
-        resetPasswordUseCase.execute(request.token(), request.newPassword());
-        return ResponseEntity.noContent().build();
+    @GetMapping("/me")
+    public ResponseEntity<UserAuthInfoResponse> getUserAuthInfo(@RequestHeader("Authorization") String tokenHeader) {
+
+        String rawToken = tokenHeader.replace("Bearer ", "");
+        var response = getUserAuthInfoUseCase.execute(rawToken);
+
+        return ResponseEntity.ok(response);
     }
 }

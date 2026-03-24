@@ -49,29 +49,15 @@ public class UserJpaEntity {
     @Column(name = "creci")
     private String creci;
 
-    @Enumerated(EnumType.STRING)
     @Column(name = "nivel_acesso")
+    @Enumerated(EnumType.STRING)
     private AccessLevel accessLevel;
 
     @Column(name = "data_criacao")
-    private LocalDateTime dateCreation;
+    private LocalDate dateCreation;
 
     @Column(name = "ativo")
     private boolean active = true;
-
-//    @OneToMany(
-//            mappedBy = "client",
-//            cascade = CascadeType.ALL,
-//            orphanRemoval = true,
-//            fetch = FetchType.LAZY)
-//    private Set<AppointmentEntity> appointmentsClient;
-//
-//    @OneToMany(
-//            mappedBy = "estateAgent",
-//            cascade = CascadeType.ALL,
-//            orphanRemoval = true,
-//            fetch = FetchType.LAZY)
-//    private Set<AppointmentEntity> appointmentsEstateAgent;
 
     @Column(name = "token_redefinicao_senha")
     private String passwordResetToken;

@@ -9,7 +9,7 @@ import penelope.corretagem.penelopeapirest.application.useCase.images.UploadImag
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/v2/imagens")
+@RequestMapping("/imagens")
 public class ImageUploadController {
 
     private final UploadImagesUseCase uploadImagesUseCase;

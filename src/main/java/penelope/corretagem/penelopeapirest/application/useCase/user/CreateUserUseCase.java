@@ -45,10 +45,9 @@ public class CreateUserUseCase {
         User savedUser = userRepository.save(newUser);
 
         return new UserResponse(
-                savedUser.getId(), savedUser.getName(), savedUser.getEmail(), savedUser.getPassword(),
+                savedUser.getId(), savedUser.getName(), savedUser.getEmail(),
                 savedUser.getCpf(), savedUser.getDateBirth(), savedUser.getMonthlyIncome(),
-                savedUser.getPhone(), savedUser.getCreci(), savedUser.getAccessLevel() ,
-                savedUser.getDateCreation(), savedUser.isActive()
+                savedUser.getPhone(), savedUser.getCreci(), savedUser.getAccessLevel(), savedUser.isActive()
         );
     }
 }

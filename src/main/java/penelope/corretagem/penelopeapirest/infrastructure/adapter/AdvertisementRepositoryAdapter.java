@@ -31,7 +31,10 @@ public class AdvertisementRepositoryAdapter implements IAdvertisementRepository 
 
     public AdvertisementRepositoryAdapter(
             IAdvertisementJpaRepository jpaRepository,
-            AdvertisementInfrastructureMapper mapper, IEstateJpaRepository estateRepository, IAddressJpaRepository addressJpaRepository, IEventTypeJpaRepository eventTypeRepository
+            AdvertisementInfrastructureMapper mapper,
+            IEstateJpaRepository estateRepository,
+            IAddressJpaRepository addressJpaRepository,
+            IEventTypeJpaRepository eventTypeRepository
     ) {
         this.jpaRepository = jpaRepository;
         this.mapper = mapper;

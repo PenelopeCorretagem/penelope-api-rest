@@ -52,13 +52,6 @@ public class EstateJpaEntity {
             fetch = FetchType.LAZY)
     private Set<ImageEstateJpaEntity> images;
 
-//    @OneToMany(
-//            mappedBy = "estate",
-//            cascade = CascadeType.ALL,
-//            orphanRemoval = true,
-//            fetch = FetchType.LAZY)
-//    private Set<AppointmentEntity> appointments;
-
     @OneToMany(
             mappedBy = "estate",
             cascade = CascadeType.ALL,

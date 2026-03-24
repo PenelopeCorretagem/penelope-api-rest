@@ -8,10 +8,9 @@ public record EstateCreateRequest(
         Double area,
         Integer numberOfRooms,
         String type,
-        AdvertisementCreateRequest advertisementCreateRequest,
         AddressRequest address,
         AddressRequest standAddress,
         List<Long> amenitiesIds,
-        List<String> images,
-        List<Integer> imageType
-) {}
+        List<ImageRequest> images
+) {
+}

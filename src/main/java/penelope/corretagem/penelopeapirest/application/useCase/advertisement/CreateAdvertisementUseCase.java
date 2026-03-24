@@ -1,6 +1,7 @@
 package penelope.corretagem.penelopeapirest.application.useCase.advertisement;
 
 import org.springframework.stereotype.Service;
+import penelope.corretagem.penelopeapirest.application.dto.AdvertisementCreateRequest;
 import penelope.corretagem.penelopeapirest.application.dto.EstateCreateRequest;
 import penelope.corretagem.penelopeapirest.core.address.Address;
 import penelope.corretagem.penelopeapirest.core.advertisement.Advertisement;
@@ -33,47 +34,47 @@ public class CreateAdvertisementUseCase {
         this.eventTypeGateway = eventTypeGateway;
     }
 
-    public Advertisement execute(EstateCreateRequest request) {
+    public Advertisement execute(AdvertisementCreateRequest request) {
 
-        var adRequest = request.advertisementCreateRequest();
+        var estateRequest = request.estate();
 
-        User creator = userRepository.findById(adRequest.creator())
+        User creator = userRepository.findById(request.creatorId())
                 .orElseThrow(() -> new RuntimeException("Usuário criador não encontrado"));
 
-        User responsible = userRepository.findById(adRequest.responsible())
+        User responsible = userRepository.findById(request.responsibleId())
                 .orElseThrow(() -> new RuntimeException("Usuário responsável não encontrado"));
 
-        String cleanZipCode = request.address().zipCode() != null
-                ? request.address().zipCode().replaceAll("[^0-9]", "")
+        String cleanZipCode = estateRequest.address().zipCode() != null
+                ? estateRequest.address().zipCode().replaceAll("[^0-9]", "")
                 : null;
 
         var address = Address.createNew(
-                request.address().street(),
-                request.address().number(),
-                request.address().neighborhood(),
-                request.address().city(),
-                request.address().uf(),
+                estateRequest.address().street(),
+                estateRequest.address().number(),
+                estateRequest.address().neighborhood(),
+                estateRequest.address().city(),
+                estateRequest.address().uf(),
                 cleanZipCode,
-                request.address().complement(),
-                request.address().region()
+                estateRequest.address().complement(),
+                estateRequest.address().region()
         );
 
         Address standAddress = null;
-        if (request.standAddress() != null) {
+        if (estateRequest.standAddress() != null) {
             standAddress = Address.createNew(
-                    request.standAddress().street(),
-                    request.standAddress().number(),
-                    request.standAddress().neighborhood(),
-                    request.standAddress().city(),
-                    request.standAddress().uf(),
+                    estateRequest.standAddress().street(),
+                    estateRequest.standAddress().number(),
+                    estateRequest.standAddress().neighborhood(),
+                    estateRequest.standAddress().city(),
+                    estateRequest.standAddress().uf(),
                     cleanZipCode,
-                    request.standAddress().complement(),
-                    request.standAddress().region()
+                    estateRequest.standAddress().complement(),
+                    estateRequest.standAddress().region()
             );
         }
 
-        Set<AmenitiesEstate> domainAmenities = request.amenitiesIds() != null ?
-                request.amenitiesIds().stream()
+        Set<AmenitiesEstate> domainAmenities = estateRequest.amenitiesIds() != null ?
+                estateRequest.amenitiesIds().stream()
                         .map(id -> {
                             var amenity = new Amenities(id, null);
                             return AmenitiesEstate.createNew(null, null, amenity);
@@ -81,11 +82,18 @@ public class CreateAdvertisementUseCase {
                         .collect(Collectors.toSet()) : new java.util.HashSet<>();
 
         Set<ImageEstate> domainImages = new java.util.HashSet<>();
-        if (request.images() != null && request.imageType() != null) {
+        if (estateRequest.images() != null) {
+            for (var imgReq : estateRequest.images()) {
 
-            for (int i = 0; i < request.images().size(); i++) {
-                String imageUrl = request.images().get(i);
-                Long typeId = request.imageType().get(i).longValue();
+                String imageUrl = imgReq.url();
+                String typeString = imgReq.type();
+
+                Long typeId = 2L; // Padrão Galeria
+                if ("CAPA".equalsIgnoreCase(typeString)) {
+                    typeId = 1L;
+                } else if ("PLANTA".equalsIgnoreCase(typeString)) {
+                    typeId = 3L;
+                }
 
                 var imageTypeDomain = ImageEstateType.restore(typeId, null, null);
 
@@ -100,11 +108,11 @@ public class CreateAdvertisementUseCase {
 
         var estate = Estate.createNew(
                 null,
-                request.title(),
-                request.description(),
-                request.area(),
-                request.numberOfRooms(),
-                Estate.Type.valueOf(request.type()),
+                estateRequest.title(),
+                estateRequest.description(),
+                estateRequest.area(),
+                estateRequest.numberOfRooms(),
+                Estate.Type.valueOf(estateRequest.type()),
                 address,
                 standAddress,
                 domainImages,
@@ -118,7 +126,7 @@ public class CreateAdvertisementUseCase {
                 creator,
                 responsible,
                 eventTypeDomain,
-                adRequest.dataFim()
+                request.endDate()
         );
 
         return advertisementRepository.save(advertisement);

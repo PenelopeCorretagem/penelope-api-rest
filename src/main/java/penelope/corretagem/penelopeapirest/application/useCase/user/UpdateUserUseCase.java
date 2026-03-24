@@ -35,10 +35,9 @@ public class UpdateUserUseCase {
         var updatedUser = userRepository.update(user);
 
         return new UserResponse(
-                updatedUser.getId(), updatedUser.getName(), updatedUser.getEmail(), updatedUser.getPassword(),
+                updatedUser.getId(), updatedUser.getName(), updatedUser.getEmail(),
                 updatedUser.getCpf(), updatedUser.getDateBirth(), updatedUser.getMonthlyIncome(),
-                updatedUser.getPhone(), updatedUser.getCreci(), updatedUser.getAccessLevel(),
-                updatedUser.getDateCreation(), updatedUser.isActive()
+                updatedUser.getPhone(), updatedUser.getCreci(), updatedUser.getAccessLevel(), updatedUser.isActive()
         );
     }
 }

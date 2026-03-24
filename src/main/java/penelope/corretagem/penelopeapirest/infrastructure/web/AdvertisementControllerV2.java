@@ -4,16 +4,14 @@ import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import penelope.corretagem.penelopeapirest.application.dto.EstateCreateRequest;
-import penelope.corretagem.penelopeapirest.application.dto.AdvertisementFilterRequest;
-import penelope.corretagem.penelopeapirest.application.dto.AdvertisementResponse;
+import penelope.corretagem.penelopeapirest.application.dto.*;
 import penelope.corretagem.penelopeapirest.application.useCase.advertisement.*;
 
 import java.util.List;
 import java.util.Map;
 
 @RestController("advertisementControllerV2")
-@RequestMapping("/api/v2/anuncios")
+@RequestMapping("/advertisements")
 public class AdvertisementControllerV2 {
 
     private final GetAdvertisementByIdUseCase getAdvertisementByIdUseCase;
@@ -37,18 +35,18 @@ public class AdvertisementControllerV2 {
         this.changeAdvertisementStatusUseCase = changeAdvertisementStatusUseCase;
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<AdvertisementResponse> getAdvertisementById(@PathVariable Long id) {
-
-        AdvertisementResponse response = getAdvertisementByIdUseCase.execute(id);
-
-        return ResponseEntity.ok(response);
-    }
-
     @GetMapping
     public ResponseEntity<List<AdvertisementResponse>> getAll(AdvertisementFilterRequest filter) {
 
         var response = getAllAdvertisementsUseCase.execute(filter);
+
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<AdvertisementResponse> getAdvertisementById(@PathVariable Long id) {
+
+        AdvertisementResponse response = getAdvertisementByIdUseCase.execute(id);
 
         return ResponseEntity.ok(response);
     }
@@ -65,7 +63,7 @@ public class AdvertisementControllerV2 {
     }
 
     @PostMapping
-    public ResponseEntity<AdvertisementResponse> create(@RequestBody EstateCreateRequest request) {
+    public ResponseEntity<AdvertisementResponse> create(@RequestBody AdvertisementCreateRequest request) {
 
         var savedAdvertisement = createAdvertisementUseCase.execute(request);
 
@@ -77,10 +75,11 @@ public class AdvertisementControllerV2 {
     @PutMapping("/{id}")
     public ResponseEntity<?> update(
             @PathVariable Long id,
-            @RequestBody @Valid EstateCreateRequest request) {
+            @RequestBody @Valid AdvertisementUpdateRequest request) {
 
         var updatedAdvertisement = updateAdvertisementUseCase.execute(id, request);
-        return ResponseEntity.ok(updatedAdvertisement);
+        var response = AdvertisementResponse.fromDomain(updatedAdvertisement);
+        return ResponseEntity.ok(response);
     }
 
     @PatchMapping("/{id}/status")

@@ -122,7 +122,7 @@ public class AdvertisementInfrastructureMapper {
         );
     }
 
-    private Amenities toAmenitiesDomain(AmenitiesJpaEntity jpa) {
+    public Amenities toAmenitiesDomain(AmenitiesJpaEntity jpa) {
         if (jpa == null) return null;
 
         return new Amenities(

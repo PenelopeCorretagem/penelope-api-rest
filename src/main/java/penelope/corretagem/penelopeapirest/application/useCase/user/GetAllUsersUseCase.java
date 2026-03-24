@@ -20,10 +20,8 @@ public class GetAllUsersUseCase {
         return userRepository.findAll().stream()
                 .map(user -> new UserResponse(
                         user.getId(), user.getName(), user.getEmail(),
-                        user.getPassword(),
                         user.getCpf(), user.getDateBirth(), user.getMonthlyIncome(),
-                        user.getPhone(), user.getCreci(), user.getAccessLevel(),
-                        user.getDateCreation(), user.isActive()))
-                .collect(Collectors.toList());
+                        user.getPhone(), user.getCreci(), user.getAccessLevel(), user.isActive()
+                )).collect(Collectors.toList());
     }
 }

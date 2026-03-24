@@ -19,10 +19,9 @@ public class GetUserByIdUseCase {
                 .orElseThrow(UserNotFoundException::new);
 
         return new UserResponse(
-                user.getId(), user.getName(), user.getEmail(), user.getPassword(),
+                user.getId(), user.getName(), user.getEmail(),
                 user.getCpf(), user.getDateBirth(), user.getMonthlyIncome(),
-                user.getPhone(), user.getCreci(), user.getAccessLevel(),
-                user.getDateCreation(), user.isActive()
+                user.getPhone(), user.getCreci(), user.getAccessLevel(), user.isActive()
         );
     }
 }

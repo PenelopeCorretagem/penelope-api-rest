@@ -9,10 +9,10 @@ public record UserRequest(
         String name,
         String email,
         String password,
+        String phone,
         String cpf,
         LocalDate dateBirth,
         BigDecimal monthlyIncome,
-        String phone,
         String creci,
         AccessLevel accessLevel
 ) {

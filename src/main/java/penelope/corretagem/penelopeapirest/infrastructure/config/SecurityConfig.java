@@ -1,5 +1,6 @@
 package penelope.corretagem.penelopeapirest.infrastructure.config;
 
+import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -36,11 +37,16 @@ public class SecurityConfig {
             "/swagger-ui/**",
             "/api-docs/**",
             "/h2-console/**",
-            // Liberamos o POST de criação de usuário na V2
-            "/api/v2/usuarios/esqueci-senha",
-            "/api/v2/usuarios/redefinir-senha",
-            "/api/v2/auth/login",
-            "/api/v2/contact-us"
+
+            "/users/forgot-password",
+            "/users/reset-password",
+            "/users/validate-reset-token",
+
+            "/auth/login",
+
+            "/advertisements",
+            "/advertisements/{id}"
+
     };
 
     @Bean
@@ -48,13 +54,15 @@ public class SecurityConfig {
         return http
                 .cors(Customizer.withDefaults())
                 .csrf(AbstractHttpConfigurer::disable)
+                .headers(headers -> headers.frameOptions(frame -> frame.disable()))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authorize -> authorize
+                        .requestMatchers(PathRequest.toH2Console()).permitAll()
                         .requestMatchers(AUTH_WHITELIST).permitAll()
                         // Permite criar usuário sem estar logado
-                        .requestMatchers(antMatcher(HttpMethod.POST, "/api/v2/usuarios")).permitAll()
+                        .requestMatchers(antMatcher(HttpMethod.POST, "/users")).permitAll()
                         // Permite ver anúncios sem estar logado
-                        .requestMatchers(antMatcher(HttpMethod.GET, "/api/v2/anuncios/**")).permitAll()
+                        .requestMatchers(antMatcher(HttpMethod.GET, "/advertisements/**")).permitAll()
 
                         .anyRequest().authenticated()
                 )

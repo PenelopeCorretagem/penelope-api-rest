@@ -1,6 +1,7 @@
 package penelope.corretagem.penelopeapirest.application.useCase.advertisement;
 
 import org.springframework.stereotype.Service;
+import penelope.corretagem.penelopeapirest.application.dto.AdvertisementUpdateRequest;
 import penelope.corretagem.penelopeapirest.application.dto.EstateCreateRequest;
 import penelope.corretagem.penelopeapirest.core.address.Address;
 import penelope.corretagem.penelopeapirest.core.advertisement.Advertisement;
@@ -12,6 +13,8 @@ import penelope.corretagem.penelopeapirest.core.estate.ImageEstate;
 import penelope.corretagem.penelopeapirest.core.estate.ImageEstateType;
 import penelope.corretagem.penelopeapirest.core.eventType.EventType;
 import penelope.corretagem.penelopeapirest.core.gateway.IEventTypeGateway;
+import penelope.corretagem.penelopeapirest.core.user.User;
+import penelope.corretagem.penelopeapirest.core.user.repository.IUserRepository;
 
 import java.util.Objects;
 import java.util.Set;
@@ -22,66 +25,84 @@ public class UpdateAdvertisementUseCase {
 
     private final IAdvertisementRepository advertisementRepository;
     private final IEventTypeGateway eventTypeGateway;
+    private final IUserRepository userRepository;
 
     public UpdateAdvertisementUseCase(
             IAdvertisementRepository advertisementRepository,
-            IEventTypeGateway eventTypeGateway
+            IEventTypeGateway eventTypeGateway,
+            IUserRepository userRepository
     ) {
         this.advertisementRepository = advertisementRepository;
         this.eventTypeGateway = eventTypeGateway;
+        this.userRepository = userRepository;
     }
 
-    public Advertisement execute(Long advertisementId, EstateCreateRequest request) {
+    public Advertisement execute(Long advertisementId, AdvertisementUpdateRequest request) {
 
         Advertisement advertisement = advertisementRepository.findById(advertisementId)
                 .orElseThrow(() -> new RuntimeException("Anúncio não encontrado"));
 
         Estate currentEstate = advertisement.getEstate();
+        EstateCreateRequest estateReq = request.estate();
+        boolean shouldUpdateEventType = false;
 
-        boolean shouldUpdateEventType = hasEventTypeRelevantChanges(currentEstate, request);
+       if (estateReq != null) {
+            shouldUpdateEventType = hasEventTypeRelevantChanges(currentEstate, estateReq);
 
-        String cleanZipCode = request.address().zipCode() != null
-                ? request.address().zipCode().replaceAll("[^0-9]", "") : null;
+            String cleanZipCode = estateReq.address().zipCode() != null
+                    ? estateReq.address().zipCode().replaceAll("[^0-9]", "") : null;
 
-        var newAddress = Address.createNew(
-                request.address().street(), request.address().number(), request.address().neighborhood(),
-                request.address().city(), request.address().uf(), cleanZipCode,
-                request.address().complement(), request.address().region()
-        );
+            var newAddress = Address.createNew(
+                    estateReq.address().street(), estateReq.address().number(), estateReq.address().neighborhood(),
+                    estateReq.address().city(), estateReq.address().uf(), cleanZipCode,
+                    estateReq.address().complement(), estateReq.address().region()
+            );
 
-        Address newStandAddress = null;
-        if (request.standAddress() != null) {
-            newStandAddress = Address.createNew(
-                    request.standAddress().street(), request.standAddress().number(), request.standAddress().neighborhood(),
-                    request.standAddress().city(), request.standAddress().uf(), cleanZipCode,
-                    request.standAddress().complement(), request.standAddress().region()
+            Address newStandAddress = null;
+            if (estateReq.standAddress() != null) {
+                String cleanStandZipCode = estateReq.standAddress().zipCode() != null
+                        ? estateReq.standAddress().zipCode().replaceAll("[^0-9]", "") : null;
+
+                newStandAddress = Address.createNew(
+                        estateReq.standAddress().street(), estateReq.standAddress().number(), estateReq.standAddress().neighborhood(),
+                        estateReq.standAddress().city(), estateReq.standAddress().uf(), cleanStandZipCode,
+                        estateReq.standAddress().complement(), estateReq.standAddress().region()
+                );
+            }
+
+            Set<AmenitiesEstate> newAmenities = estateReq.amenitiesIds() != null ?
+                    estateReq.amenitiesIds().stream()
+                            .map(id -> AmenitiesEstate.createNew(null, null, new Amenities(id, null)))
+                            .collect(Collectors.toSet()) : new java.util.HashSet<>();
+
+            Set<ImageEstate> newImages = new java.util.HashSet<>();
+            if (estateReq.images() != null) {
+                for (var imgReq : estateReq.images()) {
+                    Long typeId = 2L;
+                    if ("CAPA".equalsIgnoreCase(imgReq.type())) {
+                        typeId = 1L;
+                    } else if ("PLANTA".equalsIgnoreCase(imgReq.type())) {
+                        typeId = 3L;
+                    }
+                    newImages.add(ImageEstate.createNew(null, ImageEstateType.restore(typeId, null, null), imgReq.url()));
+                }
+            }
+
+            currentEstate.updateAllDetails(
+                    estateReq.title(), estateReq.description(), estateReq.area(), estateReq.numberOfRooms(),
+                    Estate.Type.valueOf(estateReq.type()), newAddress, newStandAddress, newImages, newAmenities
             );
         }
 
-        Set<AmenitiesEstate> newAmenities = request.amenitiesIds() != null ?
-                request.amenitiesIds().stream()
-                        .map(id -> AmenitiesEstate.createNew(null, null, new Amenities(id, null)))
-                        .collect(Collectors.toSet()) : new java.util.HashSet<>();
-
-        Set<ImageEstate> newImages = new java.util.HashSet<>();
-        if (request.images() != null && request.imageType() != null) {
-            for (int i = 0; i < request.images().size(); i++) {
-                Long typeId = request.imageType().get(i).longValue();
-                newImages.add(ImageEstate.createNew(null, ImageEstateType.restore(typeId, null, null), request.images().get(i)));
-            }
+        if (request.responsibleId() != null) {
+            User newResponsible = userRepository.findById(request.responsibleId())
+                    .orElseThrow(() -> new RuntimeException("Novo responsável não encontrado"));
         }
 
-        currentEstate.updateAllDetails(
-                request.title(), request.description(), request.area(), request.numberOfRooms(),
-                Estate.Type.valueOf(request.type()), newAddress, newStandAddress, newImages, newAmenities
-        );
+        advertisement.updateInfo(request.active(), request.endDate());
 
-        var adRequest = request.advertisementCreateRequest();
-        advertisement.updateInfo(adRequest.active(), adRequest.dataFim());
-
-        if (shouldUpdateEventType) {
+        if (shouldUpdateEventType && advertisement.getEventType() != null) {
             EventType newEventType = eventTypeGateway.recreateForEstate(advertisement.getEventType(), currentEstate);
-
             advertisement.setEventType(newEventType);
         }
 

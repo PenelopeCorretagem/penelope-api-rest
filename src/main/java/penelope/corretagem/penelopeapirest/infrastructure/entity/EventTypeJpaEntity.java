@@ -15,7 +15,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "event_type_jpa_entity")
+@Table(name = "tipo_evento")
 public class EventTypeJpaEntity {
 
     @Id

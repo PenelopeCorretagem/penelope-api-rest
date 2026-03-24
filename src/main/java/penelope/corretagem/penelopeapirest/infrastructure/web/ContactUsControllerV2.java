@@ -6,7 +6,7 @@ import penelope.corretagem.penelopeapirest.application.useCase.email.SendContact
 import penelope.corretagem.penelopeapirest.oldArchiteture.domain.dto.ContactUsRequest;
 
 @RestController
-@RequestMapping("/api/v2/contact-us")
+@RequestMapping("/contact-us")
 public class ContactUsControllerV2 {
 
     private final SendContactEmailUseCase sendContactEmailUseCase;

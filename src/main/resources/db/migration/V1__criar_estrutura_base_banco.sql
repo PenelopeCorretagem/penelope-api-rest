@@ -23,7 +23,7 @@ CREATE TABLE usuario (
     telefone VARCHAR(20),
     creci VARCHAR(20) UNIQUE,
     ativo TINYINT(1) DEFAULT 1,
-    nivel_acesso ENUM('Administrador', 'Cliente') NOT NULL DEFAULT 'Cliente',
+    nivel_acesso VARCHAR(50) NOT NULL DEFAULT 'CLIENTE',
     data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     token_redefinicao_senha VARCHAR(255),
     data_expiracao_token DATETIME
@@ -37,9 +37,9 @@ CREATE TABLE empreendimento (
     area DOUBLE NOT NULL,
     quartos INT NOT NULL,
     tipo ENUM(
-        'Disponível',
-        'Em obras',
-        'Lançamento'
+        'DISPONIVEL',
+        'EM_OBRAS',
+        'LANCAMENTO'
     ) NOT NULL,
     fk_endereco BIGINT NOT NULL,
     fk_endereco_stand BIGINT,
@@ -49,7 +49,7 @@ CREATE TABLE empreendimento (
 
 CREATE TABLE tipo_evento (
     id BIGINT PRIMARY KEY,
-    titulo VARCHAR(100) NOT NULL,
+    title VARCHAR(100) NOT NULL,
     slug VARCHAR(100) NOT NULL UNIQUE
 );
 
