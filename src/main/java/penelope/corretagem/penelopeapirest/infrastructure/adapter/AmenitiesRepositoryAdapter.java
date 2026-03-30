@@ -17,7 +17,6 @@ public class AmenitiesRepositoryAdapter implements IAmenitiesRepository {
     private final AdvertisementInfrastructureMapper mapper;
 
     public AmenitiesRepositoryAdapter(IAmenitiesJpaRepository jpaRepository, AdvertisementInfrastructureMapper mapper) {
-
         this.jpaRepository = jpaRepository;
         this.mapper = mapper;
     }
@@ -25,17 +24,32 @@ public class AmenitiesRepositoryAdapter implements IAmenitiesRepository {
     @Override
     public List<Amenities> findAll() {
         return jpaRepository.findAll().stream()
-                .map(entity ->
-                        new Amenities(
-                                entity.getId(),
-                                entity.getDescription()))
+                .map(mapper::toAmenitiesDomain)
                 .collect(Collectors.toList());
     }
 
     @Override
-    public Amenities findById(Long id) {
-        return jpaRepository.findById(id)
-                .map(mapper::toAmenitiesDomain)
-                .orElseThrow(() -> new RuntimeException("Comodidade não encontrada"));
+    public Optional<Amenities> findById(Long id) {
+        return jpaRepository.findById(id).map(mapper::toAmenitiesDomain);
+    }
+
+    @Override
+    public Amenities save(Amenities domain) {
+
+        var entity = mapper.toAmenitiesEntity(domain);
+
+        var savedEntity = jpaRepository.save(entity);
+
+        return mapper.toAmenitiesDomain(savedEntity);
+    }
+
+    @Override
+    public boolean existsById(Long id) {
+        return jpaRepository.existsById(id);
+    }
+
+    @Override
+    public void deleteById(Long id) {
+        jpaRepository.deleteById(id);
     }
 }

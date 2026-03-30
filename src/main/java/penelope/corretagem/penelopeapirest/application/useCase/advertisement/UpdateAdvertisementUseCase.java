@@ -46,7 +46,7 @@ public class UpdateAdvertisementUseCase {
         EstateCreateRequest estateReq = request.estate();
         boolean shouldUpdateEventType = false;
 
-       if (estateReq != null) {
+        if (estateReq != null) {
             shouldUpdateEventType = hasEventTypeRelevantChanges(currentEstate, estateReq);
 
             String cleanZipCode = estateReq.address().zipCode() != null
@@ -72,8 +72,11 @@ public class UpdateAdvertisementUseCase {
 
             Set<AmenitiesEstate> newAmenities = estateReq.amenitiesIds() != null ?
                     estateReq.amenitiesIds().stream()
-                            .map(id -> AmenitiesEstate.createNew(null, null, new Amenities(id, null)))
-                            .collect(Collectors.toSet()) : new java.util.HashSet<>();
+                            .map(id ->
+                                    AmenitiesEstate.createNew(
+                                            null, null, Amenities.restore(id, null, null, null)
+                                    )
+                            ).collect(Collectors.toSet()) : new java.util.HashSet<>();
 
             Set<ImageEstate> newImages = new java.util.HashSet<>();
             if (estateReq.images() != null) {

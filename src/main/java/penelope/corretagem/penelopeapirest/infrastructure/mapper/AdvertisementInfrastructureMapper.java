@@ -125,10 +125,23 @@ public class AdvertisementInfrastructureMapper {
     public Amenities toAmenitiesDomain(AmenitiesJpaEntity jpa) {
         if (jpa == null) return null;
 
-        return new Amenities(
+        return Amenities.restore(
                 jpa.getId(),
-                jpa.getDescription()
+                jpa.getDescription(),
+                jpa.getIcon(),
+                null
         );
+    }
+
+    public AmenitiesJpaEntity toAmenitiesEntity(Amenities domain) {
+        if (domain == null) return null;
+
+        var entity = new AmenitiesJpaEntity();
+        entity.setId(domain.getId());
+        entity.setDescription(domain.getDescription());
+        entity.setIcon(domain.getIcon());
+
+        return entity;
     }
 
     private EventType toEventTypeDomain(EventTypeJpaEntity jpa) {

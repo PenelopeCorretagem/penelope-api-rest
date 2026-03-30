@@ -23,6 +23,9 @@ public class AmenitiesJpaEntity {
     @Column(name = "descricao", nullable = false, unique = true)
     private String description;
 
+    @Column(name = "icon_name", unique = true)
+    private String icon;
+
     @OneToMany(
             mappedBy = "amenity",
             cascade = CascadeType.ALL,

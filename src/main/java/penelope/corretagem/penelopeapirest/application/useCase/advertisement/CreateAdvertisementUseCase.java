@@ -76,7 +76,7 @@ public class CreateAdvertisementUseCase {
         Set<AmenitiesEstate> domainAmenities = estateRequest.amenitiesIds() != null ?
                 estateRequest.amenitiesIds().stream()
                         .map(id -> {
-                            var amenity = new Amenities(id, null);
+                            var amenity = Amenities.restore(id, null, null, null);
                             return AmenitiesEstate.createNew(null, null, amenity);
                         })
                         .collect(Collectors.toSet()) : new java.util.HashSet<>();

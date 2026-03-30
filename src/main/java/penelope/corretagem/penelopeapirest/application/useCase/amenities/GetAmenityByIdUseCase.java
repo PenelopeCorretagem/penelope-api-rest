@@ -14,7 +14,10 @@ public class GetAmenityByIdUseCase {
     }
 
     public AmenitiesResponse execute(Long id) {
-        var amenity = repository.findById(id);
+
+        var amenity = repository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Amenidade não encontrada"));
+
         return AmenitiesResponse.fromDomain(amenity);
     }
 }

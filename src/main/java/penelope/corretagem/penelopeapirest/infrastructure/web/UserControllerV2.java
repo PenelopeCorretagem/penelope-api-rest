@@ -25,7 +25,6 @@ public class UserControllerV2 {
     private final UpdateUserUseCase updateUserUseCase;
     private final DeleteUserUseCase deleteUserUseCase;
     private final GeneratePasswordResetTokenUseCase generatePasswordResetTokenUseCase;
-    private final ResetPasswordUseCase resetPasswordUseCase;
 
     public UserControllerV2(GetAllUsersUseCase getAllUsersUseCase, GetUserAuthInfoUseCase getUserAuthInfoUseCase, GetUserByIdUseCase getUserByIdUseCase, CreateUserUseCase createUserUseCase, UpdateUserUseCase updateUserUseCase, DeleteUserUseCase deleteUserUseCase, GeneratePasswordResetTokenUseCase generatePasswordResetTokenUseCase, ResetPasswordUseCase resetPasswordUseCase) {
         this.getAllUsersUseCase = getAllUsersUseCase;
@@ -35,7 +34,6 @@ public class UserControllerV2 {
         this.updateUserUseCase = updateUserUseCase;
         this.deleteUserUseCase = deleteUserUseCase;
         this.generatePasswordResetTokenUseCase = generatePasswordResetTokenUseCase;
-        this.resetPasswordUseCase = resetPasswordUseCase;
     }
 
     @GetMapping

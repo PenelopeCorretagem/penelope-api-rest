@@ -87,7 +87,8 @@ CREATE TABLE imagem_empreendimento (
 -- Tabela de diferenciais dos empreendimentos
 CREATE TABLE diferencial (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
-    descricao VARCHAR(100) NOT NULL UNIQUE
+    descricao VARCHAR(100) NOT NULL UNIQUE,
+    icon_name VARCHAR(100) UNIQUE
 );
 
 -- Tabela de associação entre empreendimento e diferencial
