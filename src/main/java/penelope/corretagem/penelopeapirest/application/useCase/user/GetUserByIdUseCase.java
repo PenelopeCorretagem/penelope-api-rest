@@ -1,11 +1,9 @@
 package penelope.corretagem.penelopeapirest.application.useCase.user;
 
-import org.springframework.stereotype.Service;
 import penelope.corretagem.penelopeapirest.core.user.repository.IUserRepository;
 import penelope.corretagem.penelopeapirest.application.dto.UserResponse;
 import penelope.corretagem.penelopeapirest.oldArchiteture.service.exception.UserNotFoundException;
 
-@Service
 public class GetUserByIdUseCase {
 
     private final IUserRepository userRepository;

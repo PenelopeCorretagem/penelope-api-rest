@@ -1,6 +1,5 @@
 package penelope.corretagem.penelopeapirest.application.useCase.advertisement;
 
-import org.springframework.stereotype.Service;
 import penelope.corretagem.penelopeapirest.application.dto.AdvertisementCreateRequest;
 import penelope.corretagem.penelopeapirest.core.address.Address;
 import penelope.corretagem.penelopeapirest.core.advertisement.Advertisement;
@@ -19,7 +18,6 @@ import penelope.corretagem.penelopeapirest.core.user.repository.IUserRepository;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-@Service
 public class CreateAdvertisementUseCase {
 
     private final IAdvertisementRepository advertisementRepository;

@@ -1,12 +1,10 @@
 package penelope.corretagem.penelopeapirest.application.useCase.user;
 
-import org.springframework.stereotype.Service;
 import penelope.corretagem.penelopeapirest.core.user.repository.IUserRepository;
 import penelope.corretagem.penelopeapirest.oldArchiteture.service.exception.InvalidTokenException;
 
 import java.util.Date;
 
-@Service
 public class ValidatePasswordResetTokenUseCase {
 
     private final IUserRepository userRepository;

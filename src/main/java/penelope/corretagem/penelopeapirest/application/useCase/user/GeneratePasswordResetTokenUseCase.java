@@ -1,13 +1,11 @@
 package penelope.corretagem.penelopeapirest.application.useCase.user;
 
-import org.springframework.stereotype.Service;
 import penelope.corretagem.penelopeapirest.core.gateway.IEmailGateway;
 import penelope.corretagem.penelopeapirest.core.user.repository.IUserRepository;
 
 import java.security.SecureRandom;
 import java.util.Date;
 
-@Service
 public class GeneratePasswordResetTokenUseCase {
 
     private final IUserRepository userRepository;

@@ -1,7 +1,6 @@
 package penelope.corretagem.penelopeapirest.application.useCase.auth;
 
 
-import org.springframework.stereotype.Service;
 import penelope.corretagem.penelopeapirest.core.gateway.IPasswordEncoderGateway;
 import penelope.corretagem.penelopeapirest.core.gateway.ITokenGateway;
 import penelope.corretagem.penelopeapirest.core.exception.InvalidCredentialsException;
@@ -9,7 +8,6 @@ import penelope.corretagem.penelopeapirest.core.user.repository.IUserRepository;
 import penelope.corretagem.penelopeapirest.application.dto.LoginRequest;
 import penelope.corretagem.penelopeapirest.application.dto.LoginResponse;
 
-@Service
 public class AuthenticateUserUseCase {
 
     private final IUserRepository userRepository;

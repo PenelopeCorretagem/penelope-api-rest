@@ -1,12 +1,10 @@
 package penelope.corretagem.penelopeapirest.application.useCase.advertisement;
 
-import org.springframework.stereotype.Service;
 import penelope.corretagem.penelopeapirest.core.advertisement.repository.IAdvertisementRepository;
 import penelope.corretagem.penelopeapirest.application.dto.AdvertisementResponse;
 import penelope.corretagem.penelopeapirest.core.exception.DomainValidationException;
 import penelope.corretagem.penelopeapirest.core.exception.ResourceNotFoundException;
 
-@Service
 public class GetAdvertisementByEstateIdUseCase {
 
     private final IAdvertisementRepository repository;

@@ -1,12 +1,10 @@
 package penelope.corretagem.penelopeapirest.application.useCase.amenities;
 
-import org.springframework.stereotype.Service;
 import penelope.corretagem.penelopeapirest.application.dto.AmenitiesResponse;
 import penelope.corretagem.penelopeapirest.core.amenities.repository.IAmenitiesRepository;
 import penelope.corretagem.penelopeapirest.core.exception.DomainValidationException;
 import penelope.corretagem.penelopeapirest.core.exception.ResourceNotFoundException;
 
-@Service
 public class GetAmenityByIdUseCase {
 
     private final IAmenitiesRepository repository;

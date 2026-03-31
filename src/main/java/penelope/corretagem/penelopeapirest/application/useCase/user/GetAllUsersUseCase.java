@@ -1,13 +1,11 @@
 package penelope.corretagem.penelopeapirest.application.useCase.user;
 
-import org.springframework.stereotype.Service;
 import penelope.corretagem.penelopeapirest.core.user.repository.IUserRepository;
 import penelope.corretagem.penelopeapirest.application.dto.UserResponse;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Service
 public class GetAllUsersUseCase {
 
     private final IUserRepository userRepository;

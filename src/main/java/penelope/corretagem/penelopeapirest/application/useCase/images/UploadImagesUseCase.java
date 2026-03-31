@@ -1,12 +1,10 @@
 package penelope.corretagem.penelopeapirest.application.useCase.images;
 
-import org.springframework.stereotype.Service;
 import penelope.corretagem.penelopeapirest.core.exception.InvalidImagePayloadException;
 import penelope.corretagem.penelopeapirest.core.gateway.IImageStorageGateway;
 import java.util.ArrayList;
 import java.util.List;
 
-@Service
 public class UploadImagesUseCase {
 
     private final IImageStorageGateway imageStorageGateway;

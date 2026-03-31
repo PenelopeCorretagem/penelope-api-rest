@@ -1,6 +1,5 @@
 package penelope.corretagem.penelopeapirest.application.useCase.user;
 
-import org.springframework.stereotype.Service;
 import penelope.corretagem.penelopeapirest.core.gateway.IPasswordEncoderGateway;
 import penelope.corretagem.penelopeapirest.core.user.User;
 import penelope.corretagem.penelopeapirest.core.user.repository.IUserRepository;
@@ -9,7 +8,6 @@ import penelope.corretagem.penelopeapirest.application.dto.UserResponse;
 import penelope.corretagem.penelopeapirest.oldArchiteture.service.exception.ClientMustNotPossessACreci;
 import penelope.corretagem.penelopeapirest.oldArchiteture.service.exception.UserEmailAlreadyExistsException;
 
-@Service
 public class CreateUserUseCase {
 
     private final IUserRepository userRepository;
