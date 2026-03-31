@@ -2,8 +2,8 @@ package penelope.corretagem.penelopeapirest.infrastructure.web;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import penelope.corretagem.penelopeapirest.application.dto.ContactUsRequest;
 import penelope.corretagem.penelopeapirest.application.useCase.email.SendContactEmailUseCase;
-import penelope.corretagem.penelopeapirest.oldArchiteture.domain.dto.ContactUsRequest;
 
 @RestController
 @RequestMapping("/contact-us")

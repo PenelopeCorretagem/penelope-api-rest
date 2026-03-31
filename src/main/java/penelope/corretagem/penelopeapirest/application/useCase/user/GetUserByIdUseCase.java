@@ -1,8 +1,8 @@
 package penelope.corretagem.penelopeapirest.application.useCase.user;
 
+import penelope.corretagem.penelopeapirest.core.exception.ResourceNotFoundException;
 import penelope.corretagem.penelopeapirest.core.user.repository.IUserRepository;
 import penelope.corretagem.penelopeapirest.application.dto.UserResponse;
-import penelope.corretagem.penelopeapirest.oldArchiteture.service.exception.UserNotFoundException;
 
 public class GetUserByIdUseCase {
 
@@ -14,7 +14,7 @@ public class GetUserByIdUseCase {
 
     public UserResponse execute(Long id) {
         var user = userRepository.findById(id)
-                .orElseThrow(UserNotFoundException::new);
+                .orElseThrow(() -> new ResourceNotFoundException("Usuário não encontrado"));
 
         return new UserResponse(
                 user.getId(), user.getName(), user.getEmail(),

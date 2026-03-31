@@ -1,9 +1,9 @@
 package penelope.corretagem.penelopeapirest.application.useCase.user;
 
 import penelope.corretagem.penelopeapirest.application.dto.UserAuthInfoResponse;
+import penelope.corretagem.penelopeapirest.core.exception.ResourceNotFoundException;
 import penelope.corretagem.penelopeapirest.core.gateway.ITokenGateway;
 import penelope.corretagem.penelopeapirest.core.user.repository.IUserRepository;
-import penelope.corretagem.penelopeapirest.oldArchiteture.service.exception.UserNotFoundException;
 
 public class GetUserAuthInfoUseCase {
 
@@ -19,7 +19,7 @@ public class GetUserAuthInfoUseCase {
         String email = tokenGateway.getEmailFromToken(token);
 
         var user = userRepository.findByEmail(email)
-                .orElseThrow(UserNotFoundException::new);
+            .orElseThrow(() -> new ResourceNotFoundException("Usuário não encontrado"));
 
         return new UserAuthInfoResponse(
                 user.getId(),

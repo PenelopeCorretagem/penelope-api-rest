@@ -1,8 +1,8 @@
 package penelope.corretagem.penelopeapirest.core.gateway;
 
-import penelope.corretagem.penelopeapirest.oldArchiteture.domain.dto.ContactUsRequest;
+import penelope.corretagem.penelopeapirest.core.email.ContactMessage;
 
 public interface IEmailGateway {
     void sendPasswordResetEmail(String toEmail, String token);
-    void contactUsEmail(ContactUsRequest contactUsRequest);
+    void contactUsEmail(ContactMessage contactMessage);
 }

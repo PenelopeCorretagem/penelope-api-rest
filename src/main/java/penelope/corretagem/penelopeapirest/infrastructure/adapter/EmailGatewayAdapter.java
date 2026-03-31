@@ -4,8 +4,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Component;
+import penelope.corretagem.penelopeapirest.core.email.ContactMessage;
 import penelope.corretagem.penelopeapirest.core.gateway.IEmailGateway;
-import penelope.corretagem.penelopeapirest.oldArchiteture.domain.dto.ContactUsRequest;
 
 @Component
 public class EmailGatewayAdapter implements IEmailGateway {
@@ -52,7 +52,7 @@ public class EmailGatewayAdapter implements IEmailGateway {
         System.out.println("Link alternativo: " + manualUrl);
     }
 
-    public void contactUsEmail(ContactUsRequest contactUsRequest) {
+    public void contactUsEmail(ContactMessage contactUsRequest) {
 
         String nome = contactUsRequest.nome();
         String email = contactUsRequest.email();

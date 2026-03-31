@@ -13,6 +13,7 @@ import penelope.corretagem.penelopeapirest.infrastructure.entity.AmenitiesEstate
 import penelope.corretagem.penelopeapirest.infrastructure.mapper.AdvertisementInfrastructureMapper;
 import penelope.corretagem.penelopeapirest.infrastructure.repository.IAddressJpaRepository;
 import penelope.corretagem.penelopeapirest.infrastructure.repository.IAdvertisementJpaRepository;
+import penelope.corretagem.penelopeapirest.infrastructure.repository.IAmenitiesJpaRepository;
 import penelope.corretagem.penelopeapirest.infrastructure.repository.IEstateJpaRepository;
 import penelope.corretagem.penelopeapirest.infrastructure.repository.IEventTypeJpaRepository;
 import penelope.corretagem.penelopeapirest.infrastructure.specification.AdvertisementSpecifications;
@@ -28,6 +29,7 @@ public class AdvertisementRepositoryAdapter implements IAdvertisementRepository 
     private final AdvertisementInfrastructureMapper mapper;
     private final IEstateJpaRepository estateRepository;
     private final IAddressJpaRepository addressJpaRepository;
+    private final IAmenitiesJpaRepository amenitiesJpaRepository;
     private final IEventTypeJpaRepository eventTypeRepository;
 
     public AdvertisementRepositoryAdapter(
@@ -35,12 +37,14 @@ public class AdvertisementRepositoryAdapter implements IAdvertisementRepository 
             AdvertisementInfrastructureMapper mapper,
             IEstateJpaRepository estateRepository,
             IAddressJpaRepository addressJpaRepository,
+            IAmenitiesJpaRepository amenitiesJpaRepository,
             IEventTypeJpaRepository eventTypeRepository
     ) {
         this.jpaRepository = jpaRepository;
         this.mapper = mapper;
         this.estateRepository = estateRepository;
         this.addressJpaRepository = addressJpaRepository;
+        this.amenitiesJpaRepository = amenitiesJpaRepository;
         this.eventTypeRepository = eventTypeRepository;
     }
 
@@ -104,6 +108,8 @@ public class AdvertisementRepositoryAdapter implements IAdvertisementRepository 
         var jpaEntity = mapper.toEntity(advertisement);
         var estateEntity = jpaEntity.getEstate();
 
+        attachManagedAmenities(estateEntity);
+
         var savedAddress = addressJpaRepository.saveAndFlush(estateEntity.getAddress());
         estateEntity.setAddress(savedAddress);
 
@@ -141,8 +147,8 @@ public class AdvertisementRepositoryAdapter implements IAdvertisementRepository 
             evEntity.setTitle(advertisement.getEventType().getTitle());
             evEntity.setSlug(advertisement.getEventType().getSlug());
 
-            eventTypeRepository.save(evEntity);
-            existingEntity.setEventType(evEntity);
+            var managedEventType = eventTypeRepository.saveAndFlush(evEntity);
+            existingEntity.setEventType(managedEventType);
         }
 
         Estate estateDomain = advertisement.getEstate();
@@ -175,12 +181,15 @@ public class AdvertisementRepositoryAdapter implements IAdvertisementRepository 
 
         for (Long incomingId : incomingAmenityIds) {
             if (!currentAmenityIds.contains(incomingId)) {
+                if (!amenitiesJpaRepository.existsById(incomingId)) {
+                    throw new ResourceNotFoundException("Amenidade não encontrada: " + incomingId);
+                }
+
                 var newRel = new AmenitiesEstateJpaEntity();
                 newRel.setId(new AmenitiesEstateJpaId());
                 newRel.setEstate(existingEstate);
 
-                var amenityRef = new AmenitiesJpaEntity();
-                amenityRef.setId(incomingId);
+                var amenityRef = amenitiesJpaRepository.getReferenceById(incomingId);
                 newRel.setAmenity(amenityRef);
 
                 existingEstate.getAmenities().add(newRel);
@@ -214,5 +223,24 @@ public class AdvertisementRepositoryAdapter implements IAdvertisementRepository 
 
         existingEntity.setActive(active);
         jpaRepository.save(existingEntity);
+    }
+
+    private void attachManagedAmenities(EstateJpaEntity estateEntity) {
+        if (estateEntity == null || estateEntity.getAmenities() == null) {
+            return;
+        }
+
+        estateEntity.getAmenities().forEach(relation -> {
+            if (relation.getAmenity() == null || relation.getAmenity().getId() == null) {
+                throw new ResourceNotFoundException("Amenidade inválida para associação com o empreendimento");
+            }
+
+            if (!amenitiesJpaRepository.existsById(relation.getAmenity().getId())) {
+                throw new ResourceNotFoundException("Amenidade não encontrada: " + relation.getAmenity().getId());
+            }
+
+            relation.setAmenity(amenitiesJpaRepository.getReferenceById(relation.getAmenity().getId()));
+            relation.setEstate(estateEntity);
+        });
     }
 }

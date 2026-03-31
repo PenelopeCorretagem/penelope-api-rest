@@ -4,12 +4,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import penelope.corretagem.penelopeapirest.infrastructure.api.CalClient;
+import penelope.corretagem.penelopeapirest.infrastructure.api.dto.eventtype.EventTypeCalResponse;
+import penelope.corretagem.penelopeapirest.infrastructure.api.dto.eventtype.EventTypeRequest;
 import penelope.corretagem.penelopeapirest.core.estate.Estate;
 import penelope.corretagem.penelopeapirest.core.exception.IntegrationException;
 import penelope.corretagem.penelopeapirest.core.eventType.EventType;
 import penelope.corretagem.penelopeapirest.core.gateway.IEventTypeGateway;
-import penelope.corretagem.penelopeapirest.oldArchiteture.domain.dto.cal.eventtype.EventTypeCalResponse;
-import penelope.corretagem.penelopeapirest.oldArchiteture.domain.dto.cal.eventtype.EventTypeRequest;
 
 @Component
 public class EventTypeGatewayAdapter implements IEventTypeGateway {

@@ -2,6 +2,7 @@ package penelope.corretagem.penelopeapirest.core.advertisement;
 
 import penelope.corretagem.penelopeapirest.core.estate.Estate;
 import penelope.corretagem.penelopeapirest.core.eventType.EventType;
+import penelope.corretagem.penelopeapirest.core.exception.DomainValidationException;
 import penelope.corretagem.penelopeapirest.core.user.User;
 
 import java.time.LocalDate;
@@ -116,5 +117,17 @@ public class Advertisement {
 
     public void setActive(Boolean active) {
         this.active = active;
+    }
+
+    public void setEmphasis(Boolean emphasis) {
+        this.emphasis = emphasis;
+    }
+
+    public void updateResponsible(User responsible) {
+        if (responsible == null) {
+            throw new DomainValidationException("Responsável é obrigatório");
+        }
+
+        this.responsible = responsible;
     }
 }

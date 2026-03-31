@@ -1,7 +1,7 @@
 package penelope.corretagem.penelopeapirest.application.useCase.user;
 
 import penelope.corretagem.penelopeapirest.core.user.repository.IUserRepository;
-import penelope.corretagem.penelopeapirest.oldArchiteture.service.exception.UserNotFoundException;
+import penelope.corretagem.penelopeapirest.core.exception.ResourceNotFoundException;
 
 public class DeleteUserUseCase {
 
@@ -13,7 +13,7 @@ public class DeleteUserUseCase {
 
     public void execute(Long id) {
         if (!userRepository.existsById(id)) {
-            throw new UserNotFoundException();
+            throw new ResourceNotFoundException("Usuário não encontrado");
         }
 
         userRepository.deleteById(id);

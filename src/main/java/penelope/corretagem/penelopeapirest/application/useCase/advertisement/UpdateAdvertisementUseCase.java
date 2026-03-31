@@ -14,6 +14,7 @@ import penelope.corretagem.penelopeapirest.core.eventType.EventType;
 import penelope.corretagem.penelopeapirest.core.exception.DomainValidationException;
 import penelope.corretagem.penelopeapirest.core.exception.ResourceNotFoundException;
 import penelope.corretagem.penelopeapirest.core.gateway.IEventTypeGateway;
+import penelope.corretagem.penelopeapirest.core.user.User;
 import penelope.corretagem.penelopeapirest.core.user.repository.IUserRepository;
 
 import java.util.Objects;
@@ -109,8 +110,13 @@ public class UpdateAdvertisementUseCase {
         }
 
         if (request.responsibleId() != null) {
-            userRepository.findById(request.responsibleId())
+            User responsible = userRepository.findById(request.responsibleId())
                     .orElseThrow(() -> new ResourceNotFoundException("Novo responsável não encontrado"));
+            advertisement.updateResponsible(responsible);
+        }
+
+        if (request.featured() != null) {
+            advertisement.setEmphasis(request.featured());
         }
 
         advertisement.updateInfo(request.active(), request.endDate());

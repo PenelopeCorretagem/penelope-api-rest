@@ -1,12 +1,11 @@
 package penelope.corretagem.penelopeapirest.application.useCase.user;
 
 import penelope.corretagem.penelopeapirest.core.gateway.IPasswordEncoderGateway;
+import penelope.corretagem.penelopeapirest.core.exception.DomainValidationException;
 import penelope.corretagem.penelopeapirest.core.user.User;
 import penelope.corretagem.penelopeapirest.core.user.repository.IUserRepository;
 import penelope.corretagem.penelopeapirest.application.dto.UserRequest;
 import penelope.corretagem.penelopeapirest.application.dto.UserResponse;
-import penelope.corretagem.penelopeapirest.oldArchiteture.service.exception.ClientMustNotPossessACreci;
-import penelope.corretagem.penelopeapirest.oldArchiteture.service.exception.UserEmailAlreadyExistsException;
 
 public class CreateUserUseCase {
 
@@ -21,11 +20,11 @@ public class CreateUserUseCase {
     public UserResponse execute(UserRequest request) {
 
         if (userRepository.findByEmail(request.email()).isPresent()) {
-            throw new UserEmailAlreadyExistsException("O e-mail informado já está cadastrado");
+            throw new DomainValidationException("O e-mail informado já está cadastrado");
         }
 
         if (request.creci() != null && request.accessLevel().toString().equalsIgnoreCase("CLIENTE")) {
-            throw new ClientMustNotPossessACreci("Clientes não devem possuir Creci");
+            throw new DomainValidationException("Clientes não devem possuir Creci");
         }
 
         User newUser = User.createNew(

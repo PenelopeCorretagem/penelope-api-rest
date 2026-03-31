@@ -1,10 +1,10 @@
 package penelope.corretagem.penelopeapirest.application.useCase.user;
 
+import penelope.corretagem.penelopeapirest.core.exception.ResourceNotFoundException;
 import penelope.corretagem.penelopeapirest.core.gateway.IPasswordEncoderGateway;
 import penelope.corretagem.penelopeapirest.core.user.repository.IUserRepository;
 import penelope.corretagem.penelopeapirest.application.dto.UserResponse;
 import penelope.corretagem.penelopeapirest.application.dto.UserUpdateRequest;
-import penelope.corretagem.penelopeapirest.oldArchiteture.service.exception.UserNotFoundException;
 
 public class UpdateUserUseCase {
 
@@ -19,7 +19,7 @@ public class UpdateUserUseCase {
     public UserResponse execute(Long id, UserUpdateRequest req) {
 
         var user = userRepository.findById(id)
-                .orElseThrow(UserNotFoundException::new);
+            .orElseThrow(() -> new ResourceNotFoundException("Usuário não encontrado"));
 
         user.updateInformation(
                 req.name(), req.email(), req.cpf(),
