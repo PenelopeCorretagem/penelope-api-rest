@@ -1,11 +1,10 @@
 package penelope.corretagem.penelopeapirest.infrastructure.entity;
 
 import jakarta.persistence.*;
-        import lombok.AllArgsConstructor;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import penelope.corretagem.penelopeapirest.core.amenities.AmenitiesEstateId;
 
 @Entity
 @Table(name = "diferencial_empreendimento")
@@ -16,7 +15,7 @@ import penelope.corretagem.penelopeapirest.core.amenities.AmenitiesEstateId;
 public class AmenitiesEstateJpaEntity {
 
     @EmbeddedId
-    private AmenitiesEstateId id; // chave composta
+    private AmenitiesEstateJpaId id; // chave composta
 
     @ManyToOne(fetch = FetchType.LAZY)
     @MapsId("estate") // mapeia o campo estate da chave composta

@@ -4,6 +4,8 @@ import org.springframework.stereotype.Service;
 import penelope.corretagem.penelopeapirest.application.dto.UpdateAmenityRequest;
 import penelope.corretagem.penelopeapirest.core.amenities.Amenities;
 import penelope.corretagem.penelopeapirest.core.amenities.repository.IAmenitiesRepository;
+import penelope.corretagem.penelopeapirest.core.exception.DomainValidationException;
+import penelope.corretagem.penelopeapirest.core.exception.ResourceNotFoundException;
 
 @Service
 public class UpdateAmenityUseCase {
@@ -15,8 +17,16 @@ public class UpdateAmenityUseCase {
     }
 
     public Amenities execute(Long id, UpdateAmenityRequest request) {
+        if (id == null || id <= 0) {
+            throw new DomainValidationException("ID do diferencial inválido");
+        }
+
+        if (request == null) {
+            throw new DomainValidationException("Requisição de atualização de diferencial é obrigatória");
+        }
+
         Amenities amenity = repository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Amenidade não encontrada"));
+                .orElseThrow(() -> new ResourceNotFoundException("Diferencial não encontrado"));
 
         amenity.updateInfo(request.description(), request.icon());
 

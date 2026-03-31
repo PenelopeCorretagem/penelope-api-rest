@@ -12,8 +12,9 @@ import penelope.corretagem.penelopeapirest.core.estate.Estate;
 import penelope.corretagem.penelopeapirest.core.estate.ImageEstate;
 import penelope.corretagem.penelopeapirest.core.estate.ImageEstateType;
 import penelope.corretagem.penelopeapirest.core.eventType.EventType;
+import penelope.corretagem.penelopeapirest.core.exception.DomainValidationException;
+import penelope.corretagem.penelopeapirest.core.exception.ResourceNotFoundException;
 import penelope.corretagem.penelopeapirest.core.gateway.IEventTypeGateway;
-import penelope.corretagem.penelopeapirest.core.user.User;
 import penelope.corretagem.penelopeapirest.core.user.repository.IUserRepository;
 
 import java.util.Objects;
@@ -39,14 +40,26 @@ public class UpdateAdvertisementUseCase {
 
     public Advertisement execute(Long advertisementId, AdvertisementUpdateRequest request) {
 
+        if (advertisementId == null || advertisementId <= 0) {
+            throw new DomainValidationException("ID do anúncio inválido");
+        }
+
+        if (request == null) {
+            throw new DomainValidationException("Requisição de atualização do anúncio é obrigatória");
+        }
+
         Advertisement advertisement = advertisementRepository.findById(advertisementId)
-                .orElseThrow(() -> new RuntimeException("Anúncio não encontrado"));
+                .orElseThrow(() -> new ResourceNotFoundException("Anúncio não encontrado"));
 
         Estate currentEstate = advertisement.getEstate();
         EstateCreateRequest estateReq = request.estate();
         boolean shouldUpdateEventType = false;
 
         if (estateReq != null) {
+            if (estateReq.address() == null) {
+                throw new DomainValidationException("Endereço do imóvel é obrigatório para atualização");
+            }
+
             shouldUpdateEventType = hasEventTypeRelevantChanges(currentEstate, estateReq);
 
             String cleanZipCode = estateReq.address().zipCode() != null
@@ -93,13 +106,13 @@ public class UpdateAdvertisementUseCase {
 
             currentEstate.updateAllDetails(
                     estateReq.title(), estateReq.description(), estateReq.area(), estateReq.numberOfRooms(),
-                    Estate.Type.valueOf(estateReq.type()), newAddress, newStandAddress, newImages, newAmenities
+                    parseEstateType(estateReq.type()), newAddress, newStandAddress, newImages, newAmenities
             );
         }
 
         if (request.responsibleId() != null) {
-            User newResponsible = userRepository.findById(request.responsibleId())
-                    .orElseThrow(() -> new RuntimeException("Novo responsável não encontrado"));
+            userRepository.findById(request.responsibleId())
+                    .orElseThrow(() -> new ResourceNotFoundException("Novo responsável não encontrado"));
         }
 
         advertisement.updateInfo(request.active(), request.endDate());
@@ -131,5 +144,17 @@ public class UpdateAdvertisementUseCase {
                 !oldStand.getZipCode().equals(newStand.zipCode()) ||
                 !Objects.equals(oldStand.getComplement(), newStand.complement()) ||
                 !oldStand.getRegion().equals(newStand.region());
+    }
+
+    private Estate.Type parseEstateType(String type) {
+        if (type == null || type.isBlank()) {
+            throw new DomainValidationException("Tipo do imóvel é obrigatório");
+        }
+
+        try {
+            return Estate.Type.valueOf(type.toUpperCase());
+        } catch (IllegalArgumentException ex) {
+            throw new DomainValidationException("Tipo do imóvel inválido: " + type);
+        }
     }
 }

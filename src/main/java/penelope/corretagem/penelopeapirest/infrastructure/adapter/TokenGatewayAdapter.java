@@ -5,6 +5,7 @@ import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTCreationException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+import penelope.corretagem.penelopeapirest.core.exception.IntegrationException;
 import penelope.corretagem.penelopeapirest.core.gateway.ITokenGateway;
 
 import java.time.Instant;
@@ -29,7 +30,7 @@ public class TokenGatewayAdapter implements ITokenGateway {
                     .withExpiresAt(generateExpirationDate())
                     .sign(algorithm);
         } catch (JWTCreationException exception) {
-            throw new RuntimeException("Erro ao gerar o token JWT", exception);
+            throw new IntegrationException("Erro ao gerar o token JWT", exception);
         }
     }
 

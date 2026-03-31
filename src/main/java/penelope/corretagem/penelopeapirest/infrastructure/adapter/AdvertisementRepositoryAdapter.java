@@ -4,11 +4,12 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import penelope.corretagem.penelopeapirest.core.advertisement.Advertisement;
+import penelope.corretagem.penelopeapirest.core.advertisement.AdvertisementFilter;
 import penelope.corretagem.penelopeapirest.core.advertisement.repository.IAdvertisementRepository;
-import penelope.corretagem.penelopeapirest.application.dto.AdvertisementFilterRequest;
-import penelope.corretagem.penelopeapirest.core.amenities.AmenitiesEstateId;
+import penelope.corretagem.penelopeapirest.core.exception.ResourceNotFoundException;
 import penelope.corretagem.penelopeapirest.core.estate.Estate;
 import penelope.corretagem.penelopeapirest.infrastructure.entity.*;
+import penelope.corretagem.penelopeapirest.infrastructure.entity.AmenitiesEstateJpaId;
 import penelope.corretagem.penelopeapirest.infrastructure.mapper.AdvertisementInfrastructureMapper;
 import penelope.corretagem.penelopeapirest.infrastructure.repository.IAddressJpaRepository;
 import penelope.corretagem.penelopeapirest.infrastructure.repository.IAdvertisementJpaRepository;
@@ -50,7 +51,7 @@ public class AdvertisementRepositoryAdapter implements IAdvertisementRepository 
     }
 
     @Override
-    public List<Advertisement> findAll(AdvertisementFilterRequest filter) {
+    public List<Advertisement> findAll(AdvertisementFilter filter) {
 
         Estate.Type type = null;
         if (filter.type() != null && !filter.type().isBlank()) type = Estate.Type.valueOf(filter.type().toUpperCase());
@@ -128,7 +129,7 @@ public class AdvertisementRepositoryAdapter implements IAdvertisementRepository 
     @Transactional
     public Advertisement update(Advertisement advertisement) {
         AdvertisementJpaEntity existingEntity = jpaRepository.findById(advertisement.getId())
-                .orElseThrow(() -> new RuntimeException("Anúncio não encontrado"));
+                .orElseThrow(() -> new ResourceNotFoundException("Anúncio não encontrado"));
 
         existingEntity.setActive(advertisement.getActive());
         existingEntity.setEmphasis(advertisement.getEmphasis());
@@ -162,8 +163,6 @@ public class AdvertisementRepositoryAdapter implements IAdvertisementRepository 
         existingEstate.getAddress().setComplement(estateDomain.getAddress().getComplement());
         existingEstate.getAddress().setRegion(estateDomain.getAddress().getRegion());
 
-        var mappedNewTree = mapper.toEntity(advertisement);
-
         Set<Long> incomingAmenityIds = estateDomain.getAmenities().stream()
                 .map(am -> am.getAmenity().getId())
                 .collect(java.util.stream.Collectors.toSet());
@@ -177,7 +176,7 @@ public class AdvertisementRepositoryAdapter implements IAdvertisementRepository 
         for (Long incomingId : incomingAmenityIds) {
             if (!currentAmenityIds.contains(incomingId)) {
                 var newRel = new AmenitiesEstateJpaEntity();
-                newRel.setId(new AmenitiesEstateId());
+                newRel.setId(new AmenitiesEstateJpaId());
                 newRel.setEstate(existingEstate);
 
                 var amenityRef = new AmenitiesJpaEntity();
@@ -211,7 +210,7 @@ public class AdvertisementRepositoryAdapter implements IAdvertisementRepository 
     @Transactional
     public void updateStatus(Long id, Boolean active) {
         AdvertisementJpaEntity existingEntity = jpaRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Anúncio não encontrado"));
+                .orElseThrow(() -> new ResourceNotFoundException("Anúncio não encontrado"));
 
         existingEntity.setActive(active);
         jpaRepository.save(existingEntity);

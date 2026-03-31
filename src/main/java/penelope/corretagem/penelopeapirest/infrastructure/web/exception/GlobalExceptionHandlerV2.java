@@ -4,6 +4,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import penelope.corretagem.penelopeapirest.core.exception.DomainValidationException;
+import penelope.corretagem.penelopeapirest.core.exception.IntegrationException;
+import penelope.corretagem.penelopeapirest.core.exception.InvalidCredentialsException;
+import penelope.corretagem.penelopeapirest.core.exception.InvalidImagePayloadException;
+import penelope.corretagem.penelopeapirest.core.exception.PasswordResetTokenExpiredException;
 import penelope.corretagem.penelopeapirest.core.exception.ResourceNotFoundException;
 
 import java.time.LocalDateTime;
@@ -35,6 +40,66 @@ public class GlobalExceptionHandlerV2 {
         );
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
+    }
+
+    @ExceptionHandler(InvalidCredentialsException.class)
+    public ResponseEntity<StandardErrorResponse> handleInvalidCredentials(InvalidCredentialsException ex) {
+
+        StandardErrorResponse error = new StandardErrorResponse(
+                HttpStatus.UNAUTHORIZED.value(),
+                ex.getMessage(),
+                LocalDateTime.now()
+        );
+
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(error);
+    }
+
+    @ExceptionHandler(InvalidImagePayloadException.class)
+    public ResponseEntity<StandardErrorResponse> handleInvalidImagePayload(InvalidImagePayloadException ex) {
+
+        StandardErrorResponse error = new StandardErrorResponse(
+                HttpStatus.BAD_REQUEST.value(),
+                ex.getMessage(),
+                LocalDateTime.now()
+        );
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
+    }
+
+    @ExceptionHandler(DomainValidationException.class)
+    public ResponseEntity<StandardErrorResponse> handleDomainValidation(DomainValidationException ex) {
+
+        StandardErrorResponse error = new StandardErrorResponse(
+                HttpStatus.BAD_REQUEST.value(),
+                ex.getMessage(),
+                LocalDateTime.now()
+        );
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
+    }
+
+    @ExceptionHandler(PasswordResetTokenExpiredException.class)
+    public ResponseEntity<StandardErrorResponse> handlePasswordResetTokenExpired(PasswordResetTokenExpiredException ex) {
+
+        StandardErrorResponse error = new StandardErrorResponse(
+                HttpStatus.BAD_REQUEST.value(),
+                ex.getMessage(),
+                LocalDateTime.now()
+        );
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
+    }
+
+    @ExceptionHandler(IntegrationException.class)
+    public ResponseEntity<StandardErrorResponse> handleIntegration(IntegrationException ex) {
+
+        StandardErrorResponse error = new StandardErrorResponse(
+                HttpStatus.BAD_GATEWAY.value(),
+                ex.getMessage(),
+                LocalDateTime.now()
+        );
+
+        return ResponseEntity.status(HttpStatus.BAD_GATEWAY).body(error);
     }
 
     // 3. Fallback para qualquer outro erro inesperado (Erro 500)

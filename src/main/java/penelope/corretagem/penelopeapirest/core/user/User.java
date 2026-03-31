@@ -1,5 +1,6 @@
 package penelope.corretagem.penelopeapirest.core.user;
 
+import penelope.corretagem.penelopeapirest.core.exception.PasswordResetTokenExpiredException;
 import penelope.corretagem.penelopeapirest.core.user.valueObject.AccessLevel;
 
 import java.math.BigDecimal;
@@ -138,7 +139,7 @@ public class User {
     public void applyNewPassword(String newEncryptedPassword) {
 
         if (this.passwordResetTokenExpiry == null || this.passwordResetTokenExpiry.before(new Date())) {
-            throw new RuntimeException("Token expirado ou inválido. Por favor, solicite uma nova redefinição de senha.");
+            throw new PasswordResetTokenExpiredException();
         }
 
         this.password = newEncryptedPassword;

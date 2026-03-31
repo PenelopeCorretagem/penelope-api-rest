@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import penelope.corretagem.penelopeapirest.infrastructure.api.CalClient;
 import penelope.corretagem.penelopeapirest.core.estate.Estate;
+import penelope.corretagem.penelopeapirest.core.exception.IntegrationException;
 import penelope.corretagem.penelopeapirest.core.eventType.EventType;
 import penelope.corretagem.penelopeapirest.core.gateway.IEventTypeGateway;
 import penelope.corretagem.penelopeapirest.oldArchiteture.domain.dto.cal.eventtype.EventTypeCalResponse;
@@ -47,11 +48,11 @@ public class EventTypeGatewayAdapter implements IEventTypeGateway {
                         response.slug()
                 );
             }
-            throw new RuntimeException("A resposta do Cal.com veio nula.");
+            throw new IntegrationException("A resposta do Cal.com veio nula.");
 
         } catch (Exception e) {
             logger.error("Erro ao criar Event Type no Cal.com para o imóvel {}: {}", estate.getTitle(), e.getMessage(), e);
-            throw new RuntimeException("Falha ao criar Event Type: " + e.getMessage(), e);
+            throw new IntegrationException("Falha ao criar Event Type: " + e.getMessage(), e);
         }
     }
 
@@ -91,7 +92,7 @@ public class EventTypeGatewayAdapter implements IEventTypeGateway {
 
         } catch (Exception e) {
             logger.error("Erro ao recriar Event Type no Cal.com: {}", e.getMessage(), e);
-            throw new RuntimeException("Falha ao atualizar calendário: " + e.getMessage(), e);
+            throw new IntegrationException("Falha ao atualizar calendário: " + e.getMessage(), e);
         }
     }
 

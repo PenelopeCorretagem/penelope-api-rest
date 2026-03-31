@@ -114,9 +114,17 @@ public class AdvertisementInfrastructureMapper {
         if (jpaAmenity == null) return null;
 
         Amenities amenityDomain = toAmenitiesDomain(jpaAmenity.getAmenity());
+        AmenitiesEstateId id = null;
+
+        if (jpaAmenity.getId() != null) {
+            id = new AmenitiesEstateId(
+                jpaAmenity.getId().getEstate(),
+                jpaAmenity.getId().getAmenity()
+            );
+        }
 
         return AmenitiesEstate.restore(
-                jpaAmenity.getId(),
+            id,
                 null,
                 amenityDomain
         );
@@ -197,7 +205,7 @@ public class AdvertisementInfrastructureMapper {
             Set<AmenitiesEstateJpaEntity> amenitiesSet = domain.getAmenities().stream().map(amenitiesEstateDomain -> {
                 var relacionamento = new AmenitiesEstateJpaEntity();
 
-                relacionamento.setId(new AmenitiesEstateId());
+                relacionamento.setId(new AmenitiesEstateJpaId());
 
                 var amenityEntity = amenitiesJpaRepository.getReferenceById(amenitiesEstateDomain.getAmenity().getId());
 

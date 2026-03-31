@@ -1,10 +1,8 @@
 package penelope.corretagem.penelopeapirest.application.useCase.images;
 
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
+import penelope.corretagem.penelopeapirest.core.exception.InvalidImagePayloadException;
 import penelope.corretagem.penelopeapirest.core.gateway.IImageStorageGateway;
-
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,16 +15,16 @@ public class UploadImagesUseCase {
         this.imageStorageGateway = imageStorageGateway;
     }
 
-    public List<String> execute(List<MultipartFile> files) {
+    public List<String> execute(List<UploadImageCommand> files) {
         List<String> uploadedUrls = new ArrayList<>();
 
-        for (MultipartFile file : files) {
-            try {
-                String url = imageStorageGateway.uploadImage(file.getBytes(), file.getOriginalFilename());
-                uploadedUrls.add(url);
-            } catch (IOException e) {
-                throw new RuntimeException("Erro ao ler o arquivo: " + file.getOriginalFilename(), e);
+        for (UploadImageCommand file : files) {
+            if (file.content() == null || file.originalFilename() == null) {
+                throw new InvalidImagePayloadException("desconhecido", null);
             }
+
+            String url = imageStorageGateway.uploadImage(file.content(), file.originalFilename());
+            uploadedUrls.add(url);
         }
 
         return uploadedUrls;

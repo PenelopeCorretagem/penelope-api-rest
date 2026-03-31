@@ -3,6 +3,8 @@ package penelope.corretagem.penelopeapirest.application.useCase.advertisement;
 import org.springframework.stereotype.Service;
 import penelope.corretagem.penelopeapirest.core.advertisement.repository.IAdvertisementRepository;
 import penelope.corretagem.penelopeapirest.application.dto.AdvertisementResponse;
+import penelope.corretagem.penelopeapirest.core.exception.DomainValidationException;
+import penelope.corretagem.penelopeapirest.core.exception.ResourceNotFoundException;
 
 @Service
 public class GetAdvertisementByEstateIdUseCase {
@@ -14,10 +16,14 @@ public class GetAdvertisementByEstateIdUseCase {
     }
 
     public AdvertisementResponse execute(Long estateId) {
+        if (estateId == null || estateId <= 0) {
+            throw new DomainValidationException("ID do empreendimento inválido");
+        }
+
         var advertisement = repository.findByEstateId(estateId);
 
         if (advertisement == null) {
-            throw new RuntimeException("Nenhum anúncio encontrado para o Empreendimento ID: " + estateId);
+            throw new ResourceNotFoundException("Nenhum anúncio encontrado para o Empreendimento ID: " + estateId);
         }
 
         return AdvertisementResponse.fromDomain(advertisement);

@@ -1,16 +1,13 @@
 package penelope.corretagem.penelopeapirest.application.useCase.auth;
 
 
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Service;
 import penelope.corretagem.penelopeapirest.core.gateway.IPasswordEncoderGateway;
 import penelope.corretagem.penelopeapirest.core.gateway.ITokenGateway;
+import penelope.corretagem.penelopeapirest.core.exception.InvalidCredentialsException;
 import penelope.corretagem.penelopeapirest.core.user.repository.IUserRepository;
 import penelope.corretagem.penelopeapirest.application.dto.LoginRequest;
 import penelope.corretagem.penelopeapirest.application.dto.LoginResponse;
-
-import java.util.List;
 
 @Service
 public class AuthenticateUserUseCase {
@@ -30,12 +27,12 @@ public class AuthenticateUserUseCase {
     public LoginResponse execute(LoginRequest request) {
 
         var user = userRepository.findByEmail(request.email())
-                .orElseThrow(() -> new RuntimeException("Usuário ou senha inválidos"));
+                .orElseThrow(InvalidCredentialsException::new);
 
         String role = user.getAccessLevel().name();
 
         if (!passwordEncoderGateway.matches(request.password(), user.getPassword())) {
-            throw new RuntimeException("Usuário ou senha inválidos");
+            throw new InvalidCredentialsException();
         }
 
         String token = tokenGateway.generateToken(user.getEmail(), role);

@@ -1,17 +1,20 @@
-package penelope.corretagem.penelopeapirest.core.amenities;
+package penelope.corretagem.penelopeapirest.infrastructure.entity;
+
+import jakarta.persistence.Embeddable;
 
 import java.io.Serializable;
 import java.util.Objects;
 
-public class AmenitiesEstateId implements Serializable {
+@Embeddable
+public class AmenitiesEstateJpaId implements Serializable {
 
     private Long estate;
     private Long amenity;
 
-    public AmenitiesEstateId() {
+    public AmenitiesEstateJpaId() {
     }
 
-    public AmenitiesEstateId(Long estate, Long amenity) {
+    public AmenitiesEstateJpaId(Long estate, Long amenity) {
         this.estate = estate;
         this.amenity = amenity;
     }
@@ -35,10 +38,8 @@ public class AmenitiesEstateId implements Serializable {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof AmenitiesEstateId)) return false;
-        AmenitiesEstateId that = (AmenitiesEstateId) o;
-        return Objects.equals(estate, that.estate) &&
-                Objects.equals(amenity, that.amenity);
+        if (!(o instanceof AmenitiesEstateJpaId that)) return false;
+        return Objects.equals(estate, that.estate) && Objects.equals(amenity, that.amenity);
     }
 
     @Override

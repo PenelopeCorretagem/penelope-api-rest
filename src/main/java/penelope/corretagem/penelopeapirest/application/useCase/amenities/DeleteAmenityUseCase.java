@@ -1,22 +1,28 @@
 package penelope.corretagem.penelopeapirest.application.useCase.amenities;
 
 import org.springframework.stereotype.Service;
-import penelope.corretagem.penelopeapirest.infrastructure.adapter.AmenitiesRepositoryAdapter;
+import penelope.corretagem.penelopeapirest.core.amenities.repository.IAmenitiesRepository;
+import penelope.corretagem.penelopeapirest.core.exception.DomainValidationException;
+import penelope.corretagem.penelopeapirest.core.exception.ResourceNotFoundException;
 
 @Service
 public class DeleteAmenityUseCase {
 
-    private final AmenitiesRepositoryAdapter amenitiesRepositoryAdapter;
+    private final IAmenitiesRepository amenitiesRepository;
 
-    public DeleteAmenityUseCase(AmenitiesRepositoryAdapter amenitiesRepositoryAdapter) {
-        this.amenitiesRepositoryAdapter = amenitiesRepositoryAdapter;
+    public DeleteAmenityUseCase(IAmenitiesRepository amenitiesRepository) {
+        this.amenitiesRepository = amenitiesRepository;
     }
 
     public void execute(Long id) {
-        if (!amenitiesRepositoryAdapter.existsById(id)) {
-            throw new RuntimeException("Diferencial nao encontrado");
+        if (id == null || id <= 0) {
+            throw new DomainValidationException("ID da amenidade inválido");
         }
 
-        amenitiesRepositoryAdapter.deleteById(id);
+        if (!amenitiesRepository.existsById(id)) {
+            throw new ResourceNotFoundException("Diferencial não encontrado");
+        }
+
+        amenitiesRepository.deleteById(id);
     }
 }

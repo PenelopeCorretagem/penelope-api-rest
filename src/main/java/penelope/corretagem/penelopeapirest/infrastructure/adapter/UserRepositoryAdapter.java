@@ -1,6 +1,7 @@
 package penelope.corretagem.penelopeapirest.infrastructure.adapter;
 
 import org.springframework.stereotype.Component;
+import penelope.corretagem.penelopeapirest.core.exception.ResourceNotFoundException;
 import penelope.corretagem.penelopeapirest.core.user.User;
 import penelope.corretagem.penelopeapirest.core.user.repository.IUserRepository;
 import penelope.corretagem.penelopeapirest.infrastructure.mapper.UserInfrastructureMapper;
@@ -51,7 +52,7 @@ public class UserRepositoryAdapter implements IUserRepository {
     @Override
     public User update(User user) {
         var existingEntity = jpaRepository.findById(user.getId())
-                .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+                .orElseThrow(() -> new ResourceNotFoundException("Usuário não encontrado"));
 
         existingEntity.setName(user.getName());
         existingEntity.setEmail(user.getEmail());

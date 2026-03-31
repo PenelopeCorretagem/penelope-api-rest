@@ -1,7 +1,7 @@
 package penelope.corretagem.penelopeapirest.core.advertisement.repository;
 
 import penelope.corretagem.penelopeapirest.core.advertisement.Advertisement;
-import penelope.corretagem.penelopeapirest.application.dto.AdvertisementFilterRequest;
+import penelope.corretagem.penelopeapirest.core.advertisement.AdvertisementFilter;
 import java.util.List;
 import java.util.Optional;
 
@@ -17,5 +17,5 @@ public interface IAdvertisementRepository {
     Optional<Advertisement> findTopByOrderByCreatedAtDesc();
     Advertisement findByEstateId(Long estateId);
     List<Advertisement> findExpiredActiveAdvertisements();
-    List<Advertisement> findAll(AdvertisementFilterRequest filter);
+    List<Advertisement> findAll(AdvertisementFilter filter);
 }

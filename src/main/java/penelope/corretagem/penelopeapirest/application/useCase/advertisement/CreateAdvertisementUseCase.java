@@ -2,7 +2,6 @@ package penelope.corretagem.penelopeapirest.application.useCase.advertisement;
 
 import org.springframework.stereotype.Service;
 import penelope.corretagem.penelopeapirest.application.dto.AdvertisementCreateRequest;
-import penelope.corretagem.penelopeapirest.application.dto.EstateCreateRequest;
 import penelope.corretagem.penelopeapirest.core.address.Address;
 import penelope.corretagem.penelopeapirest.core.advertisement.Advertisement;
 import penelope.corretagem.penelopeapirest.core.advertisement.repository.IAdvertisementRepository;
@@ -11,7 +10,9 @@ import penelope.corretagem.penelopeapirest.core.amenities.AmenitiesEstate;
 import penelope.corretagem.penelopeapirest.core.estate.Estate;
 import penelope.corretagem.penelopeapirest.core.estate.ImageEstate;
 import penelope.corretagem.penelopeapirest.core.estate.ImageEstateType;
+import penelope.corretagem.penelopeapirest.core.exception.DomainValidationException;
 import penelope.corretagem.penelopeapirest.core.gateway.IEventTypeGateway;
+import penelope.corretagem.penelopeapirest.core.exception.ResourceNotFoundException;
 import penelope.corretagem.penelopeapirest.core.user.User;
 import penelope.corretagem.penelopeapirest.core.user.repository.IUserRepository;
 
@@ -36,13 +37,25 @@ public class CreateAdvertisementUseCase {
 
     public Advertisement execute(AdvertisementCreateRequest request) {
 
+                if (request == null) {
+                        throw new DomainValidationException("Requisição de criação do anúncio é obrigatória");
+                }
+
+                if (request.creatorId() == null || request.responsibleId() == null) {
+                        throw new DomainValidationException("IDs de criador e responsável são obrigatórios");
+                }
+
+                if (request.estate() == null || request.estate().address() == null) {
+                        throw new DomainValidationException("Dados do imóvel e endereço são obrigatórios");
+                }
+
         var estateRequest = request.estate();
 
         User creator = userRepository.findById(request.creatorId())
-                .orElseThrow(() -> new RuntimeException("Usuário criador não encontrado"));
+                                .orElseThrow(() -> new ResourceNotFoundException("Usuário criador não encontrado"));
 
         User responsible = userRepository.findById(request.responsibleId())
-                .orElseThrow(() -> new RuntimeException("Usuário responsável não encontrado"));
+                                .orElseThrow(() -> new ResourceNotFoundException("Usuário responsável não encontrado"));
 
         String cleanZipCode = estateRequest.address().zipCode() != null
                 ? estateRequest.address().zipCode().replaceAll("[^0-9]", "")
@@ -112,7 +125,7 @@ public class CreateAdvertisementUseCase {
                 estateRequest.description(),
                 estateRequest.area(),
                 estateRequest.numberOfRooms(),
-                Estate.Type.valueOf(estateRequest.type()),
+                parseEstateType(estateRequest.type()),
                 address,
                 standAddress,
                 domainImages,
@@ -131,4 +144,16 @@ public class CreateAdvertisementUseCase {
 
         return advertisementRepository.save(advertisement);
     }
+
+        private Estate.Type parseEstateType(String type) {
+                if (type == null || type.isBlank()) {
+                        throw new DomainValidationException("Tipo do imóvel é obrigatório");
+                }
+
+                try {
+                        return Estate.Type.valueOf(type.toUpperCase());
+                } catch (IllegalArgumentException ex) {
+                        throw new DomainValidationException("Tipo do imóvel inválido: " + type);
+                }
+        }
 }

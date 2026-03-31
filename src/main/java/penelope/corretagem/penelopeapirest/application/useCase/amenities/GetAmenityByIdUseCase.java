@@ -2,21 +2,26 @@ package penelope.corretagem.penelopeapirest.application.useCase.amenities;
 
 import org.springframework.stereotype.Service;
 import penelope.corretagem.penelopeapirest.application.dto.AmenitiesResponse;
-import penelope.corretagem.penelopeapirest.infrastructure.adapter.AmenitiesRepositoryAdapter;
+import penelope.corretagem.penelopeapirest.core.amenities.repository.IAmenitiesRepository;
+import penelope.corretagem.penelopeapirest.core.exception.DomainValidationException;
+import penelope.corretagem.penelopeapirest.core.exception.ResourceNotFoundException;
 
 @Service
 public class GetAmenityByIdUseCase {
 
-    private final AmenitiesRepositoryAdapter repository;
+    private final IAmenitiesRepository repository;
 
-    public GetAmenityByIdUseCase(AmenitiesRepositoryAdapter repository) {
+    public GetAmenityByIdUseCase(IAmenitiesRepository repository) {
         this.repository = repository;
     }
 
     public AmenitiesResponse execute(Long id) {
+        if (id == null || id <= 0) {
+            throw new DomainValidationException("ID da amenidade inválido");
+        }
 
         var amenity = repository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Amenidade não encontrada"));
+                .orElseThrow(() -> new ResourceNotFoundException("Amenidade não encontrada"));
 
         return AmenitiesResponse.fromDomain(amenity);
     }
