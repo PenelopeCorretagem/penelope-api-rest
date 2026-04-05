@@ -1,11 +1,9 @@
 package penelope.corretagem.penelopeapirest.infrastructure.web;
 
 import jakarta.validation.Valid;
-import org.hibernate.sql.Update;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import penelope.corretagem.penelopeapirest.application.dto.AdvertisementResponse;
 import penelope.corretagem.penelopeapirest.application.dto.AmenitiesResponse;
 import penelope.corretagem.penelopeapirest.application.dto.CreateAmenityRequest;
 import penelope.corretagem.penelopeapirest.application.dto.UpdateAmenityRequest;

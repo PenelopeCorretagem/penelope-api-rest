@@ -11,7 +11,7 @@ import java.io.IOException;
 import java.util.List;
 
 @RestController
-@RequestMapping("/imagens")
+@RequestMapping("/images")
 public class ImageUploadController {
 
     private final UploadImagesUseCase uploadImagesUseCase;

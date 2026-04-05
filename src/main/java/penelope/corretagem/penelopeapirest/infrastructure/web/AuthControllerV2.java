@@ -1,5 +1,6 @@
 package penelope.corretagem.penelopeapirest.infrastructure.web;
 
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -38,7 +39,7 @@ public class AuthControllerV2 {
     }
 
     @PostMapping("/validate-reset-token")
-    public ResponseEntity<Map<String, String>> validateToken(@RequestBody ValidateTokenRequest request) {
+    public ResponseEntity<Map<String, String>> validateToken(@Valid @RequestBody ValidateTokenRequest request) {
 
         validatePasswordResetTokenUseCase.execute(request.token());
 

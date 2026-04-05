@@ -14,7 +14,6 @@ import java.util.Optional;
 public interface IAdvertisementJpaRepository extends JpaRepository<AdvertisementJpaEntity, Long>, JpaSpecificationExecutor<AdvertisementJpaEntity> {
 
     // Lista o ultimo anuncio cadastrado
-    @Query("SELECT a FROM AdvertisementJpaEntity a ORDER BY a.createdAt DESC Limit 1")
     Optional<AdvertisementJpaEntity> findTopByOrderByCreatedAtDesc();
 
     // Lista um anuncio pelo ID trazendo todas as relações (Ajuste os nomes das propriedades conforme sua EstateEntity)

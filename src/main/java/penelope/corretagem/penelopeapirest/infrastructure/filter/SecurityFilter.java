@@ -5,26 +5,23 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 import penelope.corretagem.penelopeapirest.core.gateway.ITokenGateway;
-import penelope.corretagem.penelopeapirest.core.user.repository.IUserRepository;
 
 import java.io.IOException;
-import java.util.Collections;
+import java.util.List;
+import java.util.Locale;
 
 @Component
 public class SecurityFilter extends OncePerRequestFilter {
 
     private final ITokenGateway tokenGateway;
-    private final IUserRepository userRepository;
 
-    public SecurityFilter(ITokenGateway tokenGateway, IUserRepository userRepository) {
+    public SecurityFilter(ITokenGateway tokenGateway) {
         this.tokenGateway = tokenGateway;
-        this.userRepository = userRepository;
     }
 
     @Override
@@ -35,19 +32,18 @@ public class SecurityFilter extends OncePerRequestFilter {
 
         if (token != null) {
             var email = tokenGateway.getEmailFromToken(token);
+            var accessLevel = tokenGateway.getAccessLevelFromToken(token);
 
-            if (email != null) {
-                userRepository.findByEmail(email).ifPresent(user -> {
-                    UserDetails userDetails = new User(user.getEmail(), user.getPassword(), Collections.emptyList());
+            if (email != null && !email.isBlank() && accessLevel != null && !accessLevel.isBlank()) {
+                var authority = new SimpleGrantedAuthority("ROLE_" + accessLevel.toUpperCase(Locale.ROOT));
 
-                    var authentication = new UsernamePasswordAuthenticationToken(
-                            user,
-                            null,
-                            userDetails.getAuthorities()
-                    );
+                var authentication = new UsernamePasswordAuthenticationToken(
+                        email,
+                        null,
+                        List.of(authority)
+                );
 
-                    SecurityContextHolder.getContext().setAuthentication(authentication);
-                });
+                SecurityContextHolder.getContext().setAuthentication(authentication);
             }
         }
         filterChain.doFilter(request, response);
@@ -55,7 +51,7 @@ public class SecurityFilter extends OncePerRequestFilter {
 
     private String recoverToken(HttpServletRequest request) {
         var authHeader = request.getHeader("Authorization");
-        if (authHeader == null) return null;
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) return null;
         return authHeader.replace("Bearer ", "");
     }
 }

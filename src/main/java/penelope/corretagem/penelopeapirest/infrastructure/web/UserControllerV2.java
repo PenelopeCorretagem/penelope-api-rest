@@ -4,7 +4,6 @@ import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import penelope.corretagem.penelopeapirest.application.dto.ForgotPasswordRequest;
-import penelope.corretagem.penelopeapirest.application.dto.ResetPasswordRequest;
 import penelope.corretagem.penelopeapirest.application.dto.UserAuthInfoResponse;
 import penelope.corretagem.penelopeapirest.application.useCase.user.*;
 import penelope.corretagem.penelopeapirest.application.dto.UserRequest;
@@ -77,7 +76,7 @@ public class UserControllerV2 {
         return ResponseEntity.ok(responseBody);
     }
 
-    @GetMapping("/me")
+    @GetMapping("/profile")
     public ResponseEntity<UserAuthInfoResponse> getUserAuthInfo(@RequestHeader("Authorization") String tokenHeader) {
 
         String rawToken = tokenHeader.replace("Bearer ", "");

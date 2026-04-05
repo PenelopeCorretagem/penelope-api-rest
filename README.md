@@ -81,7 +81,7 @@ Este documento lista as modificações realizadas nos principais arquivos do pro
 - Uso do **MapStruct** para mapear entre DTOs e entidade.
 - Métodos declarados:
     - `toUserEntity(UserRequest userRequest)`
-    - `toUserResponse(UserEntity user)`
+    - `toUserResponse(UserJpaEntity user)`
 - Anotação:
     - `@Mapper(componentModel = "spring")` – Permite injeção automática via Spring
 

@@ -4,6 +4,7 @@ import penelope.corretagem.penelopeapirest.core.gateway.IPasswordEncoderGateway;
 import penelope.corretagem.penelopeapirest.core.exception.DomainValidationException;
 import penelope.corretagem.penelopeapirest.core.user.User;
 import penelope.corretagem.penelopeapirest.core.user.repository.IUserRepository;
+import penelope.corretagem.penelopeapirest.core.user.valueObject.AccessLevel;
 import penelope.corretagem.penelopeapirest.application.dto.UserRequest;
 import penelope.corretagem.penelopeapirest.application.dto.UserResponse;
 
@@ -19,11 +20,23 @@ public class CreateUserUseCase {
 
     public UserResponse execute(UserRequest request) {
 
+        if (request == null) {
+            throw new DomainValidationException("Dados do usuario sao obrigatorios");
+        }
+
+        if (request.email() == null || request.email().isBlank()) {
+            throw new DomainValidationException("O e-mail e obrigatorio");
+        }
+
+        if (request.accessLevel() == null) {
+            throw new DomainValidationException("O nivel de acesso e obrigatorio");
+        }
+
         if (userRepository.findByEmail(request.email()).isPresent()) {
             throw new DomainValidationException("O e-mail informado já está cadastrado");
         }
 
-        if (request.creci() != null && request.accessLevel().toString().equalsIgnoreCase("CLIENTE")) {
+        if (request.creci() != null && request.accessLevel() == AccessLevel.CLIENTE) {
             throw new DomainValidationException("Clientes não devem possuir Creci");
         }
 
