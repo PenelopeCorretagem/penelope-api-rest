@@ -1,6 +1,5 @@
 package penelope.corretagem.penelopeapirest.config;
 
-import org.springframework.amqp.core.*;
 import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
 import org.springframework.amqp.support.converter.MessageConverter;
 import org.springframework.context.annotation.Bean;
@@ -17,7 +16,7 @@ public class RabbitMQConfig {
   }
 
   @Bean
-  public TopicExchange domainExchange() {
-    return new TopicExchange(EXCHANGE_NAME);
+  public org.springframework.amqp.core.TopicExchange domainExchange() {
+    return new org.springframework.amqp.core.TopicExchange(EXCHANGE_NAME);
   }
 }
