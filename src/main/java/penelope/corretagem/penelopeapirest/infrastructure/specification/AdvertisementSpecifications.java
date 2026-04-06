@@ -16,7 +16,7 @@ public class AdvertisementSpecifications {
 
             String cidadeNormalizada = normalize(cidade);
             return cb.equal(
-                    cb.lower(root.get("property").get("address").get("city")),
+                    cb.lower(root.get("estate").get("address").get("city")),
                     cidadeNormalizada
             );
         };
@@ -28,7 +28,7 @@ public class AdvertisementSpecifications {
 
             String regiaoNormalizada = normalize(regiao);
             return cb.equal(
-                    cb.lower(root.get("property").get("address").get("region")),
+                    cb.lower(root.get("estate").get("address").get("region")),
                     regiaoNormalizada
             );
         };
@@ -36,27 +36,27 @@ public class AdvertisementSpecifications {
 
     public static Specification<AdvertisementJpaEntity> hasTipo(Estate.Type tipo) {
         return (root, query, cb) -> tipo == null ? null :
-                cb.equal(root.get("property").get("type"), tipo);
+                cb.equal(root.get("estate").get("type"), tipo);
     }
 
     public static Specification<AdvertisementJpaEntity> hasQuartos(Integer quartos) {
         return (root, query, cb) -> quartos == null ? null :
-                cb.equal(root.get("property").get("numberOfRooms"), quartos);
+                cb.equal(root.get("estate").get("numberOfRooms"), quartos);
     }
 
     public static Specification<AdvertisementJpaEntity> hasArea(Double area) {
         return (root, query, cb) -> area == null ? null :
-                cb.equal(root.get("property").get("area"), area);
+                cb.equal(root.get("estate").get("area"), area);
     }
 
     public static Specification<AdvertisementJpaEntity> hasTitulo(String titulo) {
         return (root, query, cb) -> titulo == null ? null :
-                cb.equal(root.get("property").get("title"), titulo);
+                cb.equal(root.get("estate").get("title"), titulo);
     }
 
     public static Specification<AdvertisementJpaEntity> hasDescricao(String descricao) {
         return (root, query, cb) -> descricao == null ? null :
-                cb.equal(root.get("property").get("description"), descricao);
+                cb.equal(root.get("estate").get("description"), descricao);
     }
 
     public static Specification<AdvertisementJpaEntity> isActive(Boolean active) {
