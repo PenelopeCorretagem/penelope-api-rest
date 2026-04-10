@@ -1,6 +1,6 @@
 server:
   servlet:
-    context-path: /api/v1
+    context-path: /api
   tomcat:
     max-http-form-post-size: 20MB
   port: ${PRODUCER_PORT:8080}

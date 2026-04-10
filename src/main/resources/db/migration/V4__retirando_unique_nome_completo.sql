@@ -1,0 +1,1 @@
+ALTER TABLE usuario MODIFY COLUMN nome_completo VARCHAR(50) NOT NULL;

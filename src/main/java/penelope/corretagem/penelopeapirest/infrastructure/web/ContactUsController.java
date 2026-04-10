@@ -6,12 +6,12 @@ import penelope.corretagem.penelopeapirest.application.dto.ContactUsRequest;
 import penelope.corretagem.penelopeapirest.application.useCase.email.SendContactEmailUseCase;
 
 @RestController
-@RequestMapping("/contact-us")
-public class ContactUsControllerV2 {
+@RequestMapping("/v1/contact-us")
+public class ContactUsController {
 
     private final SendContactEmailUseCase sendContactEmailUseCase;
 
-    public ContactUsControllerV2(SendContactEmailUseCase sendContactEmailUseCase) {
+    public ContactUsController(SendContactEmailUseCase sendContactEmailUseCase) {
         this.sendContactEmailUseCase = sendContactEmailUseCase;
     }
 

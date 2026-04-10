@@ -12,8 +12,8 @@ import penelope.corretagem.penelopeapirest.application.useCase.amenities.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/amenities")
-public class AmenitiesControllerV2 {
+@RequestMapping("/v1/amenities")
+public class AmenitiesController {
 
     private final GetAllAmenitiesUseCase getAllAmenitiesUseCase;
     private final GetAmenityByIdUseCase getAmenityByIdUseCase;
@@ -21,7 +21,7 @@ public class AmenitiesControllerV2 {
     private final UpdateAmenityUseCase updateAmenityUseCase;
     private final DeleteAmenityUseCase deleteAmenityUseCase;
 
-    public AmenitiesControllerV2(GetAllAmenitiesUseCase getAllAmenitiesUseCase, GetAmenityByIdUseCase getAmenityByIdUseCase, CreateAmenityUseCase createAmenityUseCase, UpdateAmenityUseCase updateAmenityUseCase, DeleteAmenityUseCase deleteAmenityUseCase) {
+    public AmenitiesController(GetAllAmenitiesUseCase getAllAmenitiesUseCase, GetAmenityByIdUseCase getAmenityByIdUseCase, CreateAmenityUseCase createAmenityUseCase, UpdateAmenityUseCase updateAmenityUseCase, DeleteAmenityUseCase deleteAmenityUseCase) {
         this.getAllAmenitiesUseCase = getAllAmenitiesUseCase;
         this.getAmenityByIdUseCase = getAmenityByIdUseCase;
         this.createAmenityUseCase = createAmenityUseCase;

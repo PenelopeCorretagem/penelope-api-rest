@@ -10,9 +10,9 @@ import penelope.corretagem.penelopeapirest.application.useCase.advertisement.*;
 import java.util.List;
 import java.util.Map;
 
-@RestController("advertisementControllerV2")
-@RequestMapping("/advertisements")
-public class AdvertisementControllerV2 {
+@RestController
+@RequestMapping("/v1/advertisements")
+public class AdvertisementController {
 
     private final GetAdvertisementByIdUseCase getAdvertisementByIdUseCase;
     private final GetAllAdvertisementsUseCase getAllAdvertisementsUseCase;
@@ -22,7 +22,7 @@ public class AdvertisementControllerV2 {
     private final UpdateAdvertisementUseCase updateAdvertisementUseCase;
     private final ChangeAdvertisementStatusUseCase changeAdvertisementStatusUseCase;
 
-    public AdvertisementControllerV2(
+    public AdvertisementController(
             GetAdvertisementByIdUseCase getAdvertisementByIdUseCase,
             GetAllAdvertisementsUseCase getAllAdvertisementsUseCase, GetAdvertisementByEstateIdUseCase getAdvertisementByEstateIdUseCase, GetLatestAdvertisementUseCase getLatestAdvertisementUseCase, CreateAdvertisementUseCase createAdvertisementUseCase, UpdateAdvertisementUseCase updateAdvertisementUseCase, ChangeAdvertisementStatusUseCase changeAdvertisementStatusUseCase
     ) {
