@@ -17,16 +17,16 @@ import penelope.corretagem.penelopeapirest.application.useCase.user.ValidatePass
 import java.util.Map;
 
 @RestController
-@RequestMapping("/auth")
-public class AuthControllerV2 {
+@RequestMapping("/v1/auth")
+public class AuthController {
 
     private final AuthenticateUserUseCase authenticateUserUseCase;
     private final ValidatePasswordResetTokenUseCase validatePasswordResetTokenUseCase;
     private final ResetPasswordUseCase resetPasswordUseCase;
 
-    public AuthControllerV2(AuthenticateUserUseCase authenticateUserUseCase,
-                            ValidatePasswordResetTokenUseCase validatePasswordResetTokenUseCase,
-                            ResetPasswordUseCase resetPasswordUseCase) {
+    public AuthController(AuthenticateUserUseCase authenticateUserUseCase,
+                          ValidatePasswordResetTokenUseCase validatePasswordResetTokenUseCase,
+                          ResetPasswordUseCase resetPasswordUseCase) {
         this.authenticateUserUseCase = authenticateUserUseCase;
         this.validatePasswordResetTokenUseCase = validatePasswordResetTokenUseCase;
         this.resetPasswordUseCase = resetPasswordUseCase;

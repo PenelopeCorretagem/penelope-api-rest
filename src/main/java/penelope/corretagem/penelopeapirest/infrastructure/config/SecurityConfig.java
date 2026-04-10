@@ -36,20 +36,20 @@ public class SecurityConfig {
     }
 
     private static final String[] AUTH_WHITELIST = {
-            "/auth/**",
+            "/v1/auth/**",
             "/error",
-            "/contact-us",
+            "/v1/contact-us",
             "/swagger-ui/**",
             "/api-docs/**",
 
-            "/users/forgot-password",
-            "/users/reset-password",
-            "/users/validate-reset-token",
+            "/v1/users/forgot-password",
+            "/v1/users/reset-password",
+            "/v1/users/validate-reset-token",
 
-            "/auth/login",
+            "/v1/auth/login",
 
-            "/advertisements",
-            "/advertisements/{id}"
+            "/v1/advertisements",
+            "/v1/advertisements/{id}"
     };
 
     @Bean

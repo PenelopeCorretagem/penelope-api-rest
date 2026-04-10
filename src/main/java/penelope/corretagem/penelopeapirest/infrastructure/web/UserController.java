@@ -14,8 +14,8 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/users")
-public class UserControllerV2 {
+@RequestMapping("/v1/users")
+public class UserController {
 
     private final GetAllUsersUseCase getAllUsersUseCase;
     private final GetUserAuthInfoUseCase getUserAuthInfoUseCase;
@@ -25,7 +25,7 @@ public class UserControllerV2 {
     private final DeleteUserUseCase deleteUserUseCase;
     private final GeneratePasswordResetTokenUseCase generatePasswordResetTokenUseCase;
 
-    public UserControllerV2(GetAllUsersUseCase getAllUsersUseCase, GetUserAuthInfoUseCase getUserAuthInfoUseCase, GetUserByIdUseCase getUserByIdUseCase, CreateUserUseCase createUserUseCase, UpdateUserUseCase updateUserUseCase, DeleteUserUseCase deleteUserUseCase, GeneratePasswordResetTokenUseCase generatePasswordResetTokenUseCase, ResetPasswordUseCase resetPasswordUseCase) {
+    public UserController(GetAllUsersUseCase getAllUsersUseCase, GetUserAuthInfoUseCase getUserAuthInfoUseCase, GetUserByIdUseCase getUserByIdUseCase, CreateUserUseCase createUserUseCase, UpdateUserUseCase updateUserUseCase, DeleteUserUseCase deleteUserUseCase, GeneratePasswordResetTokenUseCase generatePasswordResetTokenUseCase, ResetPasswordUseCase resetPasswordUseCase) {
         this.getAllUsersUseCase = getAllUsersUseCase;
         this.getUserAuthInfoUseCase = getUserAuthInfoUseCase;
         this.getUserByIdUseCase = getUserByIdUseCase;
