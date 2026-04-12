@@ -10,8 +10,8 @@ import penelope.corretagem.penelopeapirest.core.estate.Estate;
 import penelope.corretagem.penelopeapirest.core.estate.ImageEstate;
 import penelope.corretagem.penelopeapirest.core.estate.ImageEstateType;
 import penelope.corretagem.penelopeapirest.core.exception.DomainValidationException;
-import penelope.corretagem.penelopeapirest.core.gateway.IEventTypeGateway;
 import penelope.corretagem.penelopeapirest.core.exception.ResourceNotFoundException;
+import penelope.corretagem.penelopeapirest.core.gateway.IEstateEventPublisherGateway;
 import penelope.corretagem.penelopeapirest.core.user.User;
 import penelope.corretagem.penelopeapirest.core.user.repository.IUserRepository;
 
@@ -22,15 +22,16 @@ public class CreateAdvertisementUseCase {
 
     private final IAdvertisementRepository advertisementRepository;
     private final IUserRepository userRepository;
-    private final IEventTypeGateway eventTypeGateway;
+    private final IEstateEventPublisherGateway estateEventPublisher;
 
     public CreateAdvertisementUseCase(
             IAdvertisementRepository advertisementRepository,
-            IUserRepository userRepository, IEventTypeGateway eventTypeGateway
+            IUserRepository userRepository,
+            IEstateEventPublisherGateway estateEventPublisher
     ) {
         this.advertisementRepository = advertisementRepository;
         this.userRepository = userRepository;
-        this.eventTypeGateway = eventTypeGateway;
+        this.estateEventPublisher = estateEventPublisher;
     }
 
     public Advertisement execute(AdvertisementCreateRequest request) {
@@ -130,17 +131,16 @@ public class CreateAdvertisementUseCase {
                 domainAmenities
         );
 
-        var eventTypeDomain = eventTypeGateway.generateForEstate(estate);
-
         var advertisement = Advertisement.createNew(
                 estate,
                 creator,
                 responsible,
-                eventTypeDomain,
                 request.endDate()
         );
 
-        return advertisementRepository.save(advertisement);
+        var savedAdvertisement = advertisementRepository.save(advertisement);
+        estateEventPublisher.publishEstateCreated(savedAdvertisement.getEstate(), savedAdvertisement.getId());
+        return savedAdvertisement;
     }
 
         private Estate.Type parseEstateType(String type) {

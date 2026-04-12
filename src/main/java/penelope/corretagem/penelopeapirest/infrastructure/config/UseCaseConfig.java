@@ -29,7 +29,7 @@ import penelope.corretagem.penelopeapirest.application.useCase.user.ValidatePass
 import penelope.corretagem.penelopeapirest.core.advertisement.repository.IAdvertisementRepository;
 import penelope.corretagem.penelopeapirest.core.amenities.repository.IAmenitiesRepository;
 import penelope.corretagem.penelopeapirest.core.gateway.IEmailGateway;
-import penelope.corretagem.penelopeapirest.core.gateway.IEventTypeGateway;
+import penelope.corretagem.penelopeapirest.core.gateway.IEstateEventPublisherGateway;
 import penelope.corretagem.penelopeapirest.core.gateway.IImageStorageGateway;
 import penelope.corretagem.penelopeapirest.core.gateway.IPasswordEncoderGateway;
 import penelope.corretagem.penelopeapirest.core.gateway.ITokenGateway;
@@ -47,9 +47,9 @@ public class UseCaseConfig {
     public CreateAdvertisementUseCase createAdvertisementUseCase(
             IAdvertisementRepository advertisementRepository,
             IUserRepository userRepository,
-            IEventTypeGateway eventTypeGateway
+            IEstateEventPublisherGateway estateEventPublisher
     ) {
-        return new CreateAdvertisementUseCase(advertisementRepository, userRepository, eventTypeGateway);
+        return new CreateAdvertisementUseCase(advertisementRepository, userRepository, estateEventPublisher);
     }
 
     @Bean
@@ -75,10 +75,10 @@ public class UseCaseConfig {
     @Bean
     public UpdateAdvertisementUseCase updateAdvertisementUseCase(
             IAdvertisementRepository advertisementRepository,
-            IEventTypeGateway eventTypeGateway,
+            IEstateEventPublisherGateway estateEventPublisher,
             IUserRepository userRepository
     ) {
-        return new UpdateAdvertisementUseCase(advertisementRepository, eventTypeGateway, userRepository);
+        return new UpdateAdvertisementUseCase(advertisementRepository, estateEventPublisher, userRepository);
     }
 
     @Bean

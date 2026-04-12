@@ -44,8 +44,4 @@ public class AdvertisementJpaEntity {
 
     @Column(name = "data_criacao")
     private LocalDateTime createdAt;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "fk_tipo_evento")
-    private EventTypeJpaEntity eventType;
 }
