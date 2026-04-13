@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping({"/v1/users", "/v1/usuarios"})
+@RequestMapping({"/v1/users"})
 public class UserController {
 
     private final GetAllUsersUseCase getAllUsersUseCase;
