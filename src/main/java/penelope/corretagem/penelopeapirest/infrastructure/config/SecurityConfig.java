@@ -68,9 +68,9 @@ public class SecurityConfig {
                     authorize
                             .requestMatchers(AUTH_WHITELIST).permitAll()
                             // Permite criar usuário sem estar logado
-                            .requestMatchers(antMatcher(HttpMethod.POST, "/users")).permitAll()
+                            .requestMatchers(antMatcher(HttpMethod.POST, "/v1/users")).permitAll()
                             // Permite ver anúncios sem estar logado
-                            .requestMatchers(antMatcher(HttpMethod.GET, "/advertisements/**")).permitAll()
+                            .requestMatchers(antMatcher(HttpMethod.GET, "/v1/advertisements/**")).permitAll()
                             .anyRequest().authenticated();
                 })
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)

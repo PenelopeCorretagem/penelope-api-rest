@@ -11,6 +11,8 @@ public interface IAdvertisementRepository {
     Advertisement save(Advertisement advertisement);
     void updateStatus(Long id, Boolean active);
     Advertisement update(Advertisement advertisement);
+    boolean existsByEstateTitle(String title);
+    boolean existsByEstateTitleAndIdNot(String title, Long advertisementId);
 
     // Leituras
     Optional<Advertisement> findById(Long id);

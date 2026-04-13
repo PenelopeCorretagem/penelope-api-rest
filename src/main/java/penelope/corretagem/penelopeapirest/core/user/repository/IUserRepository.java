@@ -10,6 +10,8 @@ public interface IUserRepository {
     List<User> findAll();
     Optional<User> findById(Long id);
     Optional<User> findByEmail(String email);
+    Optional<User> findByCpf(String cpf);
+    Optional<User> findByCreci(String creci);
 
     User save(User user);
     User update(User user);

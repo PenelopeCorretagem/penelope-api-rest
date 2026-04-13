@@ -132,6 +132,16 @@ public class AdvertisementRepositoryAdapter implements IAdvertisementRepository 
     }
 
     @Override
+    public boolean existsByEstateTitle(String title) {
+        return jpaRepository.existsByEstateTitleIgnoreCase(title);
+    }
+
+    @Override
+    public boolean existsByEstateTitleAndIdNot(String title, Long advertisementId) {
+        return jpaRepository.existsByEstateTitleIgnoreCaseAndIdNot(title, advertisementId);
+    }
+
+    @Override
     @Transactional
     public Advertisement update(Advertisement advertisement) {
         AdvertisementJpaEntity existingEntity = jpaRepository.findById(advertisement.getId())

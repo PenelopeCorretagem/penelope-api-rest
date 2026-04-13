@@ -49,6 +49,15 @@ public class CreateAdvertisementUseCase {
 
         var estateRequest = request.estate();
 
+                String normalizedTitle = estateRequest.title() != null ? estateRequest.title().trim() : null;
+                if (normalizedTitle == null || normalizedTitle.isBlank()) {
+                        throw new DomainValidationException("Título do anúncio é obrigatório");
+                }
+
+                if (advertisementRepository.existsByEstateTitle(normalizedTitle)) {
+                        throw new DomainValidationException("Já existe anúncio com este título");
+                }
+
         User creator = userRepository.findById(request.creatorId())
                                 .orElseThrow(() -> new ResourceNotFoundException("Usuário criador não encontrado"));
 
@@ -119,7 +128,7 @@ public class CreateAdvertisementUseCase {
 
         var estate = Estate.createNew(
                 null,
-                estateRequest.title(),
+                normalizedTitle,
                 estateRequest.description(),
                 estateRequest.area(),
                 estateRequest.numberOfRooms(),

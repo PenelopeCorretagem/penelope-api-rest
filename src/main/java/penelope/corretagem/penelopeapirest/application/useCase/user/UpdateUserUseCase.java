@@ -1,5 +1,6 @@
 package penelope.corretagem.penelopeapirest.application.useCase.user;
 
+import penelope.corretagem.penelopeapirest.core.exception.DomainValidationException;
 import penelope.corretagem.penelopeapirest.core.exception.ResourceNotFoundException;
 import penelope.corretagem.penelopeapirest.core.gateway.IPasswordEncoderGateway;
 import penelope.corretagem.penelopeapirest.core.user.repository.IUserRepository;
@@ -21,10 +22,36 @@ public class UpdateUserUseCase {
         var user = userRepository.findById(id)
             .orElseThrow(() -> new ResourceNotFoundException("Usuário não encontrado"));
 
+        if (req.email() != null) {
+            userRepository.findByEmail(req.email())
+                    .filter(existingUser -> !existingUser.getId().equals(user.getId()))
+                    .ifPresent(existingUser -> {
+                        throw new DomainValidationException("O e-mail informado já está cadastrado");
+                    });
+        }
+
+        if (req.cpf() != null && !req.cpf().isBlank()) {
+            userRepository.findByCpf(req.cpf())
+                    .filter(existingUser -> !existingUser.getId().equals(user.getId()))
+                    .ifPresent(existingUser -> {
+                        throw new DomainValidationException("O CPF informado já está cadastrado");
+                    });
+        }
+
+        if (req.creci() != null && !req.creci().isBlank()) {
+            userRepository.findByCreci(req.creci())
+                    .filter(existingUser -> !existingUser.getId().equals(user.getId()))
+                    .ifPresent(existingUser -> {
+                        throw new DomainValidationException("O CRECI informado já está cadastrado");
+                    });
+        }
+
         user.updateInformation(
                 req.name(), req.email(), req.cpf(),
                 req.dateBirth(), req.monthlyIncome(), req.phone()
         );
+
+        user.updateAccessProfile(req.accessLevel(), req.creci());
 
         if (req.password() != null && !req.password().isBlank()) {
             user.changePassword(passwordEncoder.encode(req.password()));

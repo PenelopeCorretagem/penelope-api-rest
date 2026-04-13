@@ -3,14 +3,14 @@ server:
     context-path: /api
   tomcat:
     max-http-form-post-size: 20MB
-  port: ${PRODUCER_PORT:8080}
+  port: ${PRODUCER_PORT:8081}
 
 spring:
   application:
     name: penelope-api-rest
 
   profiles:
-    active: ${SPRING_PROFILES_ACTIVE:dev}
+    active: ${SPRING_PROFILES_ACTIVE}
 
   jackson:
     serialization:
@@ -78,6 +78,10 @@ app:
       - "http://localhost:3000" # dev
       - "http://localhost:3001" # homol
       - "http://localhost:3002" # prod
+
+auth-service:
+  api:
+    base-url: ${AUTH_SERVICE_BASE_URL:http://localhost:8082/api}
 
 calcom:
   api:

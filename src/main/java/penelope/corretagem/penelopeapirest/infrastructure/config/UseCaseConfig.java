@@ -28,6 +28,7 @@ import penelope.corretagem.penelopeapirest.application.useCase.user.UpdateUserUs
 import penelope.corretagem.penelopeapirest.application.useCase.user.ValidatePasswordResetTokenUseCase;
 import penelope.corretagem.penelopeapirest.core.advertisement.repository.IAdvertisementRepository;
 import penelope.corretagem.penelopeapirest.core.amenities.repository.IAmenitiesRepository;
+import penelope.corretagem.penelopeapirest.core.gateway.IAuthGateway;
 import penelope.corretagem.penelopeapirest.core.gateway.IEmailGateway;
 import penelope.corretagem.penelopeapirest.core.gateway.IEventTypeGateway;
 import penelope.corretagem.penelopeapirest.core.gateway.IImageStorageGateway;
@@ -107,12 +108,8 @@ public class UseCaseConfig {
     }
 
     @Bean
-    public AuthenticateUserUseCase authenticateUserUseCase(
-            IUserRepository userRepository,
-            IPasswordEncoderGateway passwordEncoderGateway,
-            ITokenGateway tokenGateway
-    ) {
-        return new AuthenticateUserUseCase(userRepository, passwordEncoderGateway, tokenGateway);
+    public AuthenticateUserUseCase authenticateUserUseCase(IAuthGateway authGateway) {
+        return new AuthenticateUserUseCase(authGateway);
     }
 
     @Bean
@@ -136,11 +133,8 @@ public class UseCaseConfig {
     }
 
     @Bean
-    public GeneratePasswordResetTokenUseCase generatePasswordResetTokenUseCase(
-            IUserRepository userRepository,
-            IEmailGateway emailGateway
-    ) {
-        return new GeneratePasswordResetTokenUseCase(userRepository, emailGateway);
+    public GeneratePasswordResetTokenUseCase generatePasswordResetTokenUseCase(IAuthGateway authGateway) {
+        return new GeneratePasswordResetTokenUseCase(authGateway);
     }
 
     @Bean
@@ -159,11 +153,8 @@ public class UseCaseConfig {
     }
 
     @Bean
-    public ResetPasswordUseCase resetPasswordUseCase(
-            IUserRepository userRepository,
-            IPasswordEncoderGateway passwordEncoder
-    ) {
-        return new ResetPasswordUseCase(userRepository, passwordEncoder);
+    public ResetPasswordUseCase resetPasswordUseCase(IAuthGateway authGateway) {
+        return new ResetPasswordUseCase(authGateway);
     }
 
     @Bean
@@ -175,7 +166,7 @@ public class UseCaseConfig {
     }
 
     @Bean
-    public ValidatePasswordResetTokenUseCase validatePasswordResetTokenUseCase(IUserRepository userRepository) {
-        return new ValidatePasswordResetTokenUseCase(userRepository);
+    public ValidatePasswordResetTokenUseCase validatePasswordResetTokenUseCase(IAuthGateway authGateway) {
+        return new ValidatePasswordResetTokenUseCase(authGateway);
     }
 }

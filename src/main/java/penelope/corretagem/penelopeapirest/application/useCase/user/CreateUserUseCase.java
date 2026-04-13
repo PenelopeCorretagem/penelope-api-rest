@@ -36,6 +36,14 @@ public class CreateUserUseCase {
             throw new DomainValidationException("O e-mail informado já está cadastrado");
         }
 
+        if (request.cpf() != null && !request.cpf().isBlank() && userRepository.findByCpf(request.cpf()).isPresent()) {
+            throw new DomainValidationException("O CPF informado já está cadastrado");
+        }
+
+        if (request.creci() != null && !request.creci().isBlank() && userRepository.findByCreci(request.creci()).isPresent()) {
+            throw new DomainValidationException("O CRECI informado já está cadastrado");
+        }
+
         if (request.creci() != null && request.accessLevel() == AccessLevel.CLIENTE) {
             throw new DomainValidationException("Clientes não devem possuir Creci");
         }
