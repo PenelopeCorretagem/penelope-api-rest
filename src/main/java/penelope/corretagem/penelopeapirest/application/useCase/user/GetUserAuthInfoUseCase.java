@@ -16,7 +16,8 @@ public class GetUserAuthInfoUseCase {
     }
 
     public UserAuthInfoResponse execute(String token) {
-        String email = tokenGateway.getEmailFromToken(token);
+        var tokenValidation = tokenGateway.validateToken(token);
+        String email = tokenValidation.email();
 
         var user = userRepository.findByEmail(email)
             .orElseThrow(() -> new ResourceNotFoundException("Usuário não encontrado"));

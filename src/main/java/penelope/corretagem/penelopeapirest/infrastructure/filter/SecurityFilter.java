@@ -9,6 +9,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
+import penelope.corretagem.penelopeapirest.core.exception.InvalidCredentialsException;
 import penelope.corretagem.penelopeapirest.core.gateway.ITokenGateway;
 
 import java.io.IOException;
@@ -31,19 +32,28 @@ public class SecurityFilter extends OncePerRequestFilter {
         var token = this.recoverToken(request);
 
         if (token != null) {
-            var email = tokenGateway.getEmailFromToken(token);
-            var accessLevel = tokenGateway.getAccessLevelFromToken(token);
+            try {
+                var tokenValidation = tokenGateway.validateToken(token);
 
-            if (email != null && !email.isBlank() && accessLevel != null && !accessLevel.isBlank()) {
-                var authority = new SimpleGrantedAuthority("ROLE_" + accessLevel.toUpperCase(Locale.ROOT));
+                if (tokenValidation.email() != null
+                        && !tokenValidation.email().isBlank()
+                        && tokenValidation.accessLevel() != null
+                        && !tokenValidation.accessLevel().isBlank()) {
+                    var authority = new SimpleGrantedAuthority(
+                            "ROLE_" + tokenValidation.accessLevel().toUpperCase(Locale.ROOT));
 
-                var authentication = new UsernamePasswordAuthenticationToken(
-                        email,
-                        null,
-                        List.of(authority)
-                );
+                    var authentication = new UsernamePasswordAuthenticationToken(
+                            tokenValidation.email(),
+                            null,
+                            List.of(authority)
+                    );
 
-                SecurityContextHolder.getContext().setAuthentication(authentication);
+                    SecurityContextHolder.getContext().setAuthentication(authentication);
+                }
+            } catch (InvalidCredentialsException ignored) {
+                SecurityContextHolder.clearContext();
+            } catch (RuntimeException ignored) {
+                SecurityContextHolder.clearContext();
             }
         }
         filterChain.doFilter(request, response);
