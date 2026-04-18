@@ -9,16 +9,13 @@ public class AdvertisementInfrastructureMapper {
 
     private final UserInfrastructureMapper userMapper;
     private final EstateInfrastructureMapper estateMapper;
-    private final EventTypeInfrastructureMapper eventTypeMapper;
 
     public AdvertisementInfrastructureMapper(
             UserInfrastructureMapper userMapper,
-            EstateInfrastructureMapper estateMapper,
-            EventTypeInfrastructureMapper eventTypeMapper
+            EstateInfrastructureMapper estateMapper
     ) {
         this.userMapper = userMapper;
         this.estateMapper = estateMapper;
-        this.eventTypeMapper = eventTypeMapper;
     }
 
     public Advertisement toDomain(AdvertisementJpaEntity jpaEntity) {
@@ -32,8 +29,7 @@ public class AdvertisementInfrastructureMapper {
                 jpaEntity.getActive(),
                 jpaEntity.getEmphasis(),
                 jpaEntity.getEndDate(),
-                jpaEntity.getCreatedAt(),
-                eventTypeMapper.toDomain(jpaEntity.getEventType())
+                jpaEntity.getCreatedAt()
         );
     }
 
@@ -48,7 +44,6 @@ public class AdvertisementInfrastructureMapper {
         entity.setEstate(estateEntity);
         entity.setCreator(userMapper.toEntity(domain.getCreator()));
         entity.setResponsible(userMapper.toEntity(domain.getResponsible()));
-        entity.setEventType(eventTypeMapper.toEntity(domain.getEventType()));
 
         entity.setActive(domain.getActive());
         entity.setEmphasis(domain.getEmphasis());

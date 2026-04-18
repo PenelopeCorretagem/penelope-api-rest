@@ -91,6 +91,9 @@ calcom:
     version-v2: 2024-08-13
   webhook:
     secret: ${CALCOM_WEBHOOK_SECRET}
+rabbitmq:
+  exchanges:
+    estate: ${RABBITMQ_EXCHANGE_ESTATE:estate.exchange}
 
 cloudinary:
   cloud-name: ${CLOUDINARY_CLOUD_NAME}

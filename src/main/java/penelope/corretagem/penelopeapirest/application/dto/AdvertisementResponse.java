@@ -13,8 +13,7 @@ public record AdvertisementResponse(
         LocalDate endDate,
         CreatorResponse creator,
         ResponsibleResponse responsible,
-        EstateResponse estate,
-        EventTypeResponse eventTypeId
+        EstateResponse estate
 ) {
     public static AdvertisementResponse fromDomain(Advertisement ad) {
         return new AdvertisementResponse(
@@ -25,8 +24,7 @@ public record AdvertisementResponse(
                 ad.getEndDate(),
                 CreatorResponse.fromDomain(ad.getCreator()),
                 ResponsibleResponse.fromDomain(ad.getResponsible()),
-                EstateResponse.fromDomain(ad.getEstate()),
-                EventTypeResponse.fromDomain(ad.getEventType())
+                EstateResponse.fromDomain(ad.getEstate())
         );
     }
 }

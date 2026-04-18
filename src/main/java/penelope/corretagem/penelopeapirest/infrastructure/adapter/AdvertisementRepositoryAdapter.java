@@ -15,7 +15,6 @@ import penelope.corretagem.penelopeapirest.infrastructure.repository.IAddressJpa
 import penelope.corretagem.penelopeapirest.infrastructure.repository.IAdvertisementJpaRepository;
 import penelope.corretagem.penelopeapirest.infrastructure.repository.IAmenitiesJpaRepository;
 import penelope.corretagem.penelopeapirest.infrastructure.repository.IEstateJpaRepository;
-import penelope.corretagem.penelopeapirest.infrastructure.repository.IEventTypeJpaRepository;
 import penelope.corretagem.penelopeapirest.infrastructure.specification.AdvertisementSpecifications;
 
 import java.util.List;
@@ -30,22 +29,19 @@ public class AdvertisementRepositoryAdapter implements IAdvertisementRepository 
     private final IEstateJpaRepository estateRepository;
     private final IAddressJpaRepository addressJpaRepository;
     private final IAmenitiesJpaRepository amenitiesJpaRepository;
-    private final IEventTypeJpaRepository eventTypeRepository;
 
     public AdvertisementRepositoryAdapter(
             IAdvertisementJpaRepository jpaRepository,
             AdvertisementInfrastructureMapper mapper,
             IEstateJpaRepository estateRepository,
             IAddressJpaRepository addressJpaRepository,
-            IAmenitiesJpaRepository amenitiesJpaRepository,
-            IEventTypeJpaRepository eventTypeRepository
+            IAmenitiesJpaRepository amenitiesJpaRepository
     ) {
         this.jpaRepository = jpaRepository;
         this.mapper = mapper;
         this.estateRepository = estateRepository;
         this.addressJpaRepository = addressJpaRepository;
         this.amenitiesJpaRepository = amenitiesJpaRepository;
-        this.eventTypeRepository = eventTypeRepository;
     }
 
     @Override
@@ -121,11 +117,6 @@ public class AdvertisementRepositoryAdapter implements IAdvertisementRepository 
         var savedEstate = estateRepository.saveAndFlush(estateEntity);
         jpaEntity.setEstate(savedEstate);
 
-        if (jpaEntity.getEventType() != null) {
-            var savedEventType = eventTypeRepository.saveAndFlush(jpaEntity.getEventType());
-            jpaEntity.setEventType(savedEventType);
-        }
-
         var savedAdvertisement = jpaRepository.save(jpaEntity);
 
         return mapper.toDomain(savedAdvertisement);
@@ -150,16 +141,6 @@ public class AdvertisementRepositoryAdapter implements IAdvertisementRepository 
         existingEntity.setActive(advertisement.getActive());
         existingEntity.setEmphasis(advertisement.getEmphasis());
         existingEntity.setEndDate(advertisement.getEndDate());
-
-        if (advertisement.getEventType() != null) {
-            var evEntity = new EventTypeJpaEntity();
-            evEntity.setId(advertisement.getEventType().getId());
-            evEntity.setTitle(advertisement.getEventType().getTitle());
-            evEntity.setSlug(advertisement.getEventType().getSlug());
-
-            var managedEventType = eventTypeRepository.saveAndFlush(evEntity);
-            existingEntity.setEventType(managedEventType);
-        }
 
         Estate estateDomain = advertisement.getEstate();
         EstateJpaEntity existingEstate = existingEntity.getEstate();
