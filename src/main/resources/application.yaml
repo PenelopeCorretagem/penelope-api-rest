@@ -81,7 +81,7 @@ app:
 
 auth-service:
   api:
-    base-url: ${AUTH_SERVICE_BASE_URL:http://localhost:8082/api}
+    base-url: ${AUTH_SERVICE_BASE_URL:http://localhost:9000/api}
 
 calcom:
   api:

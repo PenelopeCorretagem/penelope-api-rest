@@ -6,7 +6,6 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.scheduling.annotation.EnableScheduling;
 
 import penelope.corretagem.penelopeapirest.config.properties.AuthServiceProperties;
-import penelope.corretagem.penelopeapirest.config.properties.CalcomProperties;
 
 import penelope.corretagem.penelopeapirest.config.properties.CloudinaryProperties;
 import penelope.corretagem.penelopeapirest.config.properties.CorsProperties;
@@ -15,7 +14,6 @@ import penelope.corretagem.penelopeapirest.config.properties.CorsProperties;
 @SpringBootApplication(scanBasePackages = "penelope.corretagem.penelopeapirest")
 @EnableConfigurationProperties({
   AuthServiceProperties.class,
-  CalcomProperties.class,
   CloudinaryProperties.class,
   CorsProperties.class
 })

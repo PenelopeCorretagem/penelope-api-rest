@@ -22,7 +22,11 @@ public class UpdateUserUseCase {
         var user = userRepository.findById(id)
             .orElseThrow(() -> new ResourceNotFoundException("Usuário não encontrado"));
 
-        if (req.email() != null) {
+        if (req.email() != null && req.email().isBlank()) {
+            throw new DomainValidationException("O e-mail informado não pode ser vazio");
+        }
+
+        if (req.email() != null && !req.email().isBlank()) {
             userRepository.findByEmail(req.email())
                     .filter(existingUser -> !existingUser.getId().equals(user.getId()))
                     .ifPresent(existingUser -> {
