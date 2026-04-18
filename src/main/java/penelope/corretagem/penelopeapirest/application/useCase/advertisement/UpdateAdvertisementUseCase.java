@@ -58,6 +58,15 @@ public class UpdateAdvertisementUseCase {
                 throw new DomainValidationException("Endereço do imóvel é obrigatório para atualização");
             }
 
+            String normalizedTitle = estateReq.title() != null ? estateReq.title().trim() : null;
+            if (normalizedTitle == null || normalizedTitle.isBlank()) {
+                throw new DomainValidationException("Título do anúncio é obrigatório");
+            }
+
+            if (advertisementRepository.existsByEstateTitleAndIdNot(normalizedTitle, advertisementId)) {
+                throw new DomainValidationException("Já existe anúncio com este título");
+            }
+
             shouldUpdateEventType = hasEventTypeRelevantChanges(currentEstate, estateReq);
 
             String cleanZipCode = estateReq.address().zipCode() != null
@@ -103,7 +112,7 @@ public class UpdateAdvertisementUseCase {
             }
 
             currentEstate.updateAllDetails(
-                    estateReq.title(), estateReq.description(), estateReq.area(), estateReq.numberOfRooms(),
+                    normalizedTitle, estateReq.description(), estateReq.area(), estateReq.numberOfRooms(),
                     parseEstateType(estateReq.type()), newAddress, newStandAddress, newImages, newAmenities
             );
         }

@@ -1,25 +1,17 @@
 package penelope.corretagem.penelopeapirest.application.useCase.user;
 
-import penelope.corretagem.penelopeapirest.core.exception.DomainValidationException;
-import penelope.corretagem.penelopeapirest.core.gateway.IPasswordEncoderGateway;
-import penelope.corretagem.penelopeapirest.core.user.repository.IUserRepository;
+import penelope.corretagem.penelopeapirest.application.dto.ResetPasswordRequest;
+import penelope.corretagem.penelopeapirest.core.gateway.IAuthGateway;
 
 public class ResetPasswordUseCase {
 
-    private final IUserRepository userRepository;
-    private final IPasswordEncoderGateway passwordEncoder;
+    private final IAuthGateway authGateway;
 
-    public ResetPasswordUseCase(IUserRepository userRepository, IPasswordEncoderGateway passwordEncoder) {
-        this.userRepository = userRepository;
-        this.passwordEncoder = passwordEncoder;
+    public ResetPasswordUseCase(IAuthGateway authGateway) {
+        this.authGateway = authGateway;
     }
 
     public void execute(String token, String newPassword) {
-        var user = userRepository.findByPasswordResetToken(token)
-                .orElseThrow(() -> new DomainValidationException("Token inválido ou não encontrado."));
-
-        user.applyNewPassword(passwordEncoder.encode(newPassword));
-
-        userRepository.update(user);
+        authGateway.resetPassword(new ResetPasswordRequest(token, newPassword));
     }
 }

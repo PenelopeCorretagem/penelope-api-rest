@@ -1,5 +1,6 @@
 package penelope.corretagem.penelopeapirest.core.user;
 
+import penelope.corretagem.penelopeapirest.core.exception.DomainValidationException;
 import penelope.corretagem.penelopeapirest.core.exception.PasswordResetTokenExpiredException;
 import penelope.corretagem.penelopeapirest.core.user.valueObject.AccessLevel;
 
@@ -10,8 +11,8 @@ import java.util.Date;
 public class User {
     private final Long id;
     private final LocalDate dateCreation;
-    private final AccessLevel accessLevel;
-    private final String creci;
+    private AccessLevel accessLevel;
+    private String creci;
 
     private String name;
     private String email;
@@ -129,6 +130,18 @@ public class User {
         if (dateBirth != null) this.dateBirth = dateBirth;
         if (monthlyIncome != null) this.monthlyIncome = monthlyIncome;
         if (phone != null) this.phone = phone;
+    }
+
+    public void updateAccessProfile(AccessLevel accessLevel, String creci) {
+        AccessLevel targetAccessLevel = accessLevel != null ? accessLevel : this.accessLevel;
+        String targetCreci = creci != null ? creci : this.creci;
+
+        if (targetAccessLevel == AccessLevel.CLIENTE && targetCreci != null && !targetCreci.isBlank()) {
+            throw new DomainValidationException("Clientes não devem possuir Creci");
+        }
+
+        this.accessLevel = targetAccessLevel;
+        this.creci = (targetCreci != null && targetCreci.isBlank()) ? null : targetCreci;
     }
 
     public void generatePasswordResetToken(String token, Date expiryDate) {

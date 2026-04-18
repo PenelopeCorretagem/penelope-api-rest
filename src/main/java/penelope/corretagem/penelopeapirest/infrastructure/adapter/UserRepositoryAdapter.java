@@ -43,6 +43,16 @@ public class UserRepositoryAdapter implements IUserRepository {
     }
 
     @Override
+    public Optional<User> findByCpf(String cpf) {
+        return jpaRepository.findByCpf(cpf).map(mapper::toDomain);
+    }
+
+    @Override
+    public Optional<User> findByCreci(String creci) {
+        return jpaRepository.findByCreci(creci).map(mapper::toDomain);
+    }
+
+    @Override
     public User save(User user) {
         var entity = mapper.toEntity(user);
         var savedEntity = jpaRepository.save(entity);
@@ -61,6 +71,8 @@ public class UserRepositoryAdapter implements IUserRepository {
         existingEntity.setDateBirth(user.getDateBirth());
         existingEntity.setMonthlyIncome(user.getMonthlyIncome());
         existingEntity.setPhone(user.getPhone());
+        existingEntity.setCreci(user.getCreci());
+        existingEntity.setAccessLevel(user.getAccessLevel());
         existingEntity.setPasswordResetToken(user.getPasswordResetToken());
         existingEntity.setPasswordResetTokenExpiry(user.getPasswordResetTokenExpiry());
 

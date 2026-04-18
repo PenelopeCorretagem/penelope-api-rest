@@ -3,14 +3,14 @@ server:
     context-path: /api
   tomcat:
     max-http-form-post-size: 20MB
-  port: ${PRODUCER_PORT:8080}
+  port: ${PRODUCER_PORT:8081}
 
 spring:
   application:
     name: penelope-api-rest
 
   profiles:
-    active: ${SPRING_PROFILES_ACTIVE:dev}
+    active: ${SPRING_PROFILES_ACTIVE}
 
   jackson:
     serialization:
@@ -79,6 +79,18 @@ app:
       - "http://localhost:3001" # homol
       - "http://localhost:3002" # prod
 
+auth-service:
+  api:
+    base-url: ${AUTH_SERVICE_BASE_URL:http://localhost:9000/api}
+
+calcom:
+  api:
+    base-url: https://api.cal.com
+    key: ${CALCOM_API_KEY}
+    version-v1: 2024-06-14
+    version-v2: 2024-08-13
+  webhook:
+    secret: ${CALCOM_WEBHOOK_SECRET}
 rabbitmq:
   exchanges:
     estate: ${RABBITMQ_EXCHANGE_ESTATE:estate.exchange}

@@ -19,7 +19,7 @@ public class EstateJpaEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "titulo", nullable = false)
+    @Column(name = "titulo", nullable = false, unique = true)
     private String title;
 
     @Column(name = "descricao", length = 150,nullable = false)

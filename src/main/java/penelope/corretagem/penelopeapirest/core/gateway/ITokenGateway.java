@@ -1,9 +1,13 @@
 package penelope.corretagem.penelopeapirest.core.gateway;
 
 public interface ITokenGateway {
-    String generateToken(String email, String accessLevel);
+    TokenValidationResult validateToken(String token);
 
-    String getEmailFromToken(String token);
+    default String getEmailFromToken(String token) {
+        return validateToken(token).email();
+    }
 
-    String getAccessLevelFromToken(String token);
+    default String getAccessLevelFromToken(String token) {
+        return validateToken(token).accessLevel();
+    }
 }

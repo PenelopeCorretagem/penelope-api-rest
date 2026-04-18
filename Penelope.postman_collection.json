@@ -1,9 +1,10 @@
 {
   "info": {
-    "_postman_id": "9f666fc4-7668-4c8d-888f-36adf4bee03a",
+    "_postman_id": "f68dd4a0-ac9b-4ca7-8001-3705d898e779",
     "name": "Penelope",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-    "_exporter_id": "47048995"
+    "_exporter_id": "53961377",
+    "_collection_link": "https://go.postman.co/collection/53961377-f68dd4a0-ac9b-4ca7-8001-3705d898e779?source=collection_link"
   },
   "item": [
     {
@@ -17,7 +18,7 @@
               "bearer": [
                 {
                   "key": "token",
-                  "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJQZW5lbG9wZS1BUEkiLCJzdWIiOiJyZW5uYW4ubW91cmFAc3B0ZWNoLnNjaG9vbCIsImV4cCI6MTc3MzY4NTk1Nn0.EguoFz9ivVuewryrF25ZcJNQyWpeJfM6JoTRZEjMIQs",
+                  "value": "{{bearer-token}}",
                   "type": "string"
                 }
               ]
@@ -26,7 +27,7 @@
             "header": [],
             "body": {
               "mode": "raw",
-              "raw": "{\r\n  \"title\": \"Apartamento de Luxo no F\",\r\n  \"description\": \"Excelente apartamento com varanda gourmet, vista panorâmica, acabamento de primeira linha e duas vagas de garagem.\",\r\n  \"area\": 125.5,\r\n  \"numberOfRooms\": 3,\r\n  \"type\": \"LANCAMENTO\", \r\n  \"advertisementCreateRequest\": {\r\n    \"creator\": 1,\r\n    \"responsible\": 1,\r\n    \"dataFim\": \"2026-12-31\",\r\n    \"active\": true\r\n  },\r\n  \"address\": {\r\n    \"street\": \"Rua Oscar Freire\",\r\n    \"number\": \"1500\",\r\n    \"neighborhood\": \"Jardins\",\r\n    \"city\": \"São Paulo\",\r\n    \"uf\": \"SP\",\r\n    \"zipCode\": \"01426-001\",\r\n    \"complement\": \"Apto 42\",\r\n    \"region\": \"Zona Oeste\"\r\n  },\r\n  \"standAddress\": null,\r\n  \"amenitiesIds\": [1, 3, 5],\r\n  \"images\": [\r\n    \"https://res.cloudinary.com/sua-conta/image/upload/v1/sala.jpg\",\r\n    \"https://res.cloudinary.com/sua-conta/image/upload/v1/quarto.jpg\"\r\n  ],\r\n  \"imageType\": [1, 2]\r\n}",
+              "raw": "{\r\n  \"active\": true,\r\n  \"featured\": false,\r\n  \"endDate\": \"2026-12-31\",\r\n  \"creatorId\": 1,\r\n  \"responsibleId\": 1,\r\n  \"estate\": {\r\n    \"title\": \"Apartamento de LuxoOSOSOSOS\",\r\n    \"description\": \"Excelente apartamento com varanda gourmet, vista panorâmica, acabamento de primeira linha e duas vagas de garagem.\",\r\n    \"area\": 125.5,\r\n    \"numberOfRooms\": 3,\r\n    \"type\": \"LANCAMENTO\",\r\n    \"address\": {\r\n      \"street\": \"Rua Oscar Freire\",\r\n      \"number\": \"1500\",\r\n      \"neighborhood\": \"Jardins\",\r\n      \"city\": \"Sao Paulo\",\r\n      \"uf\": \"SP\",\r\n      \"zipCode\": \"01426-001\",\r\n      \"complement\": \"Apto 42\",\r\n      \"region\": \"Zona Oeste\"\r\n    },\r\n    \"standAddress\": null,\r\n    \"amenitiesIds\": [],\r\n    \"images\": [\r\n      {\r\n        \"url\": \"https://res.cloudinary.com/sua-conta/image/upload/v1/sala.jpg\",\r\n        \"type\": \"CAPA\"\r\n      },\r\n      {\r\n        \"url\": \"https://res.cloudinary.com/sua-conta/image/upload/v1/quarto.jpg\",\r\n        \"type\": \"GALERIA\"\r\n      }\r\n    ]\r\n  }\r\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -34,9 +35,12 @@
               }
             },
             "url": {
-              "raw": "{{penelope-dev}}anuncios",
+              "raw": "{{penelope-dev}}v1/advertisements",
               "host": [
-                "{{penelope-dev}}anuncios"
+                "{{penelope-dev}}v1"
+              ],
+              "path": [
+                "advertisements"
               ]
             }
           },
@@ -49,7 +53,7 @@
             "header": [],
             "body": {
               "mode": "raw",
-              "raw": "{\r\n    \"title\": \"Apartamento de Luxo no F\",\r\n    \"description\": \"Excelente apartamento com varanda gourmet, vista panorâmica, acabamento de primeira linha e duas vagas de garagem.\",\r\n    \"area\": 150,\r\n    \"numberOfRooms\": 4,\r\n    \"type\": \"LANCAMENTO\",\r\n    \"advertisementCreateRequest\": {\r\n        \"creator\": 1,\r\n        \"responsible\": 1,\r\n        \"dataFim\": \"2026-12-31\",\r\n        \"active\": true\r\n    },\r\n    \"address\": {\r\n        \"street\": \"Rua Oscar Bom Jesus\",\r\n        \"number\": \"1500\",\r\n        \"neighborhood\": \"Jardins\",\r\n        \"city\": \"São Paulo\",\r\n        \"uf\": \"SP\",\r\n        \"zipCode\": \"01426-001\",\r\n        \"complement\": \"Apto 42\",\r\n        \"region\": \"Zona Oeste\"\r\n    },\r\n    \"standAddress\": null,\r\n    \"amenitiesIds\": [\r\n        1,\r\n        3,\r\n        5,\r\n        7\r\n    ],\r\n    \"images\": [\r\n        \"https://res.cloudinary.com/sua-conta/image/upload/v1/sala.jpg\",\r\n        \"https://res.cloudinary.com/sua-conta/image/upload/v1/quarto.jpg\"\r\n    ],\r\n    \"imageType\": [\r\n        1,\r\n        2\r\n    ]\r\n}",
+              "raw": "{\r\n  \"active\": true,\r\n  \"featured\": false,\r\n  \"endDate\": \"2026-12-31\",\r\n  \"creatorId\": 1,\r\n  \"responsibleId\": 1,\r\n  \"estate\": {\r\n    \"title\": \"Apartamento de LuxoOSOSOSOS\",\r\n    \"description\": \"Excelente apartamento com varanda gourmet, vista panorâmica, acabamento de primeira linha e duas vagas de garagem.\",\r\n    \"area\": 125.5,\r\n    \"numberOfRooms\": 3,\r\n    \"type\": \"LANCAMENTO\",\r\n    \"address\": {\r\n      \"street\": \"Rua Oscar Freire\",\r\n      \"number\": \"1500\",\r\n      \"neighborhood\": \"Jardins\",\r\n      \"city\": \"Sao Paulo\",\r\n      \"uf\": \"SP\",\r\n      \"zipCode\": \"01426-001\",\r\n      \"complement\": \"Apto 42\",\r\n      \"region\": \"Zona Oeste\"\r\n    },\r\n    \"standAddress\": null,\r\n    \"amenitiesIds\": [],\r\n    \"images\": [\r\n      {\r\n        \"url\": \"https://res.cloudinary.com/sua-conta/image/upload/v1/sala.jpg\",\r\n        \"type\": \"CAPA\"\r\n      },\r\n      {\r\n        \"url\": \"https://res.cloudinary.com/sua-conta/image/upload/v1/quarto.jpg\",\r\n        \"type\": \"GALERIA\"\r\n      }\r\n    ]\r\n  }\r\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -57,11 +61,12 @@
               }
             },
             "url": {
-              "raw": "{{penelope-dev}}anuncios/1",
+              "raw": "{{penelope-dev}}v1/advertisements/1",
               "host": [
-                "{{penelope-dev}}anuncios"
+                "{{penelope-dev}}v1"
               ],
               "path": [
+                "advertisements",
                 "1"
               ]
             }
@@ -99,11 +104,12 @@
               }
             },
             "url": {
-              "raw": "{{penelope-dev}}anuncios/1/status",
+              "raw": "{{penelope-dev}}v1/advertisements/1/status",
               "host": [
-                "{{penelope-dev}}anuncios"
+                "{{penelope-dev}}v1"
               ],
               "path": [
+                "advertisements",
                 "1",
                 "status"
               ]
@@ -139,9 +145,12 @@
               }
             },
             "url": {
-              "raw": "{{penelope-dev}}anuncios",
+              "raw": "{{penelope-dev}}v1/advertisements",
               "host": [
-                "{{penelope-dev}}anuncios"
+                "{{penelope-dev}}v1"
+              ],
+              "path": [
+                "advertisements"
               ]
             }
           },
@@ -163,11 +172,12 @@
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "{{penelope-dev}}anuncios/1",
+              "raw": "{{penelope-dev}}v1/advertisements/1",
               "host": [
-                "{{penelope-dev}}anuncios"
+                "{{penelope-dev}}v1"
               ],
               "path": [
+                "advertisements",
                 "1"
               ]
             }
@@ -190,7 +200,7 @@
               "bearer": [
                 {
                   "key": "token",
-                  "value": "{{penelope-token}}",
+                  "value": "{{bearer-token}}",
                   "type": "string"
                 }
               ]
@@ -202,9 +212,12 @@
               "raw": ""
             },
             "url": {
-              "raw": "{{penelope-dev}}usuarios",
+              "raw": "{{penelope-dev}}v1/users",
               "host": [
-                "{{penelope-dev}}usuarios"
+                "{{penelope-dev}}v1"
+              ],
+              "path": [
+                "users"
               ]
             }
           },
@@ -218,7 +231,7 @@
               "bearer": [
                 {
                   "key": "token",
-                  "value": "{{penelope-token}}",
+                  "value": "{{bearer-token}}",
                   "type": "string"
                 }
               ]
@@ -226,12 +239,13 @@
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "{{penelope-dev}}usuarios/1",
+              "raw": "{{penelope-dev}}v1/users/5",
               "host": [
-                "{{penelope-dev}}usuarios"
+                "{{penelope-dev}}v1"
               ],
               "path": [
-                "1"
+                "users",
+                "5"
               ]
             }
           },
@@ -243,11 +257,12 @@
             "method": "DELETE",
             "header": [],
             "url": {
-              "raw": "{{penelope-dev}}usuarios/1",
+              "raw": "{{penelope-dev}}v1/users/1",
               "host": [
-                "{{penelope-dev}}usuarios"
+                "{{penelope-dev}}v1"
               ],
               "path": [
+                "users",
                 "1"
               ]
             }
@@ -270,11 +285,12 @@
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "{{penelope-dev}}usuarios/me",
+              "raw": "{{penelope-dev}}users/v1/me",
               "host": [
-                "{{penelope-dev}}usuarios"
+                "{{penelope-dev}}users"
               ],
               "path": [
+                "v1",
                 "me"
               ]
             }
@@ -288,7 +304,7 @@
             "header": [],
             "body": {
               "mode": "raw",
-              "raw": "{\r\n  \"name\": \"Rennan Moura\",\r\n  \"email\": \"rennan.moura@sptech.school\",\r\n  \"password\": \"#Rennan123\",\r\n  \"cpf\": \"11122233388\",\r\n  \"dateBirth\": \"2004-06-17\",\r\n  \"monthlyIncome\": 2000,\r\n  \"phone\": \"11962235123\",\r\n  \"accessLevel\": \"ADMINISTRADOR\"\r\n}",
+              "raw": "{\r\n  \"name\": \"Rennan Souza\",\r\n  \"email\": \"rsmoura252@sptech.com\",\r\n  \"password\": \"#Rennan123\",\r\n  \"cpf\": \"11122266948\",\r\n  \"dateBirth\": \"2004-06-17\",\r\n  \"monthlyIncome\": 2000,\r\n  \"phone\": \"11962235123\",\r\n  \"accessLevel\": \"CLIENTE\"\r\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -296,9 +312,12 @@
               }
             },
             "url": {
-              "raw": "{{penelope-dev}}usuarios",
+              "raw": "{{penelope-dev}}v1/users",
               "host": [
-                "{{penelope-dev}}usuarios"
+                "{{penelope-dev}}v1"
+              ],
+              "path": [
+                "users"
               ]
             }
           },
@@ -312,7 +331,7 @@
               "bearer": [
                 {
                   "key": "token",
-                  "value": "{{penelope-token}}",
+                  "value": "{{bearer-token}}",
                   "type": "string"
                 }
               ]
@@ -321,7 +340,7 @@
             "header": [],
             "body": {
               "mode": "raw",
-              "raw": "{\r\n  \"monthlyIncome\": 15000.00,\r\n  \"phone\": \"11955554444\"\r\n}",
+              "raw": "{\r\n  \"monthlyIncome\": 15000.00,\r\n  \"phone\": \"11955554444\",\r\n  \"accessLevel\": \"ADMINISTRADOR\",\r\n  \"creci\": \"123477789\"\r\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -329,64 +348,13 @@
               }
             },
             "url": {
-              "raw": "{{penelope-dev}}usuarios/1",
+              "raw": "{{penelope-dev}}v1/users/5",
               "host": [
-                "{{penelope-dev}}usuarios"
+                "{{penelope-dev}}v1"
               ],
               "path": [
-                "1"
-              ]
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "Esqueci senha",
-          "request": {
-            "method": "POST",
-            "header": [],
-            "body": {
-              "mode": "raw",
-              "raw": "{\r\n  \"email\": \"rsmoura252@gmail.com\" \r\n}",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
-              }
-            },
-            "url": {
-              "raw": "{{penelope-dev}}usuarios/esqueci-senha",
-              "host": [
-                "{{penelope-dev}}usuarios"
-              ],
-              "path": [
-                "esqueci-senha"
-              ]
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "Redefinir senha",
-          "request": {
-            "method": "POST",
-            "header": [],
-            "body": {
-              "mode": "raw",
-              "raw": "{\r\n  \"token\": \"053560\",\r\n  \"newPassword\": \"senhaSuperNova2026\"\r\n}",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
-              }
-            },
-            "url": {
-              "raw": "{{penelope-dev}}usuarios/redefinir-senha",
-              "host": [
-                "{{penelope-dev}}usuarios"
-              ],
-              "path": [
-                "redefinir-senha"
+                "users",
+                "5"
               ]
             }
           },
@@ -419,9 +387,13 @@
               ]
             },
             "url": {
-              "raw": "{{penelope-dev}}imagens",
+              "raw": "{{penelope-dev}}/v1/images",
               "host": [
-                "{{penelope-dev}}imagens"
+                "{{penelope-dev}}"
+              ],
+              "path": [
+                "v1",
+                "images"
               ]
             }
           },
@@ -448,40 +420,13 @@
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "{{penelope-dev}}diferenciais",
+              "raw": "{{penelope-dev}}/v1/amenities",
               "host": [
-                "{{penelope-dev}}diferenciais"
-              ]
-            }
-          },
-          "response": []
-        }
-      ]
-    },
-    {
-      "name": "Auth",
-      "item": [
-        {
-          "name": "Login",
-          "request": {
-            "method": "POST",
-            "header": [],
-            "body": {
-              "mode": "raw",
-              "raw": "{\r\n  \"email\": \"rennan.moura@sptech.school\",\r\n  \"password\": \"#Rennan123\"\r\n}",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
-              }
-            },
-            "url": {
-              "raw": "{{penelope-dev}}auth/login",
-              "host": [
-                "{{penelope-dev}}auth"
+                "{{penelope-dev}}"
               ],
               "path": [
-                "login"
+                "v1",
+                "amenities"
               ]
             }
           },
@@ -521,8 +466,7 @@
   "variable": [
     {
       "key": "penelope-token",
-      "value": "",
-      "type": "default"
+      "value": ""
     }
   ]
 }

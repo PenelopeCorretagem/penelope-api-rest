@@ -13,6 +13,10 @@ import java.util.Optional;
 @Repository
 public interface IAdvertisementJpaRepository extends JpaRepository<AdvertisementJpaEntity, Long>, JpaSpecificationExecutor<AdvertisementJpaEntity> {
 
+        boolean existsByEstateTitleIgnoreCase(String title);
+
+        boolean existsByEstateTitleIgnoreCaseAndIdNot(String title, Long id);
+
     // Lista o ultimo anuncio cadastrado
     Optional<AdvertisementJpaEntity> findTopByOrderByCreatedAtDesc();
 

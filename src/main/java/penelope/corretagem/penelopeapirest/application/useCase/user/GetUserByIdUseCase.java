@@ -4,7 +4,7 @@ import penelope.corretagem.penelopeapirest.core.exception.ResourceNotFoundExcept
 import penelope.corretagem.penelopeapirest.core.user.repository.IUserRepository;
 import penelope.corretagem.penelopeapirest.application.dto.UserResponse;
 
-public class GetUserByIdUseCase {
+public class    GetUserByIdUseCase {
 
     private final IUserRepository userRepository;
 
