@@ -29,6 +29,11 @@ spring:
     enabled: false
     clean-disabled: false
 
+  rabbitmq:
+    # Em dev, exige docker-compose up para o RabbitMQ.
+    # Para rodar sem broker, comente o bloco spring.rabbitmq no application.yaml.
+    connection-timeout: 5000ms
+
 logging:
   level:
     penelope.corretagem.penelopeapirest: DEBUG

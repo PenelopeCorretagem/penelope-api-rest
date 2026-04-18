@@ -1,7 +1,6 @@
 package penelope.corretagem.penelopeapirest.core.advertisement;
 
 import penelope.corretagem.penelopeapirest.core.estate.Estate;
-import penelope.corretagem.penelopeapirest.core.eventType.EventType;
 import penelope.corretagem.penelopeapirest.core.exception.DomainValidationException;
 import penelope.corretagem.penelopeapirest.core.user.User;
 
@@ -18,7 +17,6 @@ public class Advertisement {
     private Boolean active;
     private Boolean emphasis;
     private LocalDate endDate;
-    private EventType eventType;
 
     private Advertisement(
             Long id,
@@ -28,8 +26,7 @@ public class Advertisement {
             Boolean active,
             Boolean emphasis,
             LocalDate endDate,
-            LocalDateTime createdAt,
-            EventType eventType) {
+            LocalDateTime createdAt) {
         this.id = id;
         this.estate = estate;
         this.creator = creator;
@@ -38,21 +35,19 @@ public class Advertisement {
         this.emphasis = emphasis;
         this.endDate = endDate;
         this.createdAt = createdAt;
-        this.eventType = eventType;
     }
 
     public static Advertisement createNew(
             Estate estate,
             User creator,
             User responsible,
-            EventType eventType,
             LocalDate endDate) {
 
         Boolean defaultActive = true;
         Boolean defaultEmphasis = false;
         LocalDateTime now = LocalDateTime.now();
 
-        return new Advertisement(null, estate, creator, responsible, defaultActive, defaultEmphasis, endDate, now, eventType);
+        return new Advertisement(null, estate, creator, responsible, defaultActive, defaultEmphasis, endDate, now);
     }
 
     public static Advertisement restore(
@@ -63,10 +58,9 @@ public class Advertisement {
             Boolean active,
             Boolean emphasis,
             LocalDate endDate,
-            LocalDateTime createdAt,
-            EventType eventType) {
+            LocalDateTime createdAt) {
 
-        return new Advertisement(id, estate, creator, responsible, active, emphasis, endDate, createdAt, eventType);
+        return new Advertisement(id, estate, creator, responsible, active, emphasis, endDate, createdAt);
     }
 
     //Getters
@@ -100,14 +94,6 @@ public class Advertisement {
 
     public LocalDateTime getCreatedAt() {
         return createdAt;
-    }
-
-    public EventType getEventType() {
-        return eventType;
-    }
-
-    public void setEventType(EventType eventType) {
-        this.eventType = eventType;
     }
 
     public void updateInfo(Boolean active, LocalDate endDate) {

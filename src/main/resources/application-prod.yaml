@@ -15,8 +15,6 @@ spring:
       enabled: false
   flyway:
     enabled: true
-    baseline-on-migrate: true
-    baseline-version: 4 # Define que o estado atual do banco equivale à V1
   jpa:
     show-sql: false
     defer-datasource-initialization: false

@@ -10,10 +10,9 @@ import penelope.corretagem.penelopeapirest.core.amenities.AmenitiesEstate;
 import penelope.corretagem.penelopeapirest.core.estate.Estate;
 import penelope.corretagem.penelopeapirest.core.estate.ImageEstate;
 import penelope.corretagem.penelopeapirest.core.estate.ImageEstateType;
-import penelope.corretagem.penelopeapirest.core.eventType.EventType;
 import penelope.corretagem.penelopeapirest.core.exception.DomainValidationException;
 import penelope.corretagem.penelopeapirest.core.exception.ResourceNotFoundException;
-import penelope.corretagem.penelopeapirest.core.gateway.IEventTypeGateway;
+import penelope.corretagem.penelopeapirest.core.gateway.IEstateEventPublisherGateway;
 import penelope.corretagem.penelopeapirest.core.user.User;
 import penelope.corretagem.penelopeapirest.core.user.repository.IUserRepository;
 
@@ -24,16 +23,16 @@ import java.util.stream.Collectors;
 public class UpdateAdvertisementUseCase {
 
     private final IAdvertisementRepository advertisementRepository;
-    private final IEventTypeGateway eventTypeGateway;
+    private final IEstateEventPublisherGateway estateEventPublisher;
     private final IUserRepository userRepository;
 
     public UpdateAdvertisementUseCase(
             IAdvertisementRepository advertisementRepository,
-            IEventTypeGateway eventTypeGateway,
+            IEstateEventPublisherGateway estateEventPublisher,
             IUserRepository userRepository
     ) {
         this.advertisementRepository = advertisementRepository;
-        this.eventTypeGateway = eventTypeGateway;
+        this.estateEventPublisher = estateEventPublisher;
         this.userRepository = userRepository;
     }
 
@@ -121,12 +120,11 @@ public class UpdateAdvertisementUseCase {
 
         advertisement.updateInfo(request.active(), request.endDate());
 
-        if (shouldUpdateEventType && advertisement.getEventType() != null) {
-            EventType newEventType = eventTypeGateway.recreateForEstate(advertisement.getEventType(), currentEstate);
-            advertisement.setEventType(newEventType);
+        var savedAdvertisement = advertisementRepository.update(advertisement);
+        if (shouldUpdateEventType) {
+            estateEventPublisher.publishEstateUpdated(savedAdvertisement.getEstate(), savedAdvertisement.getId());
         }
-
-        return advertisementRepository.update(advertisement);
+        return savedAdvertisement;
     }
 
     private boolean hasEventTypeRelevantChanges(Estate estate, EstateCreateRequest req) {
