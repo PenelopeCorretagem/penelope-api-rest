@@ -54,7 +54,6 @@ public class SecurityFilter extends OncePerRequestFilter {
 
                     SecurityContextHolder.getContext().setAuthentication(authentication);
                         log.debug("Autenticado {} com autoridade {} para request {} {}",
-                            tokenValidation.email(),
                             authority.getAuthority(),
                             request.getMethod(),
                             request.getRequestURI());
@@ -64,7 +63,7 @@ public class SecurityFilter extends OncePerRequestFilter {
                 log.debug("Token inválido para request {} {}", request.getMethod(), request.getRequestURI());
             } catch (RuntimeException ex) {
                 SecurityContextHolder.clearContext();
-                log.warn("Falha ao validar token para request {} {}: {}", request.getMethod(), request.getRequestURI(), ex.getMessage());
+                log.warn("Falha ao validar token para request {} {}", request.getMethod(), request.getRequestURI(), ex);
             }
         }
         filterChain.doFilter(request, response);

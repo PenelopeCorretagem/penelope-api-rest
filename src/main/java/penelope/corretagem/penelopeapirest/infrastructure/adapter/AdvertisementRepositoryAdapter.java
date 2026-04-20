@@ -128,11 +128,6 @@ public class AdvertisementRepositoryAdapter implements IAdvertisementRepository 
     }
 
     @Override
-    public boolean existsById(Long id) {
-        return jpaRepository.existsById(id);
-    }
-
-    @Override
     public boolean existsByEstateTitleAndIdNot(String title, Long advertisementId) {
         return jpaRepository.existsByEstateTitleIgnoreCaseAndIdNot(title, advertisementId);
     }

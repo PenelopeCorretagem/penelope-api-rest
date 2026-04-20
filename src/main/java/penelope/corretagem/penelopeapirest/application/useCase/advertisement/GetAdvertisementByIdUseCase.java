@@ -15,7 +15,7 @@ public class GetAdvertisementByIdUseCase {
 
     public AdvertisementResponse execute(Long id, boolean isAdministrator){
         Advertisement advertisement = repository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Anuncio não encontrado com o ID: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("Anúncio não encontrado com o ID: " + id));
 
         if (!Boolean.TRUE.equals(advertisement.getActive()) && !isAdministrator) {
             throw new ResourceNotFoundException("Anúncio não encontrado");

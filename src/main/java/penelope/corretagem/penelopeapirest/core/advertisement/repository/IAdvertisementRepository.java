@@ -14,7 +14,6 @@ public interface IAdvertisementRepository {
     void deleteById(Long id);
     boolean existsByEstateTitle(String title);
     boolean existsByEstateTitleAndIdNot(String title, Long advertisementId);
-    boolean existsById(Long id);
 
     // Leituras
     Optional<Advertisement> findById(Long id);
