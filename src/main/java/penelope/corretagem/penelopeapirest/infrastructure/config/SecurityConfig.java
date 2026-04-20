@@ -3,7 +3,6 @@ package penelope.corretagem.penelopeapirest.infrastructure.config;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.core.env.Environment;
 import org.springframework.core.env.Profiles;
 import org.springframework.http.HttpMethod;
@@ -27,6 +26,8 @@ import static org.springframework.security.web.util.matcher.AntPathRequestMatche
 @EnableWebSecurity
 public class SecurityConfig {
 
+    private static final String ROLE_ADMINISTRADOR = "ADMINISTRADOR";
+
     private final SecurityFilter securityFilter;
     private final Environment environment;
 
@@ -46,10 +47,7 @@ public class SecurityConfig {
             "/v1/users/reset-password",
             "/v1/users/validate-reset-token",
 
-            "/v1/auth/login",
-
-            "/v1/advertisements",
-            "/v1/advertisements/{id}"
+            "/v1/auth/login"
     };
 
     @Bean
@@ -69,8 +67,30 @@ public class SecurityConfig {
                             .requestMatchers(AUTH_WHITELIST).permitAll()
                             // Permite criar usuário sem estar logado
                             .requestMatchers(antMatcher(HttpMethod.POST, "/v1/users")).permitAll()
-                            // Permite ver anúncios sem estar logado
-                            .requestMatchers(antMatcher(HttpMethod.GET, "/v1/advertisements/**")).permitAll()
+                            // Permite ver alguns anúncios sem estar logado
+                            .requestMatchers(antMatcher(HttpMethod.GET, "/v1/advertisements")).permitAll()
+                            .requestMatchers(antMatcher(HttpMethod.GET, "/v1/advertisements/latest")).permitAll()
+                            .requestMatchers(antMatcher(HttpMethod.GET, "/v1/advertisements/estate/**")).permitAll()
+                            // Detalhe do anúncio é público; regra de anúncio inativo é tratada no Use Case
+                            .requestMatchers(antMatcher(HttpMethod.GET, "/v1/advertisements/*")).permitAll()
+                            // Perfil do usuário logado
+                            .requestMatchers(antMatcher(HttpMethod.GET, "/v1/users/profile")).authenticated()
+                            // Ações administrativas em anúncios
+                            .requestMatchers(antMatcher(HttpMethod.POST, "/v1/advertisements")).hasRole(ROLE_ADMINISTRADOR)
+                            .requestMatchers(antMatcher(HttpMethod.PUT, "/v1/advertisements/**")).hasRole(ROLE_ADMINISTRADOR)
+                            .requestMatchers(antMatcher(HttpMethod.PATCH, "/v1/advertisements/**")).hasRole(ROLE_ADMINISTRADOR)
+                            .requestMatchers(antMatcher(HttpMethod.DELETE, "/v1/advertisements/**")).hasRole(ROLE_ADMINISTRADOR)
+                            // Ações administrativas em diferenciais
+                            .requestMatchers(antMatcher(HttpMethod.POST, "/v1/amenities")).hasRole(ROLE_ADMINISTRADOR)
+                            .requestMatchers(antMatcher(HttpMethod.PATCH, "/v1/amenities/**")).hasRole(ROLE_ADMINISTRADOR)
+                            .requestMatchers(antMatcher(HttpMethod.DELETE, "/v1/amenities/**")).hasRole(ROLE_ADMINISTRADOR)
+                            // Ações administrativas em usuários
+                            .requestMatchers(antMatcher(HttpMethod.GET, "/v1/users")).hasRole(ROLE_ADMINISTRADOR)
+                            .requestMatchers(antMatcher(HttpMethod.GET, "/v1/users/*")).hasRole(ROLE_ADMINISTRADOR)
+                            .requestMatchers(antMatcher(HttpMethod.PUT, "/v1/users/**")).hasRole(ROLE_ADMINISTRADOR)
+                            .requestMatchers(antMatcher(HttpMethod.DELETE, "/v1/users/**")).hasRole(ROLE_ADMINISTRADOR)
+                            // Upload de imagens de anúncios
+                            .requestMatchers(antMatcher(HttpMethod.POST, "/v1/images")).hasRole(ROLE_ADMINISTRADOR)
                             .anyRequest().authenticated();
                 })
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)

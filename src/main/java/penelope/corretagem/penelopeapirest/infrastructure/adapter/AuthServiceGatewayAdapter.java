@@ -34,7 +34,7 @@ public class AuthServiceGatewayAdapter implements IAuthGateway {
     public LoginResponse authenticate(LoginRequest request) {
         try {
             return restClient.post()
-                .uri("/v1/auth/login")
+                .uri("/api/v1/auth/login")
                 .body(request)
                 .retrieve()
                 .body(LoginResponse.class);
@@ -51,7 +51,7 @@ public class AuthServiceGatewayAdapter implements IAuthGateway {
     public void forgotPassword(ForgotPasswordRequest request) {
         try {
             restClient.post()
-                .uri("/v1/auth/forgot-password")
+                .uri("/api/v1/auth/forgot-password")
                 .body(request)
                 .retrieve()
                 .toBodilessEntity();
@@ -66,7 +66,7 @@ public class AuthServiceGatewayAdapter implements IAuthGateway {
     public void validateResetToken(ValidateTokenRequest request) {
         try {
             restClient.post()
-                .uri("/v1/auth/validate-reset-token")
+                .uri("/api/v1/auth/validate-reset-token")
                 .body(request)
                 .retrieve()
                 .toBodilessEntity();
@@ -81,7 +81,7 @@ public class AuthServiceGatewayAdapter implements IAuthGateway {
     public void resetPassword(ResetPasswordRequest request) {
         try {
             restClient.post()
-                .uri("/v1/auth/reset-password")
+                .uri("/api/v1/auth/reset-password")
                 .body(request)
                 .retrieve()
                 .toBodilessEntity();

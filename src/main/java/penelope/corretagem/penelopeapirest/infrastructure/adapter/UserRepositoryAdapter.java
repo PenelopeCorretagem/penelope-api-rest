@@ -1,5 +1,7 @@
 package penelope.corretagem.penelopeapirest.infrastructure.adapter;
 
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
 import penelope.corretagem.penelopeapirest.core.exception.ResourceNotFoundException;
 import penelope.corretagem.penelopeapirest.core.user.User;
@@ -28,6 +30,16 @@ public class UserRepositoryAdapter implements IUserRepository {
     @Override
     public List<User> findAll() {
         return jpaRepository.findAll().stream()
+                .map(mapper::toDomain)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<User> findAll(int offset, int limit) {
+        int page = offset / limit;
+        var pageable = PageRequest.of(page, limit, Sort.by(Sort.Direction.ASC, "id"));
+
+        return jpaRepository.findAll(pageable).getContent().stream()
                 .map(mapper::toDomain)
                 .collect(Collectors.toList());
     }

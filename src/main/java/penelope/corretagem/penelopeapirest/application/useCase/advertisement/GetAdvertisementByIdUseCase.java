@@ -13,9 +13,13 @@ public class GetAdvertisementByIdUseCase {
         this.repository = repository;
     }
 
-    public AdvertisementResponse execute(Long id){
+    public AdvertisementResponse execute(Long id, boolean isAdministrator){
         Advertisement advertisement = repository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Anuncio não encontrado com o ID: " + id));
+
+        if (!Boolean.TRUE.equals(advertisement.getActive()) && !isAdministrator) {
+            throw new ResourceNotFoundException("Anúncio não encontrado");
+        }
 
         return AdvertisementResponse.fromDomain(advertisement);
     }

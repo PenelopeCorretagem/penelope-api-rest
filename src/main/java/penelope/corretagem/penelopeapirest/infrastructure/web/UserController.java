@@ -36,9 +36,11 @@ public class UserController {
     }
 
     @GetMapping
-    public ResponseEntity<List<UserResponse>> getAll() {
+    public ResponseEntity<List<UserResponse>> getAll(
+            @RequestParam(defaultValue = "1") Integer page,
+            @RequestParam(defaultValue = "10") Integer pageSize) {
 
-        var response = getAllUsersUseCase.execute();
+        var response = getAllUsersUseCase.execute(page, pageSize);
 
         return ResponseEntity.ok(response);
     }

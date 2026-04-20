@@ -32,7 +32,7 @@ public class TokenGatewayAdapter implements ITokenGateway {
     public TokenValidationResult validateToken(String token) {
         try {
             ValidateAccessTokenResponse response = restClient.post()
-                .uri("/v1/auth/validate-access-token")
+                .uri("/api/v1/auth/validate-access-token")
                 .body(new ValidateAccessTokenRequest(token))
                 .retrieve()
                 .body(ValidateAccessTokenResponse.class);

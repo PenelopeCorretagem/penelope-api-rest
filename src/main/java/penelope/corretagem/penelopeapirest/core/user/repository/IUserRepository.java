@@ -8,6 +8,7 @@ import java.util.Optional;
 
 public interface IUserRepository {
     List<User> findAll();
+    List<User> findAll(int offset, int limit);
     Optional<User> findById(Long id);
     Optional<User> findByEmail(String email);
     Optional<User> findByCpf(String cpf);

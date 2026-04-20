@@ -1,5 +1,7 @@
 package penelope.corretagem.penelopeapirest.infrastructure.adapter;
 
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
 import penelope.corretagem.penelopeapirest.core.amenities.Amenities;
 import penelope.corretagem.penelopeapirest.core.amenities.repository.IAmenitiesRepository;
@@ -24,6 +26,16 @@ public class AmenitiesRepositoryAdapter implements IAmenitiesRepository {
     @Override
     public List<Amenities> findAll() {
         return jpaRepository.findAll().stream()
+                .map(mapper::toDomain)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<Amenities> findAll(int offset, int limit) {
+        int page = offset / limit;
+        var pageable = PageRequest.of(page, limit, Sort.by(Sort.Direction.ASC, "id"));
+
+        return jpaRepository.findAll(pageable).getContent().stream()
                 .map(mapper::toDomain)
                 .collect(Collectors.toList());
     }

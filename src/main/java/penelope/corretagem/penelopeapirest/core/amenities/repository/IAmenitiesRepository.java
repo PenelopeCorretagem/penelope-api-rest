@@ -6,6 +6,7 @@ import java.util.Optional;
 
 public interface IAmenitiesRepository {
     List<Amenities> findAll();
+    List<Amenities> findAll(int offset, int limit);
     Optional<Amenities> findById(Long id);
     Amenities save(Amenities amenities);
     boolean existsById(Long id);

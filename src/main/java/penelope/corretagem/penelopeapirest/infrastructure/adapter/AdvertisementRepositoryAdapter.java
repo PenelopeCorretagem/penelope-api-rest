@@ -128,8 +128,22 @@ public class AdvertisementRepositoryAdapter implements IAdvertisementRepository 
     }
 
     @Override
+    public boolean existsById(Long id) {
+        return jpaRepository.existsById(id);
+    }
+
+    @Override
     public boolean existsByEstateTitleAndIdNot(String title, Long advertisementId) {
         return jpaRepository.existsByEstateTitleIgnoreCaseAndIdNot(title, advertisementId);
+    }
+
+    @Override
+    @Transactional
+    public void deleteById(Long id) {
+        AdvertisementJpaEntity existingEntity = jpaRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Anúncio não encontrado"));
+
+        jpaRepository.delete(existingEntity);
     }
 
     @Override

@@ -18,8 +18,32 @@ public class AuthServiceClientConfig {
     @Bean
     @Qualifier("authServiceRestClient")
     public RestClient authServiceRestClient(RestClient.Builder builder) {
+        String normalizedBaseUrl = normalizeBaseUrl(properties.api().baseUrl());
+
         return builder
-            .baseUrl(properties.api().baseUrl())
+            .baseUrl(normalizedBaseUrl)
             .build();
+    }
+
+    private String normalizeBaseUrl(String configuredBaseUrl) {
+        if (configuredBaseUrl == null || configuredBaseUrl.isBlank()) {
+            return "http://localhost:9000";
+        }
+
+        String trimmed = configuredBaseUrl.trim();
+
+        if (trimmed.endsWith("/api")) {
+            return trimmed.substring(0, trimmed.length() - 4);
+        }
+
+        if (trimmed.endsWith("/api/")) {
+            return trimmed.substring(0, trimmed.length() - 5);
+        }
+
+        if (trimmed.endsWith("/")) {
+            return trimmed.substring(0, trimmed.length() - 1);
+        }
+
+        return trimmed;
     }
 }

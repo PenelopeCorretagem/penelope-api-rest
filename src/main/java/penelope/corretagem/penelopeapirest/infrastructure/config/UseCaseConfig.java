@@ -4,6 +4,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import penelope.corretagem.penelopeapirest.application.useCase.advertisement.ChangeAdvertisementStatusUseCase;
 import penelope.corretagem.penelopeapirest.application.useCase.advertisement.CreateAdvertisementUseCase;
+import penelope.corretagem.penelopeapirest.application.useCase.advertisement.DeleteAdvertisementUseCase;
 import penelope.corretagem.penelopeapirest.application.useCase.advertisement.GetAdvertisementByEstateIdUseCase;
 import penelope.corretagem.penelopeapirest.application.useCase.advertisement.GetAllAdvertisementsUseCase;
 import penelope.corretagem.penelopeapirest.application.useCase.advertisement.GetAdvertisementByIdUseCase;
@@ -51,6 +52,11 @@ public class UseCaseConfig {
             IEstateEventPublisherGateway estateEventPublisher
     ) {
         return new CreateAdvertisementUseCase(advertisementRepository, userRepository, estateEventPublisher);
+    }
+
+    @Bean
+    public DeleteAdvertisementUseCase deleteAdvertisementUseCase(IAdvertisementRepository repository) {
+        return new DeleteAdvertisementUseCase(repository);
     }
 
     @Bean
