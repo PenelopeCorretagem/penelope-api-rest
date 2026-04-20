@@ -30,8 +30,10 @@ public class AmenitiesController {
     }
 
     @GetMapping
-    public ResponseEntity<List<AmenitiesResponse>> getAll() {
-        return ResponseEntity.ok(getAllAmenitiesUseCase.execute());
+    public ResponseEntity<List<AmenitiesResponse>> getAll(
+            @RequestParam(defaultValue = "1") Integer page,
+            @RequestParam(defaultValue = "10") Integer pageSize) {
+        return ResponseEntity.ok(getAllAmenitiesUseCase.execute(page, pageSize));
     }
 
     @GetMapping("/{id}")

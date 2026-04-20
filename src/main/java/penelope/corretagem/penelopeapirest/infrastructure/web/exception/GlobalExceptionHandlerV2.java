@@ -13,7 +13,7 @@ import penelope.corretagem.penelopeapirest.core.exception.ResourceNotFoundExcept
 
 import java.time.LocalDateTime;
 
-@RestControllerAdvice("globalExceptionHandlerV2")
+@RestControllerAdvice
 public class GlobalExceptionHandlerV2 {
 
     // 1. Tratamento para quando um recurso não é encontrado (Erro 404)

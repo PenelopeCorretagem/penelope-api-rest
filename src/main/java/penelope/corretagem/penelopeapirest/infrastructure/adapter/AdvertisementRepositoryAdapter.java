@@ -134,6 +134,15 @@ public class AdvertisementRepositoryAdapter implements IAdvertisementRepository 
 
     @Override
     @Transactional
+    public void deleteById(Long id) {
+        AdvertisementJpaEntity existingEntity = jpaRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Anúncio não encontrado"));
+
+        jpaRepository.delete(existingEntity);
+    }
+
+    @Override
+    @Transactional
     public Advertisement update(Advertisement advertisement) {
         AdvertisementJpaEntity existingEntity = jpaRepository.findById(advertisement.getId())
                 .orElseThrow(() -> new ResourceNotFoundException("Anúncio não encontrado"));

@@ -3,9 +3,11 @@ package penelope.corretagem.penelopeapirest.infrastructure.web;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import penelope.corretagem.penelopeapirest.application.dto.*;
 import penelope.corretagem.penelopeapirest.application.useCase.advertisement.*;
+import penelope.corretagem.penelopeapirest.core.gateway.ITokenGateway;
 
 import java.util.List;
 import java.util.Map;
@@ -19,20 +21,31 @@ public class AdvertisementController {
     private final GetAdvertisementByEstateIdUseCase getAdvertisementByEstateIdUseCase;
     private final GetLatestAdvertisementUseCase getLatestAdvertisementUseCase;
     private final CreateAdvertisementUseCase createAdvertisementUseCase;
+    private final DeleteAdvertisementUseCase deleteAdvertisementUseCase;
     private final UpdateAdvertisementUseCase updateAdvertisementUseCase;
     private final ChangeAdvertisementStatusUseCase changeAdvertisementStatusUseCase;
+    private final ITokenGateway tokenGateway;
 
     public AdvertisementController(
             GetAdvertisementByIdUseCase getAdvertisementByIdUseCase,
-            GetAllAdvertisementsUseCase getAllAdvertisementsUseCase, GetAdvertisementByEstateIdUseCase getAdvertisementByEstateIdUseCase, GetLatestAdvertisementUseCase getLatestAdvertisementUseCase, CreateAdvertisementUseCase createAdvertisementUseCase, UpdateAdvertisementUseCase updateAdvertisementUseCase, ChangeAdvertisementStatusUseCase changeAdvertisementStatusUseCase
+            GetAllAdvertisementsUseCase getAllAdvertisementsUseCase,
+            GetAdvertisementByEstateIdUseCase getAdvertisementByEstateIdUseCase,
+            GetLatestAdvertisementUseCase getLatestAdvertisementUseCase,
+            CreateAdvertisementUseCase createAdvertisementUseCase,
+            DeleteAdvertisementUseCase deleteAdvertisementUseCase,
+            UpdateAdvertisementUseCase updateAdvertisementUseCase,
+            ChangeAdvertisementStatusUseCase changeAdvertisementStatusUseCase,
+            ITokenGateway tokenGateway
     ) {
         this.getAdvertisementByIdUseCase = getAdvertisementByIdUseCase;
         this.getAllAdvertisementsUseCase = getAllAdvertisementsUseCase;
         this.getAdvertisementByEstateIdUseCase = getAdvertisementByEstateIdUseCase;
         this.getLatestAdvertisementUseCase = getLatestAdvertisementUseCase;
         this.createAdvertisementUseCase = createAdvertisementUseCase;
+        this.deleteAdvertisementUseCase = deleteAdvertisementUseCase;
         this.updateAdvertisementUseCase = updateAdvertisementUseCase;
         this.changeAdvertisementStatusUseCase = changeAdvertisementStatusUseCase;
+        this.tokenGateway = tokenGateway;
     }
 
     @GetMapping
@@ -44,9 +57,12 @@ public class AdvertisementController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<AdvertisementResponse> getAdvertisementById(@PathVariable Long id) {
+    public ResponseEntity<AdvertisementResponse> getAdvertisementById(
+            @PathVariable Long id,
+            Authentication authentication,
+            @RequestHeader(value = "Authorization", required = false) String authorizationHeader) {
 
-        AdvertisementResponse response = getAdvertisementByIdUseCase.execute(id);
+        AdvertisementResponse response = getAdvertisementByIdUseCase.execute(id, resolveIsAdministrator(authentication, authorizationHeader));
 
         return ResponseEntity.ok(response);
     }
@@ -72,6 +88,12 @@ public class AdvertisementController {
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
+        deleteAdvertisementUseCase.execute(id);
+        return ResponseEntity.noContent().build();
+    }
+
     @PutMapping("/{id}")
     public ResponseEntity<?> update(
             @PathVariable Long id,
@@ -95,5 +117,45 @@ public class AdvertisementController {
 
         changeAdvertisementStatusUseCase.execute(id, isActive);
         return ResponseEntity.noContent().build();
+    }
+
+    private boolean isAdministrator(Authentication authentication) {
+        if (authentication == null) {
+            return false;
+        }
+
+        return authentication.getAuthorities().stream()
+                .anyMatch(authority -> "ROLE_ADMINISTRADOR".equals(authority.getAuthority()));
+    }
+
+    private boolean resolveIsAdministrator(Authentication authentication, String authorizationHeader) {
+        if (isAdministrator(authentication)) {
+            return true;
+        }
+
+        String token = extractBearerToken(authorizationHeader);
+        if (token == null) {
+            return false;
+        }
+
+        try {
+            String accessLevel = tokenGateway.getAccessLevelFromToken(token);
+            return accessLevel != null && "ADMINISTRADOR".equalsIgnoreCase(accessLevel.trim());
+        } catch (RuntimeException ex) {
+            return false;
+        }
+    }
+
+    private String extractBearerToken(String authorizationHeader) {
+        if (authorizationHeader == null) {
+            return null;
+        }
+
+        String trimmedHeader = authorizationHeader.trim();
+        if (trimmedHeader.length() < 7 || !trimmedHeader.regionMatches(true, 0, "Bearer ", 0, 7)) {
+            return null;
+        }
+
+        return trimmedHeader.substring(7).trim();
     }
 }

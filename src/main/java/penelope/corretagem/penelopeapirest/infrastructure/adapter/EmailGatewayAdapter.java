@@ -72,7 +72,7 @@ public class EmailGatewayAdapter implements IEmailGateway {
                 nome
         );
 
-        message.setTo("rennan.moura@sptech.school");
+        message.setTo("penelopedevelop@gmail.com");
         message.setCc(email);
         message.setSubject(assunto);
         message.setText(emailBody);
