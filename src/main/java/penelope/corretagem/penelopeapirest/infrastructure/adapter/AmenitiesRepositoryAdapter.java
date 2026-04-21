@@ -64,4 +64,14 @@ public class AmenitiesRepositoryAdapter implements IAmenitiesRepository {
     public void deleteById(Long id) {
         jpaRepository.deleteById(id);
     }
+
+    @Override
+    public Optional<Amenities> findByDescription(String description) {
+        return jpaRepository.findByDescription(description).map(mapper::toDomain);
+    }
+
+    @Override
+    public long count() {
+        return jpaRepository.count();
+    }
 }

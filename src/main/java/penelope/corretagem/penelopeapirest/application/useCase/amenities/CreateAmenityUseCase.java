@@ -18,6 +18,15 @@ public class CreateAmenityUseCase {
             throw new DomainValidationException("Requisição de criação da amenidade é obrigatória");
         }
 
+        if (request.description() == null || request.description().isBlank()) {
+            throw new DomainValidationException("Descrição da amenidade é obrigatória");
+        }
+
+        // Verifica se já existe uma amenity com a mesma descrição
+        if (amenitiesRepository.findByDescription(request.description()).isPresent()) {
+            throw new DomainValidationException("Já existe um diferencial com a descrição '" + request.description() + "'");
+        }
+
         Amenities newAmenity = Amenities.createNew(request.description(), request.icon());
 
         return amenitiesRepository.save(newAmenity);
