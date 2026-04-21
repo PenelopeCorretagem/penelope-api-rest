@@ -23,7 +23,7 @@ public class AmenitiesJpaEntity {
     @Column(name = "descricao", nullable = false, unique = true)
     private String description;
 
-    @Column(name = "icon_name", unique = true)
+    @Column(name = "icon_name")
     private String icon;
 
     @OneToMany(

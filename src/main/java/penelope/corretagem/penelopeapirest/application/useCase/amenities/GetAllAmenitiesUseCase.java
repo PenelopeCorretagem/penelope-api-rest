@@ -2,6 +2,7 @@ package penelope.corretagem.penelopeapirest.application.useCase.amenities;
 
 import penelope.corretagem.penelopeapirest.core.amenities.repository.IAmenitiesRepository;
 import penelope.corretagem.penelopeapirest.application.dto.AmenitiesResponse;
+import penelope.corretagem.penelopeapirest.application.dto.PaginatedAmenitiesResponse;
 import penelope.corretagem.penelopeapirest.core.exception.DomainValidationException;
 
 import java.util.List;
@@ -18,7 +19,7 @@ public class GetAllAmenitiesUseCase {
         this.amenitiesRepository = amenitiesRepository;
     }
 
-    public List<AmenitiesResponse> execute(Integer page, Integer pageSize) {
+    public PaginatedAmenitiesResponse execute(Integer page, Integer pageSize) {
         int safePage = page == null ? DEFAULT_PAGE : page;
         int safePageSize = pageSize == null ? DEFAULT_PAGE_SIZE : pageSize;
 
@@ -31,9 +32,15 @@ public class GetAllAmenitiesUseCase {
         }
 
         int offset = (safePage - 1) * safePageSize;
-
-        return amenitiesRepository.findAll(offset, safePageSize).stream()
+        
+        // Busca os itens da página
+        List<AmenitiesResponse> content = amenitiesRepository.findAll(offset, safePageSize).stream()
                 .map(AmenitiesResponse::fromDomain)
                 .collect(Collectors.toList());
+        
+        // Busca o total de elementos
+        long totalElements = amenitiesRepository.count();
+
+        return PaginatedAmenitiesResponse.of(content, safePage, safePageSize, totalElements);
     }
 }

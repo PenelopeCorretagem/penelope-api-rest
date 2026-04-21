@@ -6,10 +6,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import penelope.corretagem.penelopeapirest.application.dto.AmenitiesResponse;
 import penelope.corretagem.penelopeapirest.application.dto.CreateAmenityRequest;
+import penelope.corretagem.penelopeapirest.application.dto.PaginatedAmenitiesResponse;
 import penelope.corretagem.penelopeapirest.application.dto.UpdateAmenityRequest;
 import penelope.corretagem.penelopeapirest.application.useCase.amenities.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/v1/amenities")
@@ -30,7 +29,7 @@ public class AmenitiesController {
     }
 
     @GetMapping
-    public ResponseEntity<List<AmenitiesResponse>> getAll(
+    public ResponseEntity<PaginatedAmenitiesResponse> getAll(
             @RequestParam(defaultValue = "1") Integer page,
             @RequestParam(defaultValue = "10") Integer pageSize) {
         return ResponseEntity.ok(getAllAmenitiesUseCase.execute(page, pageSize));
