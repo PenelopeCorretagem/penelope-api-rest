@@ -109,11 +109,6 @@ public class AdvertisementRepositoryAdapter implements IAdvertisementRepository 
         var savedAddress = addressJpaRepository.saveAndFlush(estateEntity.getAddress());
         estateEntity.setAddress(savedAddress);
 
-        if (estateEntity.getStandAddress() != null) {
-            var savedStandAddress = addressJpaRepository.saveAndFlush(estateEntity.getStandAddress());
-            estateEntity.setStandAddress(savedStandAddress);
-        }
-
         var savedEstate = estateRepository.saveAndFlush(estateEntity);
         jpaEntity.setEstate(savedEstate);
 

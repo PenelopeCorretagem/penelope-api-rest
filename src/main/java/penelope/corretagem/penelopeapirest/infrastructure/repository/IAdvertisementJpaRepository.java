@@ -26,7 +26,6 @@ public interface IAdvertisementJpaRepository extends JpaRepository<Advertisement
             FROM AdvertisementJpaEntity a
             JOIN FETCH a.estate e
             JOIN FETCH e.address address
-            LEFT JOIN FETCH e.standAddress standAddress
             LEFT JOIN FETCH a.creator creator
             LEFT JOIN FETCH a.responsible responsible
             LEFT JOIN FETCH e.images images
