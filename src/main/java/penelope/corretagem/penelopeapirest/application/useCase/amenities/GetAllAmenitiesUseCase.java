@@ -19,7 +19,7 @@ public class GetAllAmenitiesUseCase {
         this.amenitiesRepository = amenitiesRepository;
     }
 
-    public PaginatedAmenitiesResponse execute(Integer page, Integer pageSize) {
+    public PaginatedAmenitiesResponse execute(Integer page, Integer pageSize, String name, String initial, String sort) {
         int safePage = page == null ? DEFAULT_PAGE : page;
         int safePageSize = pageSize == null ? DEFAULT_PAGE_SIZE : pageSize;
 
@@ -32,14 +32,12 @@ public class GetAllAmenitiesUseCase {
         }
 
         int offset = (safePage - 1) * safePageSize;
-        
-        // Busca os itens da página
-        List<AmenitiesResponse> content = amenitiesRepository.findAll(offset, safePageSize).stream()
+
+        List<AmenitiesResponse> content = amenitiesRepository.findAll(offset, safePageSize, name, initial, sort).stream()
                 .map(AmenitiesResponse::fromDomain)
                 .collect(Collectors.toList());
         
-        // Busca o total de elementos
-        long totalElements = amenitiesRepository.count();
+        long totalElements = amenitiesRepository.count(name, initial);
 
         return PaginatedAmenitiesResponse.of(content, safePage, safePageSize, totalElements);
     }

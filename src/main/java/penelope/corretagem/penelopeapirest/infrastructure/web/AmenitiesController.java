@@ -31,8 +31,11 @@ public class AmenitiesController {
     @GetMapping
     public ResponseEntity<PaginatedAmenitiesResponse> getAll(
             @RequestParam(defaultValue = "1") Integer page,
-            @RequestParam(defaultValue = "10") Integer pageSize) {
-        return ResponseEntity.ok(getAllAmenitiesUseCase.execute(page, pageSize));
+            @RequestParam(defaultValue = "10") Integer pageSize,
+            @RequestParam(required = false) String name,
+            @RequestParam(required = false) String initial,
+            @RequestParam(defaultValue = "ASC") String sort) {
+        return ResponseEntity.ok(getAllAmenitiesUseCase.execute(page, pageSize, name, initial, sort));
     }
 
     @GetMapping("/{id}")
