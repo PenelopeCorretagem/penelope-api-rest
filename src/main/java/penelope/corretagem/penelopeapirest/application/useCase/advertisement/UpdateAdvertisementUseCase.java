@@ -126,7 +126,7 @@ public class UpdateAdvertisementUseCase {
     }
 
     private boolean hasEventTypeRelevantChanges(Estate estate, EstateCreateRequest req) {
-        return !estate.getTitle().equals(req.title());
+        return !estate.getTitle().trim().equals(req.title().trim());
     }
 
     private Estate.Type parseEstateType(String type) {
