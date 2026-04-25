@@ -2,11 +2,14 @@ package penelope.corretagem.penelopeapirest.infrastructure.adapter;
 
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Component;
 import penelope.corretagem.penelopeapirest.core.amenities.Amenities;
 import penelope.corretagem.penelopeapirest.core.amenities.repository.IAmenitiesRepository;
+import penelope.corretagem.penelopeapirest.infrastructure.entity.AmenitiesJpaEntity;
 import penelope.corretagem.penelopeapirest.infrastructure.mapper.AmenitiesInfrastructureMapper;
 import penelope.corretagem.penelopeapirest.infrastructure.repository.IAmenitiesJpaRepository;
+import penelope.corretagem.penelopeapirest.infrastructure.specifications.AmenitySpecification;
 
 import java.util.List;
 import java.util.Optional;
@@ -31,11 +34,15 @@ public class AmenitiesRepositoryAdapter implements IAmenitiesRepository {
     }
 
     @Override
-    public List<Amenities> findAll(int offset, int limit) {
+    public List<Amenities> findAll(int offset, int limit, String name, String initial, String sort) {
         int page = offset / limit;
-        var pageable = PageRequest.of(page, limit, Sort.by(Sort.Direction.ASC, "id"));
+        Sort.Direction direction = "DESC".equalsIgnoreCase(sort) ? Sort.Direction.DESC : Sort.Direction.ASC;
+        var sortOrder = Sort.by(direction, "description").and(Sort.by(Sort.Direction.ASC, "id"));
+        var pageable = PageRequest.of(page, limit, sortOrder);
+        Specification<AmenitiesJpaEntity> spec = AmenitySpecification.search(name, initial);
 
-        return jpaRepository.findAll(pageable).getContent().stream()
+
+        return jpaRepository.findAll(spec, pageable).getContent().stream()
                 .map(mapper::toDomain)
                 .collect(Collectors.toList());
     }
@@ -71,7 +78,8 @@ public class AmenitiesRepositoryAdapter implements IAmenitiesRepository {
     }
 
     @Override
-    public long count() {
-        return jpaRepository.count();
+    public long count(String name, String initial) {
+        Specification<AmenitiesJpaEntity> spec = AmenitySpecification.search(name, initial);
+        return jpaRepository.count(spec);
     }
 }

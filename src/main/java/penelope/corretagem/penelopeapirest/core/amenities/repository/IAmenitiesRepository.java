@@ -7,7 +7,7 @@ import java.util.Optional;
 public interface IAmenitiesRepository {
     List<Amenities> findAll();
 
-    List<Amenities> findAll(int offset, int limit);
+    List<Amenities> findAll(int offset, int limit, String name, String initial, String sort);
 
     Optional<Amenities> findById(Long id);
 
@@ -19,5 +19,5 @@ public interface IAmenitiesRepository {
 
     void deleteById(Long id);
 
-    long count();
+    long count(String name, String initial);
 }
