@@ -3,7 +3,7 @@ package penelope.corretagem.penelopeapirest.application.dto;
 import penelope.corretagem.penelopeapirest.core.estate.Estate;
 
 import java.util.Set;
-import java.util.stream.Collectors; // Necessário para mapear as listas/sets
+import java.util.stream.Collectors; 
 
 public record EstateResponse(
         Long id,
@@ -13,7 +13,6 @@ public record EstateResponse(
         Integer numberOfRooms,
         String type,
         AddressResponse address,
-        StandAddressResponse addressStand,
         Set<ImagesResponse> images,
         Set<AmenitiesResponse> amenities
 ) {
@@ -28,7 +27,6 @@ public record EstateResponse(
                 estate.getNumberOfRooms(),
                 estate.getType() != null ? estate.getType().name() : null,
                 AddressResponse.fromDomain(estate.getAddress()),
-                StandAddressResponse.fromDomain(estate.getStandAddress()),
                 estate.getImages() != null ?
                         estate.getImages().stream()
                                 .map(ImagesResponse::fromDomain)

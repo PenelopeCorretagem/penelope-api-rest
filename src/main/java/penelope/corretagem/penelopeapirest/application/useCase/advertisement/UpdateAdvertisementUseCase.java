@@ -16,7 +16,6 @@ import penelope.corretagem.penelopeapirest.core.gateway.IEstateEventPublisherGat
 import penelope.corretagem.penelopeapirest.core.user.User;
 import penelope.corretagem.penelopeapirest.core.user.repository.IUserRepository;
 
-import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -78,18 +77,6 @@ public class UpdateAdvertisementUseCase {
                     estateReq.address().complement(), estateReq.address().region()
             );
 
-            Address newStandAddress = null;
-            if (estateReq.standAddress() != null) {
-                String cleanStandZipCode = estateReq.standAddress().zipCode() != null
-                        ? estateReq.standAddress().zipCode().replaceAll("[^0-9]", "") : null;
-
-                newStandAddress = Address.createNew(
-                        estateReq.standAddress().street(), estateReq.standAddress().number(), estateReq.standAddress().neighborhood(),
-                        estateReq.standAddress().city(), estateReq.standAddress().uf(), cleanStandZipCode,
-                        estateReq.standAddress().complement(), estateReq.standAddress().region()
-                );
-            }
-
             Set<AmenitiesEstate> newAmenities = estateReq.amenitiesIds() != null ?
                     estateReq.amenitiesIds().stream()
                             .map(id ->
@@ -106,6 +93,8 @@ public class UpdateAdvertisementUseCase {
                         typeId = 1L;
                     } else if ("PLANTA".equalsIgnoreCase(imgReq.type())) {
                         typeId = 3L;
+                    } else if ("VIDEO".equalsIgnoreCase(imgReq.type())) {
+                        typeId = 4L;
                     }
                     newImages.add(ImageEstate.createNew(null, ImageEstateType.restore(typeId, null, null), imgReq.url()));
                 }
@@ -113,7 +102,7 @@ public class UpdateAdvertisementUseCase {
 
             currentEstate.updateAllDetails(
                     normalizedTitle, estateReq.description(), estateReq.area(), estateReq.numberOfRooms(),
-                    parseEstateType(estateReq.type()), newAddress, newStandAddress, newImages, newAmenities
+                    parseEstateType(estateReq.type()), newAddress, newImages, newAmenities
             );
         }
 
@@ -137,24 +126,7 @@ public class UpdateAdvertisementUseCase {
     }
 
     private boolean hasEventTypeRelevantChanges(Estate estate, EstateCreateRequest req) {
-        if (!estate.getTitle().equals(req.title())) {
-            return true;
-        }
-
-        var oldStand = estate.getStandAddress();
-        var newStand = req.standAddress();
-
-        if (oldStand == null && newStand == null) return false;
-        if (oldStand == null || newStand == null) return true;
-
-        return !oldStand.getStreet().equals(newStand.street()) ||
-                !oldStand.getNumber().equals(newStand.number()) ||
-                !oldStand.getNeighborhood().equals(newStand.neighborhood()) ||
-                !oldStand.getCity().equals(newStand.city()) ||
-                !oldStand.getUf().equals(newStand.uf()) ||
-                !oldStand.getZipCode().equals(newStand.zipCode()) ||
-                !Objects.equals(oldStand.getComplement(), newStand.complement()) ||
-                !oldStand.getRegion().equals(newStand.region());
+        return !estate.getTitle().trim().equals(req.title().trim());
     }
 
     private Estate.Type parseEstateType(String type) {

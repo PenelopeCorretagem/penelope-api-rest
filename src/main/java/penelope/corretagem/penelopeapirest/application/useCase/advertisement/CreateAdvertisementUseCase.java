@@ -80,20 +80,6 @@ public class CreateAdvertisementUseCase {
                 estateRequest.address().region()
         );
 
-        Address standAddress = null;
-        if (estateRequest.standAddress() != null) {
-            standAddress = Address.createNew(
-                    estateRequest.standAddress().street(),
-                    estateRequest.standAddress().number(),
-                    estateRequest.standAddress().neighborhood(),
-                    estateRequest.standAddress().city(),
-                    estateRequest.standAddress().uf(),
-                    cleanZipCode,
-                    estateRequest.standAddress().complement(),
-                    estateRequest.standAddress().region()
-            );
-        }
-
         Set<AmenitiesEstate> domainAmenities = estateRequest.amenitiesIds() != null ?
                 estateRequest.amenitiesIds().stream()
                         .map(id -> {
@@ -109,12 +95,14 @@ public class CreateAdvertisementUseCase {
                 String imageUrl = imgReq.url();
                 String typeString = imgReq.type();
 
-                Long typeId = 2L; // Padrão Galeria
-                if ("CAPA".equalsIgnoreCase(typeString)) {
-                    typeId = 1L;
-                } else if ("PLANTA".equalsIgnoreCase(typeString)) {
-                    typeId = 3L;
-                }
+                                Long typeId = 2L; // Padrão Galeria
+                                if ("CAPA".equalsIgnoreCase(typeString)) {
+                                        typeId = 1L;
+                                } else if ("PLANTA".equalsIgnoreCase(typeString)) {
+                                        typeId = 3L;
+                                } else if ("VIDEO".equalsIgnoreCase(typeString)) {
+                                        typeId = 4L;
+                                }
 
                 var imageTypeDomain = ImageEstateType.restore(typeId, null, null);
 
@@ -135,7 +123,6 @@ public class CreateAdvertisementUseCase {
                 estateRequest.numberOfRooms(),
                 parseEstateType(estateRequest.type()),
                 address,
-                standAddress,
                 domainImages,
                 domainAmenities
         );

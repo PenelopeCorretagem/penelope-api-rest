@@ -53,7 +53,6 @@ public class EstateInfrastructureMapper {
                 jpa.getNumberOfRooms(),
                 Estate.Type.valueOf(jpa.getType().name()),
                 addressMapper.toDomain(jpa.getAddress()),
-                addressMapper.toDomain(jpa.getStandAddress()),
                 imagesDomain,
                 amenitiesDomain
         );
@@ -75,7 +74,6 @@ public class EstateInfrastructureMapper {
         }
 
         entity.setAddress(addressMapper.toEntity(domain.getAddress()));
-        entity.setStandAddress(addressMapper.toEntity(domain.getStandAddress()));
 
         if (domain.getAmenities() != null && !domain.getAmenities().isEmpty()) {
             Set<AmenitiesEstateJpaEntity> amenitiesSet = domain.getAmenities().stream()

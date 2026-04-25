@@ -13,7 +13,6 @@ public class Estate {
     private Integer numberOfRooms;
     private Type type;
     private Address address;
-    private Address standAddress;
     private final Set<ImageEstate> images;
     private final Set<AmenitiesEstate> amenities;
 
@@ -25,7 +24,6 @@ public class Estate {
             Integer numberOfRooms,
             Type type,
             Address address,
-            Address standAddress,
             Set<ImageEstate> images,
             Set<AmenitiesEstate> amenities
     ) {
@@ -36,7 +34,6 @@ public class Estate {
         this.numberOfRooms = numberOfRooms;
         this.type = type;
         this.address = address;
-        this.standAddress = standAddress;
         this.images = images;
         this.amenities = amenities;
     }
@@ -49,7 +46,6 @@ public class Estate {
             Integer numberOfRooms,
             Type type,
             Address address,
-            Address standAddress,
             Set<ImageEstate> images,
             Set<AmenitiesEstate> amenities) {
         return new Estate(
@@ -60,7 +56,6 @@ public class Estate {
                 numberOfRooms,
                 type,
                 address,
-                standAddress,
                 images,
                 amenities
         );
@@ -74,7 +69,6 @@ public class Estate {
             Integer numberOfRooms,
             Type type,
             Address address,
-            Address standAddress,
             Set<ImageEstate> images,
             Set<AmenitiesEstate> amenities) {
         return new Estate(
@@ -85,7 +79,6 @@ public class Estate {
                 numberOfRooms,
                 type,
                 address,
-                standAddress,
                 images,
                 amenities
         );
@@ -120,10 +113,6 @@ public class Estate {
         return address;
     }
 
-    public Address getStandAddress() {
-        return standAddress;
-    }
-
     public enum Type {
         DISPONIVEL("Disponível"),
         EM_OBRAS("Em obras"),
@@ -148,14 +137,13 @@ public class Estate {
     }
 
     public void updateAllDetails(String title, String description, Double area, Integer numberOfRooms, Type type,
-                                 Address address, Address standAddress, Set<ImageEstate> images, Set<AmenitiesEstate> amenities) {
+                                 Address address, Set<ImageEstate> images, Set<AmenitiesEstate> amenities) {
         this.title = title;
         this.description = description;
         this.area = area;
         this.numberOfRooms = numberOfRooms;
         this.type = type;
         this.address = address;
-        this.standAddress = standAddress;
 
         this.images.clear();
         if (images != null) this.images.addAll(images);

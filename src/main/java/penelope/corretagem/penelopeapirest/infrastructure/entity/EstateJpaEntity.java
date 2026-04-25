@@ -36,14 +36,8 @@ public class EstateJpaEntity {
     private Type type;
 
     @OneToOne(cascade = CascadeType.ALL)
-    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "fk_endereco", referencedColumnName = "id", nullable = false)
     private AddressJpaEntity address;
-
-    @OneToOne(cascade = CascadeType.ALL)
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "fk_endereco_stand", referencedColumnName = "id", nullable = true)
-    private AddressJpaEntity standAddress;
 
     @OneToMany(
             mappedBy = "estate",
