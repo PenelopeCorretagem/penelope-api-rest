@@ -1,11 +1,13 @@
 package penelope.corretagem.penelopeapirest.application.useCase.user;
 
+import org.springframework.security.core.context.SecurityContextHolder;
+import penelope.corretagem.penelopeapirest.application.dto.UserResponse;
+import penelope.corretagem.penelopeapirest.application.dto.UserUpdateRequest;
 import penelope.corretagem.penelopeapirest.core.exception.DomainValidationException;
 import penelope.corretagem.penelopeapirest.core.exception.ResourceNotFoundException;
 import penelope.corretagem.penelopeapirest.core.gateway.IPasswordEncoderGateway;
 import penelope.corretagem.penelopeapirest.core.user.repository.IUserRepository;
-import penelope.corretagem.penelopeapirest.application.dto.UserResponse;
-import penelope.corretagem.penelopeapirest.application.dto.UserUpdateRequest;
+import penelope.corretagem.penelopeapirest.core.user.valueObject.AccessLevel;
 
 public class UpdateUserUseCase {
 
@@ -20,7 +22,17 @@ public class UpdateUserUseCase {
     public UserResponse execute(Long id, UserUpdateRequest req) {
 
         var user = userRepository.findById(id)
-            .orElseThrow(() -> new ResourceNotFoundException("Usuário não encontrado"));
+                .orElseThrow(() -> new ResourceNotFoundException("Usuário não encontrado"));
+
+        var authentication = SecurityContextHolder.getContext().getAuthentication();
+        var currentUserEmail = authentication.getName();
+        boolean isAdministrador = authentication.getAuthorities().stream()
+                .anyMatch(grantedAuthority -> grantedAuthority.getAuthority()
+                        .equals("ROLE_" + AccessLevel.ADMINISTRADOR.name()));
+
+        if (!isAdministrador && !user.getEmail().equals(currentUserEmail)) {
+            throw new ResourceNotFoundException("Usuário não encontrado");
+        }
 
         if (req.email() != null && req.email().isBlank()) {
             throw new DomainValidationException("O e-mail informado não pode ser vazio");
