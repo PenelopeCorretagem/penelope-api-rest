@@ -9,6 +9,8 @@ import penelope.corretagem.penelopeapirest.core.estate.Estate;
 import penelope.corretagem.penelopeapirest.core.gateway.IEstateEventPublisherGateway;
 import penelope.corretagem.penelopeapirest.infrastructure.messaging.EstateChangedMessage;
 
+import java.time.Instant;
+
 @Component
 public class EstateEventPublisherAdapter implements IEstateEventPublisherGateway {
 
@@ -33,7 +35,9 @@ public class EstateEventPublisherAdapter implements IEstateEventPublisherGateway
                 estate.getTitle(),
                 estate.getDescription(),
                 generateSlug(estate.getTitle()),
-                EstateChangedMessage.ACTION_CREATED
+                EstateChangedMessage.ACTION_CREATED,
+                EstateChangedMessage.STATUS_ACTIVE,
+                Instant.now()
         );
 
         publish(message);
@@ -47,7 +51,9 @@ public class EstateEventPublisherAdapter implements IEstateEventPublisherGateway
                 estate.getTitle(),
                 estate.getDescription(),
                 generateSlug(estate.getTitle()),
-                EstateChangedMessage.ACTION_UPDATED
+                EstateChangedMessage.ACTION_UPDATED,
+                EstateChangedMessage.STATUS_ACTIVE,
+                Instant.now()
         );
 
         publish(message);
