@@ -88,7 +88,7 @@ public class SecurityConfig {
                             .requestMatchers(antMatcher(HttpMethod.GET, "/v1/users")).hasRole(ROLE_ADMINISTRADOR)
                             .requestMatchers(antMatcher(HttpMethod.GET, "/v1/users/*")).permitAll()
                             .requestMatchers(antMatcher(HttpMethod.PUT, "/v1/users/**")).permitAll()
-                            .requestMatchers(antMatcher(HttpMethod.DELETE, "/v1/users/**")).hasRole(ROLE_ADMINISTRADOR)
+                            .requestMatchers(antMatcher(HttpMethod.DELETE, "/v1/users/**")).permitAll()
                             // Upload de imagens de anúncios
                             .requestMatchers(antMatcher(HttpMethod.POST, "/v1/images")).hasRole(ROLE_ADMINISTRADOR)
                             .anyRequest().authenticated();
