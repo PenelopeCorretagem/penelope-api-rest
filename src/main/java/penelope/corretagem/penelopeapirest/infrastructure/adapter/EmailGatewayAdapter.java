@@ -21,8 +21,8 @@ public class EmailGatewayAdapter implements IEmailGateway {
 
     public void sendPasswordResetEmail(String toEmail, String token) {
 
-        String resetUrl = frontendUrl + "/verificacao?token=" + token;
-        String manualUrl = frontendUrl + "/verificacao";
+        String resetUrl = frontendUrl + "verificacao?token=" + token;
+        String manualUrl = frontendUrl + "verificacao";
 
         SimpleMailMessage message = new SimpleMailMessage();
         message.setTo(toEmail);
