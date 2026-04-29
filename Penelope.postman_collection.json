@@ -1,0 +1,472 @@
+{
+  "info": {
+    "_postman_id": "f68dd4a0-ac9b-4ca7-8001-3705d898e779",
+    "name": "Penelope",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "53961377",
+    "_collection_link": "https://go.postman.co/collection/53961377-f68dd4a0-ac9b-4ca7-8001-3705d898e779?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "Anuncio",
+      "item": [
+        {
+          "name": "Cadastrar Anuncio",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearer-token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"active\": true,\r\n  \"featured\": false,\r\n  \"endDate\": \"2026-12-31\",\r\n  \"creatorId\": 1,\r\n  \"responsibleId\": 1,\r\n  \"estate\": {\r\n    \"title\": \"Apartamento de LuxoOSOSOSOS\",\r\n    \"description\": \"Excelente apartamento com varanda gourmet, vista panorâmica, acabamento de primeira linha e duas vagas de garagem.\",\r\n    \"area\": 125.5,\r\n    \"numberOfRooms\": 3,\r\n    \"type\": \"LANCAMENTO\",\r\n    \"address\": {\r\n      \"street\": \"Rua Oscar Freire\",\r\n      \"number\": \"1500\",\r\n      \"neighborhood\": \"Jardins\",\r\n      \"city\": \"Sao Paulo\",\r\n      \"uf\": \"SP\",\r\n      \"zipCode\": \"01426-001\",\r\n      \"complement\": \"Apto 42\",\r\n      \"region\": \"Zona Oeste\"\r\n    },\r\n    \"amenitiesIds\": [],\r\n    \"images\": [\r\n      {\r\n        \"url\": \"https://res.cloudinary.com/sua-conta/image/upload/v1/sala.jpg\",\r\n        \"type\": \"CAPA\"\r\n      },\r\n      {\r\n        \"url\": \"https://res.cloudinary.com/sua-conta/image/upload/v1/quarto.jpg\",\r\n        \"type\": \"GALERIA\"\r\n      }\r\n    ]\r\n  }\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{penelope-dev}}v1/advertisements",
+              "host": [
+                "{{penelope-dev}}v1"
+              ],
+              "path": [
+                "advertisements"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Atualizar Anuncio",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"active\": true,\r\n  \"featured\": false,\r\n  \"endDate\": \"2026-12-31\",\r\n  \"creatorId\": 1,\r\n  \"responsibleId\": 1,\r\n  \"estate\": {\r\n    \"title\": \"Apartamento de LuxoOSOSOSOS\",\r\n    \"description\": \"Excelente apartamento com varanda gourmet, vista panorâmica, acabamento de primeira linha e duas vagas de garagem.\",\r\n    \"area\": 125.5,\r\n    \"numberOfRooms\": 3,\r\n    \"type\": \"LANCAMENTO\",\r\n    \"address\": {\r\n      \"street\": \"Rua Oscar Freire\",\r\n      \"number\": \"1500\",\r\n      \"neighborhood\": \"Jardins\",\r\n      \"city\": \"Sao Paulo\",\r\n      \"uf\": \"SP\",\r\n      \"zipCode\": \"01426-001\",\r\n      \"complement\": \"Apto 42\",\r\n      \"region\": \"Zona Oeste\"\r\n    },\r\n    \"amenitiesIds\": [],\r\n    \"images\": [\r\n      {\r\n        \"url\": \"https://res.cloudinary.com/sua-conta/image/upload/v1/sala.jpg\",\r\n        \"type\": \"CAPA\"\r\n      },\r\n      {\r\n        \"url\": \"https://res.cloudinary.com/sua-conta/image/upload/v1/quarto.jpg\",\r\n        \"type\": \"GALERIA\"\r\n      }\r\n    ]\r\n  }\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{penelope-dev}}v1/advertisements/1",
+              "host": [
+                "{{penelope-dev}}v1"
+              ],
+              "path": [
+                "advertisements",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Ativar/Desativar Anuncio",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{penelope-token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer COLOQUE_SEU_TOKEN_AQUI",
+                "disabled": true
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"active\": true\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{penelope-dev}}v1/advertisements/1/status",
+              "host": [
+                "{{penelope-dev}}v1"
+              ],
+              "path": [
+                "advertisements",
+                "1",
+                "status"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Buscar Anuncios",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{penelope-token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{penelope-dev}}v1/advertisements",
+              "host": [
+                "{{penelope-dev}}v1"
+              ],
+              "path": [
+                "advertisements"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Buscar Anuncios (ID)",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{penelope-token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{penelope-dev}}v1/advertisements/1",
+              "host": [
+                "{{penelope-dev}}v1"
+              ],
+              "path": [
+                "advertisements",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Usuario",
+      "item": [
+        {
+          "name": "Buscar Usuarios",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearer-token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": ""
+            },
+            "url": {
+              "raw": "{{penelope-dev}}v1/users",
+              "host": [
+                "{{penelope-dev}}v1"
+              ],
+              "path": [
+                "users"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Buscar Usuarios (Id)",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearer-token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{penelope-dev}}v1/users/5",
+              "host": [
+                "{{penelope-dev}}v1"
+              ],
+              "path": [
+                "users",
+                "5"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Deletar Usuarios (Id)",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{penelope-dev}}v1/users/1",
+              "host": [
+                "{{penelope-dev}}v1"
+              ],
+              "path": [
+                "users",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Buscar Usuarios AuthToken",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJQZW5lbG9wZS1BUEkiLCJzdWIiOiJyc21vdXJhMjUyQGdtYWlsLmNvbSIsImV4cCI6MTc3MzI0NDc1M30.Wq80gb0WfikCeevgFZ7XvjC9kB-D6FrrVHLIs2506V8",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{penelope-dev}}users/v1/me",
+              "host": [
+                "{{penelope-dev}}users"
+              ],
+              "path": [
+                "v1",
+                "me"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Cadastrar Usuario",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"name\": \"Rennan Souza\",\r\n  \"email\": \"rsmoura252@sptech.com\",\r\n  \"password\": \"#Rennan123\",\r\n  \"cpf\": \"11122266948\",\r\n  \"dateBirth\": \"2004-06-17\",\r\n  \"monthlyIncome\": 2000,\r\n  \"phone\": \"11962235123\",\r\n  \"accessLevel\": \"CLIENTE\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{penelope-dev}}v1/users",
+              "host": [
+                "{{penelope-dev}}v1"
+              ],
+              "path": [
+                "users"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Atualizar Usuario",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearer-token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"monthlyIncome\": 15000.00,\r\n  \"phone\": \"11955554444\",\r\n  \"accessLevel\": \"ADMINISTRADOR\",\r\n  \"creci\": \"123477789\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{penelope-dev}}v1/users/5",
+              "host": [
+                "{{penelope-dev}}v1"
+              ],
+              "path": [
+                "users",
+                "5"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Imagens",
+      "item": [
+        {
+          "name": "Cadastrar Imagens",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer COLOQUE_SEU_TOKEN_AQUI",
+                "disabled": true
+              }
+            ],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "type": "file",
+                  "key": "files",
+                  "src": "/C:/Users/rennan.moura_dotz/Downloads/teste.png"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{penelope-dev}}/v1/images",
+              "host": [
+                "{{penelope-dev}}"
+              ],
+              "path": [
+                "v1",
+                "images"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Diferenciais",
+      "item": [
+        {
+          "name": "Diferenciais",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{penelope-token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{penelope-dev}}/v1/amenities",
+              "host": [
+                "{{penelope-dev}}"
+              ],
+              "path": [
+                "v1",
+                "amenities"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Envio Email",
+      "item": [
+        {
+          "name": "Enviar Email (Fale Conosco)",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"nome\": \"Rennan Moura\",\r\n    \"email\": \"rsmoura252@gmail.com\",\r\n    \"assunto\": \"Teste de envio\",\r\n    \"mensagem\": \"Validando se a mensagem está sendo enviada corretamente\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{penelope-dev}}contact-us",
+              "host": [
+                "{{penelope-dev}}contact-us"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "penelope-token",
+      "value": ""
+    }
+  ]
+}

@@ -1,0 +1,41 @@
+version: '3.8'
+
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: penelope-mysql
+    restart: unless-stopped
+    ports:
+      - "${DB_PORT}:3306"
+    environment:
+      MYSQL_DATABASE: ${DB_NAME}
+      MYSQL_USER: ${DB_USER}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+    volumes:
+      - mysql_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p${DB_PASSWORD}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  rabbitmq:
+    image: rabbitmq:3.13-management-alpine
+    container_name: penelope-rabbitmq
+    restart: unless-stopped
+    ports:
+      - "${RABBITMQ_PORT}:5672"     # Porta TCP para o Spring Boot (Producer e Consumer)
+      - "${RABBITMQ_UI_PORT}:15672" # Porta HTTP para você acessar o painel no Chrome
+    environment:
+      RABBITMQ_DEFAULT_USER: ${RABBITMQ_DEFAULT_USER}
+      RABBITMQ_DEFAULT_PASS: ${RABBITMQ_DEFAULT_PASS}
+    volumes:
+      # Cria um volume persistente. Se você desligar o Docker, não perde as filas.
+      - rabbitmq_data:/var/lib/rabbitmq
+
+volumes:
+  mysql_data:
+    name: penelope_mysql_data
+  rabbitmq_data:
+    name: penelope_rabbitmq_data
