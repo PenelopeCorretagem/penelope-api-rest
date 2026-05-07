@@ -114,17 +114,33 @@ public class Estate {
     }
 
     public enum Type {
-        DISPONIVEL("Disponível"),
-        EM_OBRAS("Em obras"),
-        LANCAMENTO("Lançamento");
+        DISPONIVEL(3, "Disponível"),
+        EM_OBRAS(1, "Em obras"),
+        LANCAMENTO(2, "Lançamento");
+
+        private final int code;
         private final String typeName;
 
-        Type(String typeName) {
+        Type(int code, String typeName) {
+            this.code = code;
             this.typeName = typeName;
+        }
+
+        public int getCode() {
+            return code;
         }
 
         public String getTypeName() {
             return typeName;
+        }
+
+        public static Type fromCode(int code) {
+            for (Type value : values()) {
+                if (value.code == code) {
+                    return value;
+                }
+            }
+            throw new IllegalArgumentException("Codigo de tipo de imovel invalido: " + code);
         }
     }
 

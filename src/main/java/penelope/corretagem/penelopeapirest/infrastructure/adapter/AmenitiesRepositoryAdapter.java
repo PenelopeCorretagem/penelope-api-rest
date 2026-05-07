@@ -54,8 +54,14 @@ public class AmenitiesRepositoryAdapter implements IAmenitiesRepository {
 
     @Override
     public Amenities save(Amenities domain) {
-
-        var entity = mapper.toEntity(domain);
+        AmenitiesJpaEntity entity;
+        if (domain.getId() != null) {
+            entity = jpaRepository.findById(domain.getId())
+                    .orElseGet(() -> mapper.toEntity(domain));
+            mapper.updateEntity(domain, entity);
+        } else {
+            entity = mapper.toEntity(domain);
+        }
 
         var savedEntity = jpaRepository.save(entity);
 

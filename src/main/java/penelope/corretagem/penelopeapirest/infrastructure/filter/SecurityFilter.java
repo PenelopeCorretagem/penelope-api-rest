@@ -13,6 +13,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 import penelope.corretagem.penelopeapirest.core.exception.InvalidCredentialsException;
 import penelope.corretagem.penelopeapirest.core.gateway.ITokenGateway;
+import penelope.corretagem.penelopeapirest.core.user.valueObject.AccessLevel;
 
 import java.io.IOException;
 import java.util.List;
@@ -40,11 +41,11 @@ public class SecurityFilter extends OncePerRequestFilter {
                 var tokenValidation = tokenGateway.validateToken(token);
 
                 if (tokenValidation.email() != null
-                        && !tokenValidation.email().isBlank()
-                        && tokenValidation.accessLevel() != null
-                        && !tokenValidation.accessLevel().isBlank()) {
+                    && !tokenValidation.email().isBlank()
+                    && tokenValidation.accessLevel() != null) {
+                    AccessLevel level = AccessLevel.fromCode(tokenValidation.accessLevel());
                     var authority = new SimpleGrantedAuthority(
-                            "ROLE_" + tokenValidation.accessLevel().toUpperCase(Locale.ROOT));
+                        "ROLE_" + level.name().toUpperCase(Locale.ROOT));
 
                     var authentication = new UsernamePasswordAuthenticationToken(
                             tokenValidation.email(),
@@ -58,7 +59,7 @@ public class SecurityFilter extends OncePerRequestFilter {
                             request.getMethod(),
                             request.getRequestURI());
                 }
-            } catch (InvalidCredentialsException ignored) {
+            } catch (IllegalArgumentException | InvalidCredentialsException ignored) {
                 SecurityContextHolder.clearContext();
                 log.debug("Token inválido para request {} {}", request.getMethod(), request.getRequestURI());
             } catch (RuntimeException ex) {

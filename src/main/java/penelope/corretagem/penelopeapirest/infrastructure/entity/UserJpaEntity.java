@@ -50,7 +50,7 @@ public class UserJpaEntity {
     private String creci;
 
     @Column(name = "nivel_acesso")
-    @Enumerated(EnumType.STRING)
+    @Convert(converter = penelope.corretagem.penelopeapirest.infrastructure.entity.converter.AccessLevelAttributeConverter.class)
     private AccessLevel accessLevel;
 
     @Column(name = "data_criacao")

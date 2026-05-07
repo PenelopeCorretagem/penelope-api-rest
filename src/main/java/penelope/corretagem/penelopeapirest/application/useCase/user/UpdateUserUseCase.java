@@ -67,7 +67,16 @@ public class UpdateUserUseCase {
                 req.dateBirth(), req.monthlyIncome(), req.phone()
         );
 
-        user.updateAccessProfile(req.accessLevel(), req.creci());
+        AccessLevel accessLevel = null;
+        if (req.accessLevel() != null) {
+            try {
+                accessLevel = AccessLevel.fromCode(req.accessLevel());
+            } catch (IllegalArgumentException ex) {
+                throw new DomainValidationException("Nivel de acesso invalido: " + req.accessLevel());
+            }
+        }
+
+        user.updateAccessProfile(accessLevel, req.creci());
 
         if (req.password() != null && !req.password().isBlank()) {
             user.changePassword(passwordEncoder.encode(req.password()));
@@ -78,7 +87,7 @@ public class UpdateUserUseCase {
         return new UserResponse(
                 updatedUser.getId(), updatedUser.getName(), updatedUser.getEmail(),
                 updatedUser.getCpf(), updatedUser.getDateBirth(), updatedUser.getMonthlyIncome(),
-                updatedUser.getPhone(), updatedUser.getCreci(), updatedUser.getAccessLevel(), updatedUser.isActive()
+                updatedUser.getPhone(), updatedUser.getCreci(), updatedUser.getAccessLevel().getCode(), updatedUser.isActive()
         );
     }
 }

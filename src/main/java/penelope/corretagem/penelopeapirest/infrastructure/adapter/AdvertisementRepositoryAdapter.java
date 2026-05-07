@@ -54,7 +54,9 @@ public class AdvertisementRepositoryAdapter implements IAdvertisementRepository 
     public List<Advertisement> findAll(AdvertisementFilter filter) {
 
         Estate.Type type = null;
-        if (filter.type() != null && !filter.type().isBlank()) type = Estate.Type.valueOf(filter.type().toUpperCase());
+        if (filter.type() != null) {
+            type = Estate.Type.fromCode(filter.type());
+        }
 
         Specification<AdvertisementJpaEntity> spec =
                 AdvertisementSpecifications.hasCidade(filter.city())

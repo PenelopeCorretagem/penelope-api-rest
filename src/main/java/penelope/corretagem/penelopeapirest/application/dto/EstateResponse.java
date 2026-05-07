@@ -11,7 +11,7 @@ public record EstateResponse(
         String description,
         Double area,
         Integer numberOfRooms,
-        String type,
+        Integer type,
         AddressResponse address,
         Set<ImagesResponse> images,
         Set<AmenitiesResponse> amenities
@@ -25,7 +25,7 @@ public record EstateResponse(
                 estate.getDescription(),
                 estate.getArea(),
                 estate.getNumberOfRooms(),
-                estate.getType() != null ? estate.getType().name() : null,
+                estate.getType() != null ? estate.getType().getCode() : null,
                 AddressResponse.fromDomain(estate.getAddress()),
                 estate.getImages() != null ?
                         estate.getImages().stream()
