@@ -32,7 +32,7 @@ public class EstateJpaEntity {
     private Integer numberOfRooms;
 
     @Column(name = "tipo", nullable = false)
-    @Enumerated(EnumType.STRING)
+    @Convert(converter = penelope.corretagem.penelopeapirest.infrastructure.entity.converter.EstateTypeAttributeConverter.class)
     private Type type;
 
     @OneToOne(cascade = CascadeType.ALL)
@@ -55,14 +55,29 @@ public class EstateJpaEntity {
 
     @Getter
     public enum Type {
-        DISPONIVEL("Disponível"),
-        EM_OBRAS("Em obras"),
-        LANCAMENTO("Lançamento");
+        DISPONIVEL(3, "Disponível"),
+        EM_OBRAS(1, "Em obras"),
+        LANCAMENTO(2, "Lançamento");
 
+        private final int code;
         private final String typeName;
 
-        Type(String typeName) {
+        Type(int code, String typeName) {
+            this.code = code;
             this.typeName = typeName;
+        }
+
+        public int getCode() {
+            return code;
+        }
+
+        public static Type fromCode(int code) {
+            for (Type value : values()) {
+                if (value.code == code) {
+                    return value;
+                }
+            }
+            throw new IllegalArgumentException("Codigo de tipo de imovel invalido: " + code);
         }
     }
 }

@@ -4,12 +4,27 @@ import lombok.Getter;
 
 @Getter
 public enum AccessLevel {
-  ADMINISTRADOR("Administrador"),
-  CLIENTE("Cliente");
+  ADMINISTRADOR(1, "Administrador"),
+  CLIENTE(2, "Cliente");
 
+  private final int code;
   private final String description;
 
-  AccessLevel(String description) {
+  AccessLevel(int code, String description) {
+    this.code = code;
     this.description = description;
+  }
+
+  public int getCode() {
+    return code;
+  }
+
+  public static AccessLevel fromCode(int code) {
+    for (AccessLevel value : values()) {
+      if (value.code == code) {
+        return value;
+      }
+    }
+    throw new IllegalArgumentException("Codigo de nivel de acesso invalido: " + code);
   }
 }

@@ -32,6 +32,13 @@ public class CreateUserUseCase {
             throw new DomainValidationException("O nivel de acesso e obrigatorio");
         }
 
+        AccessLevel accessLevel;
+        try {
+            accessLevel = AccessLevel.fromCode(request.accessLevel());
+        } catch (IllegalArgumentException ex) {
+            throw new DomainValidationException("Nivel de acesso invalido: " + request.accessLevel());
+        }
+
         if (userRepository.findByEmail(request.email()).isPresent()) {
             throw new DomainValidationException("O e-mail informado já está cadastrado");
         }
@@ -44,7 +51,7 @@ public class CreateUserUseCase {
             throw new DomainValidationException("O CRECI informado já está cadastrado");
         }
 
-        if (request.creci() != null && request.accessLevel() == AccessLevel.CLIENTE) {
+        if (request.creci() != null && accessLevel == AccessLevel.CLIENTE) {
             throw new DomainValidationException("Clientes não devem possuir Creci");
         }
 
@@ -57,7 +64,7 @@ public class CreateUserUseCase {
                 request.monthlyIncome(),
                 request.phone(),
                 request.creci(),
-                request.accessLevel()
+                accessLevel
         );
 
         User savedUser = userRepository.save(newUser);
@@ -65,7 +72,7 @@ public class CreateUserUseCase {
         return new UserResponse(
                 savedUser.getId(), savedUser.getName(), savedUser.getEmail(),
                 savedUser.getCpf(), savedUser.getDateBirth(), savedUser.getMonthlyIncome(),
-                savedUser.getPhone(), savedUser.getCreci(), savedUser.getAccessLevel(), savedUser.isActive()
+                savedUser.getPhone(), savedUser.getCreci(), savedUser.getAccessLevel().getCode(), savedUser.isActive()
         );
     }
 }

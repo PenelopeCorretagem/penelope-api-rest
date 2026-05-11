@@ -1,6 +1,5 @@
 package penelope.corretagem.penelopeapirest.application.dto;
 
-import penelope.corretagem.penelopeapirest.core.user.valueObject.AccessLevel;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -14,6 +13,6 @@ public record UserRequest(
         LocalDate dateBirth,
         BigDecimal monthlyIncome,
         String creci,
-        AccessLevel accessLevel
+        Integer accessLevel
 ) {
 }

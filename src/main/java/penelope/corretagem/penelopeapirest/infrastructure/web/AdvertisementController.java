@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import penelope.corretagem.penelopeapirest.application.dto.*;
 import penelope.corretagem.penelopeapirest.application.useCase.advertisement.*;
 import penelope.corretagem.penelopeapirest.core.gateway.ITokenGateway;
+import penelope.corretagem.penelopeapirest.core.user.valueObject.AccessLevel;
 
 import java.util.List;
 import java.util.Map;
@@ -139,8 +140,8 @@ public class AdvertisementController {
         }
 
         try {
-            String accessLevel = tokenGateway.getAccessLevelFromToken(token);
-            return accessLevel != null && "ADMINISTRADOR".equalsIgnoreCase(accessLevel.trim());
+            Integer accessLevel = tokenGateway.getAccessLevelFromToken(token);
+            return accessLevel != null && accessLevel == AccessLevel.ADMINISTRADOR.getCode();
         } catch (RuntimeException ex) {
             return false;
         }

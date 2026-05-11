@@ -51,7 +51,7 @@ public class EstateInfrastructureMapper {
                 jpa.getDescription(),
                 jpa.getArea(),
                 jpa.getNumberOfRooms(),
-                Estate.Type.valueOf(jpa.getType().name()),
+            jpa.getType() != null ? Estate.Type.fromCode(jpa.getType().getCode()) : null,
                 addressMapper.toDomain(jpa.getAddress()),
                 imagesDomain,
                 amenitiesDomain
@@ -70,7 +70,7 @@ public class EstateInfrastructureMapper {
         entity.setNumberOfRooms(domain.getNumberOfRooms());
 
         if (domain.getType() != null) {
-            entity.setType(EstateJpaEntity.Type.valueOf(domain.getType().name()));
+            entity.setType(EstateJpaEntity.Type.fromCode(domain.getType().getCode()));
         }
 
         entity.setAddress(addressMapper.toEntity(domain.getAddress()));

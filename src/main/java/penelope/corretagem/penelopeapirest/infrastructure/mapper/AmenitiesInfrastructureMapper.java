@@ -33,6 +33,12 @@ public class AmenitiesInfrastructureMapper {
         return entity;
     }
 
+    public void updateEntity(Amenities domain, AmenitiesJpaEntity entity) {
+        if (domain == null || entity == null) return;
+        entity.setDescription(domain.getDescription());
+        entity.setIcon(domain.getIcon());
+    }
+
     public AmenitiesEstate toRelationDomain(AmenitiesEstateJpaEntity jpaRelation) {
         if (jpaRelation == null) return null;
 

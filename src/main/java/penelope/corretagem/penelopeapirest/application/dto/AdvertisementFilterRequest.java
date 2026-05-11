@@ -5,7 +5,7 @@ import java.time.LocalDate;
 public record AdvertisementFilterRequest(
         String city,
         String region,
-        String type,
+        Integer type,
         Integer numberOfRooms,
         Boolean active,
         Double area,

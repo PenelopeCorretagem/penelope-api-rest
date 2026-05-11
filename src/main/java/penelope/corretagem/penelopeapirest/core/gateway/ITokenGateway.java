@@ -7,7 +7,7 @@ public interface ITokenGateway {
         return validateToken(token).email();
     }
 
-    default String getAccessLevelFromToken(String token) {
+    default Integer getAccessLevelFromToken(String token) {
         return validateToken(token).accessLevel();
     }
 }
