@@ -72,7 +72,7 @@ public class CreateUserUseCase {
         return new UserResponse(
                 savedUser.getId(), savedUser.getName(), savedUser.getEmail(),
                 savedUser.getCpf(), savedUser.getDateBirth(), savedUser.getMonthlyIncome(),
-                savedUser.getPhone(), savedUser.getCreci(), savedUser.getAccessLevel().getCode(), savedUser.isActive()
+            savedUser.getPhone(), savedUser.getCreci(), savedUser.getAccessLevel().getDisplayName(), savedUser.isActive()
         );
     }
 }

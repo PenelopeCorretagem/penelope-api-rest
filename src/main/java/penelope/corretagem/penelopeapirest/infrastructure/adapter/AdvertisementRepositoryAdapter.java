@@ -6,6 +6,7 @@ import org.springframework.transaction.annotation.Transactional;
 import penelope.corretagem.penelopeapirest.core.advertisement.Advertisement;
 import penelope.corretagem.penelopeapirest.core.advertisement.AdvertisementFilter;
 import penelope.corretagem.penelopeapirest.core.advertisement.repository.IAdvertisementRepository;
+import penelope.corretagem.penelopeapirest.core.exception.DomainValidationException;
 import penelope.corretagem.penelopeapirest.core.exception.ResourceNotFoundException;
 import penelope.corretagem.penelopeapirest.core.estate.Estate;
 import penelope.corretagem.penelopeapirest.infrastructure.entity.*;
@@ -53,9 +54,13 @@ public class AdvertisementRepositoryAdapter implements IAdvertisementRepository 
     @Override
     public List<Advertisement> findAll(AdvertisementFilter filter) {
 
-        Estate.Type type = null;
+        EstateJpaEntity.Type type = null;
         if (filter.type() != null) {
-            type = Estate.Type.fromCode(filter.type());
+            try {
+                type = EstateJpaEntity.Type.fromCode(filter.type());
+            } catch (IllegalArgumentException ex) {
+                throw new DomainValidationException("Tipo do imovel invalido: " + filter.type());
+            }
         }
 
         Specification<AdvertisementJpaEntity> spec =

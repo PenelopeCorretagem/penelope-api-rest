@@ -140,8 +140,9 @@ public class AdvertisementController {
         }
 
         try {
-            Integer accessLevel = tokenGateway.getAccessLevelFromToken(token);
-            return accessLevel != null && accessLevel == AccessLevel.ADMINISTRADOR.getCode();
+            String accessLevel = tokenGateway.getAccessLevelFromToken(token);
+            return accessLevel != null
+                    && AccessLevel.fromExternalValue(accessLevel) == AccessLevel.ADMINISTRADOR;
         } catch (RuntimeException ex) {
             return false;
         }

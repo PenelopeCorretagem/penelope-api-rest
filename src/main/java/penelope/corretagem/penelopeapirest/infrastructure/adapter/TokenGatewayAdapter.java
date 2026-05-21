@@ -37,10 +37,11 @@ public class TokenGatewayAdapter implements ITokenGateway {
                 .retrieve()
                 .body(ValidateAccessTokenResponse.class);
 
-                if (response == null
-                    || response.email() == null
-                    || response.email().isBlank()
-                    || response.accessLevel() == null) {
+                    if (response == null
+                        || response.email() == null
+                        || response.email().isBlank()
+                        || response.accessLevel() == null
+                        || response.accessLevel().isBlank()) {
                 throw new InvalidCredentialsException();
             }
 

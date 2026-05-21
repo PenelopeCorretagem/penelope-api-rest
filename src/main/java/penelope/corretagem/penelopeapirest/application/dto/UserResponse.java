@@ -13,7 +13,7 @@ public record UserResponse(
         BigDecimal monthlyIncome,
         String phone,
         String creci,
-        Integer accessLevel,
+        String accessLevel,
         boolean active
 ) {
 }

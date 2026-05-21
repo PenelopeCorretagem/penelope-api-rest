@@ -3,6 +3,7 @@ package penelope.corretagem.penelopeapirest.core.estate;
 import penelope.corretagem.penelopeapirest.core.address.Address;
 import penelope.corretagem.penelopeapirest.core.amenities.AmenitiesEstate;
 
+import java.util.Locale;
 import java.util.Set;
 
 public class Estate {
@@ -132,6 +133,21 @@ public class Estate {
 
         public String getTypeName() {
             return typeName;
+        }
+
+        public String getDisplayName() {
+            String[] parts = name().toLowerCase(Locale.ROOT).split("_");
+            StringBuilder builder = new StringBuilder();
+
+            for (String part : parts) {
+                if (part.isEmpty()) {
+                    continue;
+                }
+                builder.append(Character.toUpperCase(part.charAt(0)))
+                        .append(part.substring(1));
+            }
+
+            return builder.toString();
         }
 
         public static Type fromCode(int code) {

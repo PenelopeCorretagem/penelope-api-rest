@@ -41,9 +41,10 @@ public class SecurityFilter extends OncePerRequestFilter {
                 var tokenValidation = tokenGateway.validateToken(token);
 
                 if (tokenValidation.email() != null
-                    && !tokenValidation.email().isBlank()
-                    && tokenValidation.accessLevel() != null) {
-                    AccessLevel level = AccessLevel.fromCode(tokenValidation.accessLevel());
+                        && !tokenValidation.email().isBlank()
+                        && tokenValidation.accessLevel() != null
+                        && !tokenValidation.accessLevel().isBlank()) {
+                    AccessLevel level = AccessLevel.fromExternalValue(tokenValidation.accessLevel());
                     var authority = new SimpleGrantedAuthority(
                         "ROLE_" + level.name().toUpperCase(Locale.ROOT));
 
