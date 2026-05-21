@@ -19,10 +19,6 @@ public enum AccessLevel {
     return code;
   }
 
-  public String getDisplayName() {
-    return description;
-  }
-
   public static AccessLevel fromCode(int code) {
     for (AccessLevel value : values()) {
       if (value.code == code) {
@@ -49,8 +45,7 @@ public enum AccessLevel {
 
     for (AccessLevel level : values()) {
       if (level.name().equalsIgnoreCase(trimmed)
-          || level.getDescription().equalsIgnoreCase(trimmed)
-          || level.getDisplayName().equalsIgnoreCase(trimmed)) {
+          || level.getDescription().equalsIgnoreCase(trimmed)) {
         return level;
       }
     }

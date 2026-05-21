@@ -24,7 +24,7 @@ public class GetUserAuthInfoUseCase {
 
         return new UserAuthInfoResponse(
                 user.getId(),
-            user.getAccessLevel().getDisplayName()
+                user.getAccessLevel().getDescription()
         );
     }
 }
