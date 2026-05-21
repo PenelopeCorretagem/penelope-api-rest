@@ -87,7 +87,7 @@ public class UpdateUserUseCase {
         return new UserResponse(
                 updatedUser.getId(), updatedUser.getName(), updatedUser.getEmail(),
                 updatedUser.getCpf(), updatedUser.getDateBirth(), updatedUser.getMonthlyIncome(),
-                updatedUser.getPhone(), updatedUser.getCreci(), updatedUser.getAccessLevel().getCode(), updatedUser.isActive()
+            updatedUser.getPhone(), updatedUser.getCreci(), updatedUser.getAccessLevel().getDescription(), updatedUser.isActive()
         );
     }
 }

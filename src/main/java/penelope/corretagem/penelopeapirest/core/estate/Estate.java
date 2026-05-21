@@ -134,6 +134,10 @@ public class Estate {
             return typeName;
         }
 
+        public String getDisplayName() {
+            return typeName;
+        }
+
         public static Type fromCode(int code) {
             for (Type value : values()) {
                 if (value.code == code) {

@@ -1,8 +1,8 @@
 package penelope.corretagem.penelopeapirest.infrastructure.specification;
 
 import org.springframework.data.jpa.domain.Specification;
-import penelope.corretagem.penelopeapirest.core.estate.Estate;
 import penelope.corretagem.penelopeapirest.infrastructure.entity.AdvertisementJpaEntity;
+import penelope.corretagem.penelopeapirest.infrastructure.entity.EstateJpaEntity;
 
 import java.time.LocalDate;
 
@@ -34,7 +34,7 @@ public class AdvertisementSpecifications {
         };
     }
 
-    public static Specification<AdvertisementJpaEntity> hasTipo(Estate.Type tipo) {
+    public static Specification<AdvertisementJpaEntity> hasTipo(EstateJpaEntity.Type tipo) {
         return (root, query, cb) -> tipo == null ? null :
                 cb.equal(root.get("estate").get("type"), tipo);
     }

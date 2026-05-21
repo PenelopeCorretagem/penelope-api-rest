@@ -32,7 +32,7 @@ public class GetUserByIdUseCase {
         return new UserResponse(
                 user.getId(), user.getName(), user.getEmail(),
                 user.getCpf(), user.getDateBirth(), user.getMonthlyIncome(),
-            user.getPhone(), user.getCreci(), user.getAccessLevel().getCode(), user.isActive()
+            user.getPhone(), user.getCreci(), user.getAccessLevel().getDescription(), user.isActive()
         );
     }
 }
