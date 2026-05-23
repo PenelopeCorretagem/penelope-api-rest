@@ -10,7 +10,7 @@ public record EstateCreateRequest(
         String description,
         Double area,
         Integer numberOfRooms,
-        Integer type,
+        String type,
         AddressRequest address,
         List<Long> amenitiesIds,
         List<ImageRequest> images

@@ -34,7 +34,7 @@ public class CreateUserUseCase {
 
         AccessLevel accessLevel;
         try {
-            accessLevel = AccessLevel.fromCode(request.accessLevel());
+            accessLevel = AccessLevel.fromExternalValue(request.accessLevel());
         } catch (IllegalArgumentException ex) {
             throw new DomainValidationException("Nivel de acesso invalido: " + request.accessLevel());
         }

@@ -57,7 +57,7 @@ public class AdvertisementRepositoryAdapter implements IAdvertisementRepository 
         EstateJpaEntity.Type type = null;
         if (filter.type() != null) {
             try {
-                type = EstateJpaEntity.Type.fromCode(filter.type());
+                type = EstateJpaEntity.Type.valueOf(filter.type());
             } catch (IllegalArgumentException ex) {
                 throw new DomainValidationException("Tipo do imovel invalido: " + filter.type());
             }

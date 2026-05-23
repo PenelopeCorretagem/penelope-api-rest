@@ -140,4 +140,16 @@ public class UpdateAdvertisementUseCase {
             throw new DomainValidationException("Tipo do imóvel inválido: " + type);
         }
     }
+
+    private Estate.Type parseEstateType(String type) {
+        if (type == null) {
+            throw new DomainValidationException("Tipo do imóvel é obrigatório");
+        }
+
+        try {
+            return Estate.Type.valueOf(type);
+        } catch (IllegalArgumentException ex) {
+            throw new DomainValidationException("Tipo do imóvel inválido: " + type);
+        }
+    }
 }

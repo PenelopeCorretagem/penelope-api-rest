@@ -14,6 +14,6 @@ public class AuthenticateUserUseCase {
     }
 
     public LoginResponse execute(LoginRequest request) {
-        return authGateway.authenticate(request);
+       return authGateway.authenticate(request);
     }
 }

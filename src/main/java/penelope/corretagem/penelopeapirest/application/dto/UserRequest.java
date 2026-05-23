@@ -13,6 +13,6 @@ public record UserRequest(
         LocalDate dateBirth,
         BigDecimal monthlyIncome,
         String creci,
-        Integer accessLevel
+        String accessLevel
 ) {
 }
