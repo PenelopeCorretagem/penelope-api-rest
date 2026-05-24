@@ -13,9 +13,6 @@ public record AdvertisementFilter(
         String description,
         LocalDate createdAt,
         LocalDate createdAtMin,
-        LocalDate createdAtMax,
-        LocalDate endDate,
-        LocalDate endDateMin,
-        LocalDate endDateMax
+        LocalDate createdAtMax
 ) {
 }

@@ -116,7 +116,7 @@ public class UpdateAdvertisementUseCase {
             advertisement.setEmphasis(request.featured());
         }
 
-        advertisement.updateInfo(request.active(), request.endDate());
+        advertisement.updateInfo(request.active());
 
         var savedAdvertisement = advertisementRepository.update(advertisement);
         if (shouldUpdateEventType) {
@@ -147,7 +147,7 @@ public class UpdateAdvertisementUseCase {
         }
 
         try {
-            return Estate.Type.valueOf(type);
+            return Estate.Type.fromExternalValue(type);
         } catch (IllegalArgumentException ex) {
             throw new DomainValidationException("Tipo do imóvel inválido: " + type);
         }

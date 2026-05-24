@@ -21,18 +21,19 @@ public class GetUserByIdUseCase {
         var user = userRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Usuário não encontrado"));
 
-        boolean isAdministrador = authentication.getAuthorities().stream()
+        boolean canViewOtherProfiles = authentication.getAuthorities().stream()
                 .anyMatch(grantedAuthority -> grantedAuthority.getAuthority()
-                        .equals("ROLE_" + AccessLevel.ADMINISTRADOR.name()));
+                        .equals("ROLE_" + AccessLevel.ADMINISTRADOR.name())
+                        || grantedAuthority.getAuthority().equals("ROLE_" + AccessLevel.CORRETOR.name()));
 
-        if (!isAdministrador && !user.getEmail().equals(currentUserEmail)) {
+        if (!canViewOtherProfiles && !user.getEmail().equals(currentUserEmail)) {
             throw new ResourceNotFoundException("Usuário não encontrado");
         }
 
         return new UserResponse(
                 user.getId(), user.getName(), user.getEmail(),
                 user.getCpf(), user.getDateBirth(), user.getMonthlyIncome(),
-            user.getPhone(), user.getCreci(), user.getAccessLevel().getDescription(), user.isActive()
+            user.getPhone(), user.getCreci(), user.getAccessLevel().toExternalValue(), user.isActive()
         );
     }
 }

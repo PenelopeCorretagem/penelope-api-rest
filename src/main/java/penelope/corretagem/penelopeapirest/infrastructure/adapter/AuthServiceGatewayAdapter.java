@@ -21,7 +21,7 @@ import penelope.corretagem.penelopeapirest.core.gateway.IAuthGateway;
 @Component
 public class AuthServiceGatewayAdapter implements IAuthGateway {
 
-    private record AuthServiceLoginResponse(String token, Long id, int accessLevel, String accessLevelLabel) {}
+    private record AuthServiceLoginResponse(String token, Long id, String accessLevel) {}
 
     private final RestClient restClient;
     private final ObjectMapper objectMapper;
@@ -45,7 +45,7 @@ public class AuthServiceGatewayAdapter implements IAuthGateway {
                 throw new IntegrationException("Resposta vazia ao autenticar no auth-service");
             }
 
-            return new LoginResponse(response.token(), response.id(), response.accessLevelLabel());
+            return new LoginResponse(response.token(), response.id(), response.accessLevel());
         } catch (HttpClientErrorException.Unauthorized ex) {
             throw new InvalidCredentialsException();
         } catch (RestClientResponseException ex) {

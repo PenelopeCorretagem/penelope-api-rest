@@ -15,6 +15,6 @@ public record UserUpdateRequest(
         BigDecimal monthlyIncome,
         String phone,
         String creci,
-        Integer accessLevel
+        String accessLevel
 ) {
 }

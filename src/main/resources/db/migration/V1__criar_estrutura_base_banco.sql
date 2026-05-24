@@ -62,7 +62,6 @@ CREATE TABLE anuncio (
     ativo TINYINT(1) DEFAULT 1,
     destaque TINYINT(1) DEFAULT 0,
     data_criacao DATETIME DEFAULT CURRENT_TIMESTAMP,
-    data_fim DATE,
     fk_tipo_evento BIGINT,
     CONSTRAINT fk_anuncio_empreendimento FOREIGN KEY (fk_empreendimento) REFERENCES empreendimento (id) ON DELETE CASCADE,
     CONSTRAINT fk_anuncio_criador FOREIGN KEY (fk_criador) REFERENCES usuario (id) ON DELETE SET NULL,

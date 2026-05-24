@@ -114,16 +114,18 @@ public class Estate {
     }
 
     public enum Type {
-        DISPONIVEL(3, "Disponível"),
-        EM_OBRAS(1, "Em obras"),
-        LANCAMENTO(2, "Lançamento");
+        DISPONIVEL(3, "Disponível", "disponivel"),
+        EM_OBRAS(1, "Em obras", "emObras"),
+        LANCAMENTO(2, "Lançamento", "lancamento");
 
         private final int code;
         private final String typeName;
+        private final String externalValue;
 
-        Type(int code, String typeName) {
+        Type(int code, String typeName, String externalValue) {
             this.code = code;
             this.typeName = typeName;
+            this.externalValue = externalValue;
         }
 
         public int getCode() {
@@ -138,6 +140,10 @@ public class Estate {
             return typeName;
         }
 
+        public String toExternalValue() {
+            return externalValue;
+        }
+
         public static Type fromCode(int code) {
             for (Type value : values()) {
                 if (value.code == code) {
@@ -145,6 +151,25 @@ public class Estate {
                 }
             }
             throw new IllegalArgumentException("Codigo de tipo de imovel invalido: " + code);
+        }
+
+        public static Type fromExternalValue(String value) {
+            if (value == null) {
+                throw new IllegalArgumentException("Tipo de imovel invalido: null");
+            }
+
+            String trimmed = value.trim();
+            if (trimmed.isEmpty()) {
+                throw new IllegalArgumentException("Tipo de imovel invalido: " + value);
+            }
+
+            for (Type type : values()) {
+                if (type.externalValue.equals(trimmed)) {
+                    return type;
+                }
+            }
+
+            throw new IllegalArgumentException("Tipo de imovel invalido: " + value);
         }
     }
 

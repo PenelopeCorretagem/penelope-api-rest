@@ -27,6 +27,7 @@ import static org.springframework.security.web.util.matcher.AntPathRequestMatche
 public class SecurityConfig {
 
     private static final String ROLE_ADMINISTRADOR = "ADMINISTRADOR";
+    private static final String ROLE_CORRETOR = "CORRETOR";
 
     private final SecurityFilter securityFilter;
     private final Environment environment;
@@ -76,21 +77,21 @@ public class SecurityConfig {
                             // Perfil do usuário logado
                             .requestMatchers(antMatcher(HttpMethod.GET, "/v1/users/profile")).authenticated()
                             // Ações administrativas em anúncios
-                            .requestMatchers(antMatcher(HttpMethod.POST, "/v1/advertisements")).hasRole(ROLE_ADMINISTRADOR)
-                            .requestMatchers(antMatcher(HttpMethod.PUT, "/v1/advertisements/**")).hasRole(ROLE_ADMINISTRADOR)
-                            .requestMatchers(antMatcher(HttpMethod.PATCH, "/v1/advertisements/**")).hasRole(ROLE_ADMINISTRADOR)
-                            .requestMatchers(antMatcher(HttpMethod.DELETE, "/v1/advertisements/**")).hasRole(ROLE_ADMINISTRADOR)
+                            .requestMatchers(antMatcher(HttpMethod.POST, "/v1/advertisements")).hasAnyRole(ROLE_ADMINISTRADOR, ROLE_CORRETOR)
+                            .requestMatchers(antMatcher(HttpMethod.PUT, "/v1/advertisements/**")).hasAnyRole(ROLE_ADMINISTRADOR, ROLE_CORRETOR)
+                            .requestMatchers(antMatcher(HttpMethod.PATCH, "/v1/advertisements/**")).hasAnyRole(ROLE_ADMINISTRADOR, ROLE_CORRETOR)
+                            .requestMatchers(antMatcher(HttpMethod.DELETE, "/v1/advertisements/**")).hasAnyRole(ROLE_ADMINISTRADOR, ROLE_CORRETOR)
                             // Ações administrativas em diferenciais
-                            .requestMatchers(antMatcher(HttpMethod.POST, "/v1/amenities")).hasRole(ROLE_ADMINISTRADOR)
-                            .requestMatchers(antMatcher(HttpMethod.PATCH, "/v1/amenities/**")).hasRole(ROLE_ADMINISTRADOR)
-                            .requestMatchers(antMatcher(HttpMethod.DELETE, "/v1/amenities/**")).hasRole(ROLE_ADMINISTRADOR)
+                            .requestMatchers(antMatcher(HttpMethod.POST, "/v1/amenities")).hasAnyRole(ROLE_ADMINISTRADOR, ROLE_CORRETOR)
+                            .requestMatchers(antMatcher(HttpMethod.PATCH, "/v1/amenities/**")).hasAnyRole(ROLE_ADMINISTRADOR, ROLE_CORRETOR)
+                            .requestMatchers(antMatcher(HttpMethod.DELETE, "/v1/amenities/**")).hasAnyRole(ROLE_ADMINISTRADOR, ROLE_CORRETOR)
                             // Ações administrativas em usuários
-                            .requestMatchers(antMatcher(HttpMethod.GET, "/v1/users")).hasRole(ROLE_ADMINISTRADOR)
-                            .requestMatchers(antMatcher(HttpMethod.GET, "/v1/users/*")).permitAll()
-                            .requestMatchers(antMatcher(HttpMethod.PUT, "/v1/users/**")).permitAll()
-                            .requestMatchers(antMatcher(HttpMethod.DELETE, "/v1/users/**")).permitAll()
+                            .requestMatchers(antMatcher(HttpMethod.GET, "/v1/users")).hasAnyRole(ROLE_ADMINISTRADOR, ROLE_CORRETOR)
+                            .requestMatchers(antMatcher(HttpMethod.GET, "/v1/users/*")).authenticated()
+                            .requestMatchers(antMatcher(HttpMethod.PUT, "/v1/users/**")).authenticated()
+                            .requestMatchers(antMatcher(HttpMethod.DELETE, "/v1/users/**")).authenticated()
                             // Upload de imagens de anúncios
-                            .requestMatchers(antMatcher(HttpMethod.POST, "/v1/images")).hasRole(ROLE_ADMINISTRADOR)
+                            .requestMatchers(antMatcher(HttpMethod.POST, "/v1/images")).hasAnyRole(ROLE_ADMINISTRADOR, ROLE_CORRETOR)
                             .anyRequest().authenticated();
                 })
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)

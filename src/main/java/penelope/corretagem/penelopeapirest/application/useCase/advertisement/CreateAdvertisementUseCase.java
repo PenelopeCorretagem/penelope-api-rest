@@ -130,8 +130,7 @@ public class CreateAdvertisementUseCase {
         var advertisement = Advertisement.createNew(
                 estate,
                 creator,
-                responsible,
-                request.endDate()
+                responsible
         );
 
         var savedAdvertisement = advertisementRepository.save(advertisement);
@@ -157,7 +156,7 @@ public class CreateAdvertisementUseCase {
             }
 
             try {
-                return Estate.Type.valueOf(type);
+                return Estate.Type.fromExternalValue(type);
             } catch (IllegalArgumentException ex) {
                 throw new DomainValidationException("Tipo do imóvel inválido: " + type);
             }
