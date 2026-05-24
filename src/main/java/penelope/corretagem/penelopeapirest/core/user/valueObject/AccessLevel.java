@@ -2,17 +2,22 @@ package penelope.corretagem.penelopeapirest.core.user.valueObject;
 
 import lombok.Getter;
 
+import java.util.Locale;
+
 @Getter
 public enum AccessLevel {
-  ADMINISTRADOR(1, "Administrador"),
-  CLIENTE(2, "Cliente");
+  ADMINISTRADOR(1, "Administrador", "administrador"),
+  CLIENTE(2, "Cliente", "cliente"),
+  CORRETOR(3, "Corretor", "corretor");
 
   private final int code;
   private final String description;
+  private final String externalValue;
 
-  AccessLevel(int code, String description) {
+  AccessLevel(int code, String description, String externalValue) {
     this.code = code;
     this.description = description;
+    this.externalValue = externalValue;
   }
 
   public int getCode() {
@@ -33,23 +38,22 @@ public enum AccessLevel {
       throw new IllegalArgumentException("Nivel de acesso invalido: null");
     }
 
-    String trimmed = value.trim();
-    if (trimmed.isEmpty()) {
+    String normalized = value.trim().toLowerCase(Locale.ROOT);
+    if (normalized.isEmpty()) {
       throw new IllegalArgumentException("Nivel de acesso invalido: " + value);
     }
 
-    boolean isNumeric = trimmed.chars().allMatch(Character::isDigit);
-    if (isNumeric) {
-      return fromCode(Integer.parseInt(trimmed));
-    }
-
     for (AccessLevel level : values()) {
-      if (level.name().equalsIgnoreCase(trimmed)
-          || level.getDescription().equalsIgnoreCase(trimmed)) {
+      if (level.externalValue.toLowerCase(Locale.ROOT).equals(normalized)
+          || level.name().toLowerCase(Locale.ROOT).equals(normalized)) {
         return level;
       }
     }
 
     throw new IllegalArgumentException("Nivel de acesso invalido: " + value);
+  }
+
+  public String toExternalValue() {
+    return externalValue;
   }
 }

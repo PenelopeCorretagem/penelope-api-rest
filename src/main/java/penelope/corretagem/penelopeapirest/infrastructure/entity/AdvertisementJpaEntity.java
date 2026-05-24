@@ -6,7 +6,6 @@ import lombok.Setter;
 import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
@@ -38,9 +37,6 @@ public class AdvertisementJpaEntity {
 
     @Column(name = "destaque")
     private Boolean emphasis;
-
-    @Column(name = "data_fim")
-    private LocalDate endDate;
 
     @Column(name = "data_criacao")
     private LocalDateTime createdAt;

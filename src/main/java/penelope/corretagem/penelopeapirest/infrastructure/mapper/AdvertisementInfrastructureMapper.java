@@ -28,7 +28,6 @@ public class AdvertisementInfrastructureMapper {
                 userMapper.toDomain(jpaEntity.getResponsible()),
                 jpaEntity.getActive(),
                 jpaEntity.getEmphasis(),
-                jpaEntity.getEndDate(),
                 jpaEntity.getCreatedAt()
         );
     }
@@ -47,7 +46,6 @@ public class AdvertisementInfrastructureMapper {
 
         entity.setActive(domain.getActive());
         entity.setEmphasis(domain.getEmphasis());
-        entity.setEndDate(domain.getEndDate());
         entity.setCreatedAt(domain.getCreatedAt());
 
         return entity;

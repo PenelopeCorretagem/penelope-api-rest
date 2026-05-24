@@ -27,7 +27,7 @@
             "header": [],
             "body": {
               "mode": "raw",
-              "raw": "{\r\n  \"active\": true,\r\n  \"featured\": false,\r\n  \"endDate\": \"2026-12-31\",\r\n  \"creatorId\": 1,\r\n  \"responsibleId\": 1,\r\n  \"estate\": {\r\n    \"title\": \"Apartamento de LuxoOSOSOSOS\",\r\n    \"description\": \"Excelente apartamento com varanda gourmet, vista panorâmica, acabamento de primeira linha e duas vagas de garagem.\",\r\n    \"area\": 125.5,\r\n    \"numberOfRooms\": 3,\r\n    \"type\": \"LANCAMENTO\",\r\n    \"address\": {\r\n      \"street\": \"Rua Oscar Freire\",\r\n      \"number\": \"1500\",\r\n      \"neighborhood\": \"Jardins\",\r\n      \"city\": \"Sao Paulo\",\r\n      \"uf\": \"SP\",\r\n      \"zipCode\": \"01426-001\",\r\n      \"complement\": \"Apto 42\",\r\n      \"region\": \"Zona Oeste\"\r\n    },\r\n    \"amenitiesIds\": [],\r\n    \"images\": [\r\n      {\r\n        \"url\": \"https://res.cloudinary.com/sua-conta/image/upload/v1/sala.jpg\",\r\n        \"type\": \"CAPA\"\r\n      },\r\n      {\r\n        \"url\": \"https://res.cloudinary.com/sua-conta/image/upload/v1/quarto.jpg\",\r\n        \"type\": \"GALERIA\"\r\n      }\r\n    ]\r\n  }\r\n}",
+              "raw": "{\r\n  \"active\": true,\r\n  \"featured\": false,\r\n  \"creatorId\": 1,\r\n  \"responsibleId\": 1,\r\n  \"estate\": {\r\n    \"title\": \"Apartamento de LuxoOSOSOSOS\",\r\n    \"description\": \"Excelente apartamento com varanda gourmet, vista panorâmica, acabamento de primeira linha e duas vagas de garagem.\",\r\n    \"area\": 125.5,\r\n    \"numberOfRooms\": 3,\r\n    \"type\": \"lancamento\",\r\n    \"address\": {\r\n      \"street\": \"Rua Oscar Freire\",\r\n      \"number\": \"1500\",\r\n      \"neighborhood\": \"Jardins\",\r\n      \"city\": \"Sao Paulo\",\r\n      \"uf\": \"SP\",\r\n      \"zipCode\": \"01426-001\",\r\n      \"complement\": \"Apto 42\",\r\n      \"region\": \"Zona Oeste\"\r\n    },\r\n    \"amenitiesIds\": [],\r\n    \"images\": [\r\n      {\r\n        \"url\": \"https://res.cloudinary.com/sua-conta/image/upload/v1/sala.jpg\",\r\n        \"type\": \"CAPA\"\r\n      },\r\n      {\r\n        \"url\": \"https://res.cloudinary.com/sua-conta/image/upload/v1/quarto.jpg\",\r\n        \"type\": \"GALERIA\"\r\n      }\r\n    ]\r\n  }\r\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -53,7 +53,7 @@
             "header": [],
             "body": {
               "mode": "raw",
-              "raw": "{\r\n  \"active\": true,\r\n  \"featured\": false,\r\n  \"endDate\": \"2026-12-31\",\r\n  \"creatorId\": 1,\r\n  \"responsibleId\": 1,\r\n  \"estate\": {\r\n    \"title\": \"Apartamento de LuxoOSOSOSOS\",\r\n    \"description\": \"Excelente apartamento com varanda gourmet, vista panorâmica, acabamento de primeira linha e duas vagas de garagem.\",\r\n    \"area\": 125.5,\r\n    \"numberOfRooms\": 3,\r\n    \"type\": \"LANCAMENTO\",\r\n    \"address\": {\r\n      \"street\": \"Rua Oscar Freire\",\r\n      \"number\": \"1500\",\r\n      \"neighborhood\": \"Jardins\",\r\n      \"city\": \"Sao Paulo\",\r\n      \"uf\": \"SP\",\r\n      \"zipCode\": \"01426-001\",\r\n      \"complement\": \"Apto 42\",\r\n      \"region\": \"Zona Oeste\"\r\n    },\r\n    \"amenitiesIds\": [],\r\n    \"images\": [\r\n      {\r\n        \"url\": \"https://res.cloudinary.com/sua-conta/image/upload/v1/sala.jpg\",\r\n        \"type\": \"CAPA\"\r\n      },\r\n      {\r\n        \"url\": \"https://res.cloudinary.com/sua-conta/image/upload/v1/quarto.jpg\",\r\n        \"type\": \"GALERIA\"\r\n      }\r\n    ]\r\n  }\r\n}",
+              "raw": "{\r\n  \"active\": true,\r\n  \"featured\": false,\r\n  \"creatorId\": 1,\r\n  \"responsibleId\": 1,\r\n  \"estate\": {\r\n    \"title\": \"Apartamento de LuxoOSOSOSOS\",\r\n    \"description\": \"Excelente apartamento com varanda gourmet, vista panorâmica, acabamento de primeira linha e duas vagas de garagem.\",\r\n    \"area\": 125.5,\r\n    \"numberOfRooms\": 3,\r\n    \"type\": \"lancamento\",\r\n    \"address\": {\r\n      \"street\": \"Rua Oscar Freire\",\r\n      \"number\": \"1500\",\r\n      \"neighborhood\": \"Jardins\",\r\n      \"city\": \"Sao Paulo\",\r\n      \"uf\": \"SP\",\r\n      \"zipCode\": \"01426-001\",\r\n      \"complement\": \"Apto 42\",\r\n      \"region\": \"Zona Oeste\"\r\n    },\r\n    \"amenitiesIds\": [],\r\n    \"images\": [\r\n      {\r\n        \"url\": \"https://res.cloudinary.com/sua-conta/image/upload/v1/sala.jpg\",\r\n        \"type\": \"CAPA\"\r\n      },\r\n      {\r\n        \"url\": \"https://res.cloudinary.com/sua-conta/image/upload/v1/quarto.jpg\",\r\n        \"type\": \"GALERIA\"\r\n      }\r\n    ]\r\n  }\r\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -304,7 +304,7 @@
             "header": [],
             "body": {
               "mode": "raw",
-              "raw": "{\r\n  \"name\": \"Rennan Souza\",\r\n  \"email\": \"rsmoura252@sptech.com\",\r\n  \"password\": \"#Rennan123\",\r\n  \"cpf\": \"11122266948\",\r\n  \"dateBirth\": \"2004-06-17\",\r\n  \"monthlyIncome\": 2000,\r\n  \"phone\": \"11962235123\",\r\n  \"accessLevel\": \"CLIENTE\"\r\n}",
+              "raw": "{\r\n  \"name\": \"Rennan Souza\",\r\n  \"email\": \"rsmoura252@sptech.com\",\r\n  \"password\": \"#Rennan123\",\r\n  \"cpf\": \"11122266948\",\r\n  \"dateBirth\": \"2004-06-17\",\r\n  \"monthlyIncome\": 2000,\r\n  \"phone\": \"11962235123\",\r\n  \"accessLevel\": \"cliente\"\r\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -340,7 +340,7 @@
             "header": [],
             "body": {
               "mode": "raw",
-              "raw": "{\r\n  \"monthlyIncome\": 15000.00,\r\n  \"phone\": \"11955554444\",\r\n  \"accessLevel\": \"ADMINISTRADOR\",\r\n  \"creci\": \"123477789\"\r\n}",
+              "raw": "{\r\n  \"monthlyIncome\": 15000.00,\r\n  \"phone\": \"11955554444\",\r\n  \"accessLevel\": \"administrador\",\r\n  \"creci\": \"123477789\"\r\n}",
               "options": {
                 "raw": {
                   "language": "json"

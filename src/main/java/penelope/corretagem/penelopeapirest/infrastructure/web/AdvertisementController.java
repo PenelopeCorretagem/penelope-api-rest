@@ -63,7 +63,7 @@ public class AdvertisementController {
             Authentication authentication,
             @RequestHeader(value = "Authorization", required = false) String authorizationHeader) {
 
-        AdvertisementResponse response = getAdvertisementByIdUseCase.execute(id, resolveIsAdministrator(authentication, authorizationHeader));
+        AdvertisementResponse response = getAdvertisementByIdUseCase.execute(id, resolveCanViewInactive(authentication, authorizationHeader));
 
         return ResponseEntity.ok(response);
     }
@@ -120,17 +120,18 @@ public class AdvertisementController {
         return ResponseEntity.noContent().build();
     }
 
-    private boolean isAdministrator(Authentication authentication) {
+    private boolean canViewInactive(Authentication authentication) {
         if (authentication == null) {
             return false;
         }
 
         return authentication.getAuthorities().stream()
-                .anyMatch(authority -> "ROLE_ADMINISTRADOR".equals(authority.getAuthority()));
+                .anyMatch(authority -> "ROLE_ADMINISTRADOR".equals(authority.getAuthority())
+                        || "ROLE_CORRETOR".equals(authority.getAuthority()));
     }
 
-    private boolean resolveIsAdministrator(Authentication authentication, String authorizationHeader) {
-        if (isAdministrator(authentication)) {
+    private boolean resolveCanViewInactive(Authentication authentication, String authorizationHeader) {
+        if (canViewInactive(authentication)) {
             return true;
         }
 
@@ -141,8 +142,8 @@ public class AdvertisementController {
 
         try {
             String accessLevel = tokenGateway.getAccessLevelFromToken(token);
-            return accessLevel != null
-                    && AccessLevel.fromExternalValue(accessLevel) == AccessLevel.ADMINISTRADOR;
+            AccessLevel level = AccessLevel.fromExternalValue(accessLevel);
+            return level == AccessLevel.ADMINISTRADOR || level == AccessLevel.CORRETOR;
         } catch (RuntimeException ex) {
             return false;
         }

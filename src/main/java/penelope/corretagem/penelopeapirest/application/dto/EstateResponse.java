@@ -25,7 +25,7 @@ public record EstateResponse(
                 estate.getDescription(),
                 estate.getArea(),
                 estate.getNumberOfRooms(),
-                estate.getType() != null ? estate.getType().getTypeName() : null,
+                estate.getType() != null ? estate.getType().toExternalValue() : null,
                 AddressResponse.fromDomain(estate.getAddress()),
                 estate.getImages() != null ?
                         estate.getImages().stream()

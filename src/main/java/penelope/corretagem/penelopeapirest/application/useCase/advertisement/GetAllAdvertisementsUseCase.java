@@ -29,10 +29,7 @@ public class GetAllAdvertisementsUseCase {
             filter.description(),
             filter.createdAt(),
             filter.createdAtMin(),
-            filter.createdAtMax(),
-            filter.endDate(),
-            filter.endDateMin(),
-            filter.endDateMax()
+            filter.createdAtMax()
         );
 
         var advertisements = repository.findAll(domainFilter);

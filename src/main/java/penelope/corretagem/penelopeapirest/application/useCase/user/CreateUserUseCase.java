@@ -34,7 +34,7 @@ public class CreateUserUseCase {
 
         AccessLevel accessLevel;
         try {
-            accessLevel = AccessLevel.fromCode(request.accessLevel());
+            accessLevel = AccessLevel.fromExternalValue(request.accessLevel());
         } catch (IllegalArgumentException ex) {
             throw new DomainValidationException("Nivel de acesso invalido: " + request.accessLevel());
         }
@@ -55,6 +55,10 @@ public class CreateUserUseCase {
             throw new DomainValidationException("Clientes não devem possuir Creci");
         }
 
+        if (accessLevel == AccessLevel.CORRETOR && (request.creci() == null || request.creci().isBlank())) {
+            throw new DomainValidationException("Corretores devem possuir Creci");
+        }
+
         User newUser = User.createNew(
                 request.name(),
                 request.email(),
@@ -72,7 +76,7 @@ public class CreateUserUseCase {
         return new UserResponse(
                 savedUser.getId(), savedUser.getName(), savedUser.getEmail(),
                 savedUser.getCpf(), savedUser.getDateBirth(), savedUser.getMonthlyIncome(),
-            savedUser.getPhone(), savedUser.getCreci(), savedUser.getAccessLevel().getDescription(), savedUser.isActive()
+            savedUser.getPhone(), savedUser.getCreci(), savedUser.getAccessLevel().toExternalValue(), savedUser.isActive()
         );
     }
 }

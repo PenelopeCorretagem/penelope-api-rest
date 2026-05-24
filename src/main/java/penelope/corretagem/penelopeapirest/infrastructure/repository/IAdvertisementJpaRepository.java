@@ -7,7 +7,6 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import penelope.corretagem.penelopeapirest.infrastructure.entity.AdvertisementJpaEntity;
 
-import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -41,11 +40,4 @@ public interface IAdvertisementJpaRepository extends JpaRepository<Advertisement
             """, nativeQuery = true)
     AdvertisementJpaEntity findByEstateId(@Param("estateId") Long estateId);
 
-    @Query("""
-            SELECT a
-            FROM AdvertisementJpaEntity a
-            WHERE a.endDate < CURRENT_DATE
-              AND a.active = true
-            """)
-    List<AdvertisementJpaEntity> findExpiredActiveAdvertisements();
 }

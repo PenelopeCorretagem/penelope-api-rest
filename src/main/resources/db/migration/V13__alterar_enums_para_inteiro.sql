@@ -4,6 +4,7 @@ UPDATE usuario
 SET nivel_acesso_int = CASE nivel_acesso
     WHEN 'ADMINISTRADOR' THEN 1
     WHEN 'CLIENTE' THEN 2
+    WHEN 'CORRETOR' THEN 3
     ELSE NULL
 END;
 ALTER TABLE usuario DROP COLUMN nivel_acesso;

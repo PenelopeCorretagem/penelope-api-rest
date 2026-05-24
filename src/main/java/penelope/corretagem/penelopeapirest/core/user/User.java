@@ -140,6 +140,10 @@ public class User {
             throw new DomainValidationException("Clientes não devem possuir Creci");
         }
 
+        if (targetAccessLevel == AccessLevel.CORRETOR && (targetCreci == null || targetCreci.isBlank())) {
+            throw new DomainValidationException("Corretores devem possuir Creci");
+        }
+
         this.accessLevel = targetAccessLevel;
         this.creci = (targetCreci != null && targetCreci.isBlank()) ? null : targetCreci;
     }

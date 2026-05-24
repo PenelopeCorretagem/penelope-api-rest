@@ -4,7 +4,6 @@ import penelope.corretagem.penelopeapirest.core.estate.Estate;
 import penelope.corretagem.penelopeapirest.core.exception.DomainValidationException;
 import penelope.corretagem.penelopeapirest.core.user.User;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 public class Advertisement {
@@ -16,7 +15,6 @@ public class Advertisement {
     private User responsible;
     private Boolean active;
     private Boolean emphasis;
-    private LocalDate endDate;
 
     private Advertisement(
             Long id,
@@ -25,7 +23,6 @@ public class Advertisement {
             User responsible,
             Boolean active,
             Boolean emphasis,
-            LocalDate endDate,
             LocalDateTime createdAt) {
         this.id = id;
         this.estate = estate;
@@ -33,21 +30,19 @@ public class Advertisement {
         this.responsible = responsible;
         this.active = active;
         this.emphasis = emphasis;
-        this.endDate = endDate;
         this.createdAt = createdAt;
     }
 
     public static Advertisement createNew(
             Estate estate,
             User creator,
-            User responsible,
-            LocalDate endDate) {
+            User responsible) {
 
         Boolean defaultActive = true;
         Boolean defaultEmphasis = false;
         LocalDateTime now = LocalDateTime.now();
 
-        return new Advertisement(null, estate, creator, responsible, defaultActive, defaultEmphasis, endDate, now);
+        return new Advertisement(null, estate, creator, responsible, defaultActive, defaultEmphasis, now);
     }
 
     public static Advertisement restore(
@@ -57,10 +52,9 @@ public class Advertisement {
             User responsible,
             Boolean active,
             Boolean emphasis,
-            LocalDate endDate,
             LocalDateTime createdAt) {
 
-        return new Advertisement(id, estate, creator, responsible, active, emphasis, endDate, createdAt);
+        return new Advertisement(id, estate, creator, responsible, active, emphasis, createdAt);
     }
 
     //Getters
@@ -88,17 +82,12 @@ public class Advertisement {
         return emphasis;
     }
 
-    public LocalDate getEndDate() {
-        return endDate;
-    }
-
     public LocalDateTime getCreatedAt() {
         return createdAt;
     }
 
-    public void updateInfo(Boolean active, LocalDate endDate) {
+    public void updateInfo(Boolean active) {
         this.active = active;
-        this.endDate = endDate;
     }
 
     public void setActive(Boolean active) {

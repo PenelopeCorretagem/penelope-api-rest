@@ -116,7 +116,7 @@ public class UpdateAdvertisementUseCase {
             advertisement.setEmphasis(request.featured());
         }
 
-        advertisement.updateInfo(request.active(), request.endDate());
+        advertisement.updateInfo(request.active());
 
         var savedAdvertisement = advertisementRepository.update(advertisement);
         if (shouldUpdateEventType) {
@@ -129,13 +129,13 @@ public class UpdateAdvertisementUseCase {
         return !estate.getTitle().trim().equals(req.title().trim());
     }
 
-    private Estate.Type parseEstateType(Integer type) {
-        if (type == null) {
+    private Estate.Type parseEstateType(String type) {
+        if (type == null || type.isBlank()) {
             throw new DomainValidationException("Tipo do imóvel é obrigatório");
         }
 
         try {
-            return Estate.Type.fromCode(type);
+            return Estate.Type.fromExternalValue(type);
         } catch (IllegalArgumentException ex) {
             throw new DomainValidationException("Tipo do imóvel inválido: " + type);
         }

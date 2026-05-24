@@ -70,7 +70,7 @@ public class UpdateUserUseCase {
         AccessLevel accessLevel = null;
         if (req.accessLevel() != null) {
             try {
-                accessLevel = AccessLevel.fromCode(req.accessLevel());
+                accessLevel = AccessLevel.fromExternalValue(req.accessLevel());
             } catch (IllegalArgumentException ex) {
                 throw new DomainValidationException("Nivel de acesso invalido: " + req.accessLevel());
             }
@@ -87,7 +87,7 @@ public class UpdateUserUseCase {
         return new UserResponse(
                 updatedUser.getId(), updatedUser.getName(), updatedUser.getEmail(),
                 updatedUser.getCpf(), updatedUser.getDateBirth(), updatedUser.getMonthlyIncome(),
-            updatedUser.getPhone(), updatedUser.getCreci(), updatedUser.getAccessLevel().getDescription(), updatedUser.isActive()
+            updatedUser.getPhone(), updatedUser.getCreci(), updatedUser.getAccessLevel().toExternalValue(), updatedUser.isActive()
         );
     }
 }

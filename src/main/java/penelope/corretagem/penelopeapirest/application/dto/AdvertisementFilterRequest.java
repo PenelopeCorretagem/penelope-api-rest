@@ -5,7 +5,7 @@ import java.time.LocalDate;
 public record AdvertisementFilterRequest(
         String city,
         String region,
-        Integer type,
+        String type,
         Integer numberOfRooms,
         Boolean active,
         Double area,
@@ -13,9 +13,6 @@ public record AdvertisementFilterRequest(
         String description,
         LocalDate createdAt,
         LocalDate createdAtMin,
-        LocalDate createdAtMax,
-        LocalDate endDate,
-        LocalDate endDateMin,
-        LocalDate endDateMax
+        LocalDate createdAtMax
 ) {
 }

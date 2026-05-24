@@ -84,18 +84,4 @@ public class AdvertisementSpecifications {
                 createdAt == null ? null : cb.lessThan(root.get("createdAt"), createdAt);
     }
 
-    public static Specification<AdvertisementJpaEntity> endDateEquals(LocalDate endDate) {
-        return (root, query, cb) ->
-                endDate == null ? null : cb.equal(root.get("endDate"), endDate);
-    }
-
-    public static Specification<AdvertisementJpaEntity> endDateGreaterThan(LocalDate endDate) {
-        return (root, query, cb) ->
-                endDate == null ? null : cb.greaterThan(root.get("endDate"), endDate);
-    }
-
-    public static Specification<AdvertisementJpaEntity> endDateLessThan(LocalDate endDate) {
-        return (root, query, cb) ->
-                endDate == null ? null : cb.lessThan(root.get("endDate"), endDate);
-    }
 }

@@ -57,7 +57,8 @@ public class AdvertisementRepositoryAdapter implements IAdvertisementRepository 
         EstateJpaEntity.Type type = null;
         if (filter.type() != null) {
             try {
-                type = EstateJpaEntity.Type.fromCode(filter.type());
+                Estate.Type domainType = Estate.Type.fromExternalValue(filter.type());
+                type = EstateJpaEntity.Type.fromCode(domainType.getCode());
             } catch (IllegalArgumentException ex) {
                 throw new DomainValidationException("Tipo do imovel invalido: " + filter.type());
             }
@@ -74,10 +75,7 @@ public class AdvertisementRepositoryAdapter implements IAdvertisementRepository 
                         .and(AdvertisementSpecifications.isActive(filter.active()))
                         .and(AdvertisementSpecifications.createdAtEquals(filter.createdAt()))
                         .and(AdvertisementSpecifications.createdAtGreaterThan(filter.createdAtMin()))
-                        .and(AdvertisementSpecifications.createdAtLessThan(filter.createdAtMax()))
-                        .and(AdvertisementSpecifications.endDateEquals(filter.endDate()))
-                        .and(AdvertisementSpecifications.endDateGreaterThan(filter.endDateMin()))
-                        .and(AdvertisementSpecifications.endDateLessThan(filter.endDateMax()));
+                        .and(AdvertisementSpecifications.createdAtLessThan(filter.createdAtMax()));
 
         var entidades = jpaRepository.findAll(spec);
 
@@ -96,13 +94,6 @@ public class AdvertisementRepositoryAdapter implements IAdvertisementRepository 
     public Advertisement findByEstateId(Long estateId) {
         var entity = jpaRepository.findByEstateId(estateId);
         return mapper.toDomain(entity);
-    }
-
-    @Override
-    public List<Advertisement> findExpiredActiveAdvertisements() {
-        return jpaRepository.findExpiredActiveAdvertisements().stream()
-                .map(mapper::toDomain)
-                .collect(java.util.stream.Collectors.toList());
     }
 
     @Override
@@ -151,7 +142,6 @@ public class AdvertisementRepositoryAdapter implements IAdvertisementRepository 
 
         existingEntity.setActive(advertisement.getActive());
         existingEntity.setEmphasis(advertisement.getEmphasis());
-        existingEntity.setEndDate(advertisement.getEndDate());
 
         Estate estateDomain = advertisement.getEstate();
         EstateJpaEntity existingEstate = existingEntity.getEstate();
@@ -160,7 +150,7 @@ public class AdvertisementRepositoryAdapter implements IAdvertisementRepository 
         existingEstate.setDescription(estateDomain.getDescription());
         existingEstate.setArea(estateDomain.getArea());
         existingEstate.setNumberOfRooms(estateDomain.getNumberOfRooms());
-        existingEstate.setType(EstateJpaEntity.Type.valueOf(estateDomain.getType().name()));
+        existingEstate.setType(EstateJpaEntity.Type.fromCode(estateDomain.getType().getCode()));
 
         existingEstate.getAddress().setStreet(estateDomain.getAddress().getStreet());
         existingEstate.getAddress().setNumber(estateDomain.getAddress().getNumber());
