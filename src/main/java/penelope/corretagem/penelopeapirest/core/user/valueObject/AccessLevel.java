@@ -2,6 +2,8 @@ package penelope.corretagem.penelopeapirest.core.user.valueObject;
 
 import lombok.Getter;
 
+import java.util.Locale;
+
 @Getter
 public enum AccessLevel {
   ADMINISTRADOR(1, "Administrador", "administrador"),
@@ -36,13 +38,14 @@ public enum AccessLevel {
       throw new IllegalArgumentException("Nivel de acesso invalido: null");
     }
 
-    String trimmed = value.trim();
-    if (trimmed.isEmpty()) {
+    String normalized = value.trim().toLowerCase(Locale.ROOT);
+    if (normalized.isEmpty()) {
       throw new IllegalArgumentException("Nivel de acesso invalido: " + value);
     }
 
     for (AccessLevel level : values()) {
-      if (level.externalValue.equals(trimmed)) {
+      if (level.externalValue.toLowerCase(Locale.ROOT).equals(normalized)
+          || level.name().toLowerCase(Locale.ROOT).equals(normalized)) {
         return level;
       }
     }

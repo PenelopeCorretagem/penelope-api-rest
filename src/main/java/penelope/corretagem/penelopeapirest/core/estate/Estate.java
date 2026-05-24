@@ -3,6 +3,7 @@ package penelope.corretagem.penelopeapirest.core.estate;
 import penelope.corretagem.penelopeapirest.core.address.Address;
 import penelope.corretagem.penelopeapirest.core.amenities.AmenitiesEstate;
 
+import java.util.Locale;
 import java.util.Set;
 
 public class Estate {
@@ -158,13 +159,14 @@ public class Estate {
                 throw new IllegalArgumentException("Tipo de imovel invalido: null");
             }
 
-            String trimmed = value.trim();
-            if (trimmed.isEmpty()) {
+            String normalized = value.trim().toLowerCase(Locale.ROOT);
+            if (normalized.isEmpty()) {
                 throw new IllegalArgumentException("Tipo de imovel invalido: " + value);
             }
 
             for (Type type : values()) {
-                if (type.externalValue.equals(trimmed)) {
+                if (type.externalValue.toLowerCase(Locale.ROOT).equals(normalized)
+                        || type.name().toLowerCase(Locale.ROOT).equals(normalized)) {
                     return type;
                 }
             }

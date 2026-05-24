@@ -138,20 +138,8 @@ public class CreateAdvertisementUseCase {
         return savedAdvertisement;
     }
 
-        private Estate.Type parseEstateType(Integer type) {
-                if (type == null) {
-                        throw new DomainValidationException("Tipo do imóvel é obrigatório");
-                }
-
-                try {
-                        return Estate.Type.fromCode(type);
-                } catch (IllegalArgumentException ex) {
-                        throw new DomainValidationException("Tipo do imóvel inválido: " + type);
-                }
-        }
-
         private Estate.Type parseEstateType(String type) {
-            if (type == null) {
+            if (type == null || type.isBlank()) {
                 throw new DomainValidationException("Tipo do imóvel é obrigatório");
             }
 
