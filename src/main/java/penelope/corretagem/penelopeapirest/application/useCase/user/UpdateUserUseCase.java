@@ -4,6 +4,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import penelope.corretagem.penelopeapirest.application.dto.UserResponse;
 import penelope.corretagem.penelopeapirest.application.dto.UserUpdateRequest;
 import penelope.corretagem.penelopeapirest.core.exception.DomainValidationException;
+import penelope.corretagem.penelopeapirest.core.exception.ForbiddenOperationException;
 import penelope.corretagem.penelopeapirest.core.exception.ResourceNotFoundException;
 import penelope.corretagem.penelopeapirest.core.gateway.IPasswordEncoderGateway;
 import penelope.corretagem.penelopeapirest.core.user.repository.IUserRepository;
@@ -30,8 +31,9 @@ public class UpdateUserUseCase {
                 .anyMatch(grantedAuthority -> grantedAuthority.getAuthority()
                         .equals("ROLE_" + AccessLevel.ADMINISTRADOR.name()));
 
-        if (!isAdministrador && !user.getEmail().equals(currentUserEmail)) {
-            throw new ResourceNotFoundException("Usuário não encontrado");
+        boolean isOwner = user.getEmail().equals(currentUserEmail);
+        if (!isAdministrador && !isOwner) {
+            throw new ForbiddenOperationException("Você não tem permissão para atualizar este usuário");
         }
 
         if (req.email() != null && req.email().isBlank()) {
@@ -62,21 +64,25 @@ public class UpdateUserUseCase {
                     });
         }
 
+        AccessLevel requestedAccessLevel = null;
+        if (req.accessLevel() != null) {
+            try {
+                requestedAccessLevel = AccessLevel.fromExternalValue(req.accessLevel());
+            } catch (IllegalArgumentException ex) {
+                throw new DomainValidationException("Nivel de acesso invalido: " + req.accessLevel());
+            }
+
+            if (!isAdministrador && requestedAccessLevel != user.getAccessLevel()) {
+                throw new ForbiddenOperationException("Você não pode alterar o nível de acesso do usuário");
+            }
+        }
+
         user.updateInformation(
                 req.name(), req.email(), req.cpf(),
                 req.dateBirth(), req.monthlyIncome(), req.phone()
         );
 
-        AccessLevel accessLevel = null;
-        if (req.accessLevel() != null) {
-            try {
-                accessLevel = AccessLevel.fromExternalValue(req.accessLevel());
-            } catch (IllegalArgumentException ex) {
-                throw new DomainValidationException("Nivel de acesso invalido: " + req.accessLevel());
-            }
-        }
-
-        user.updateAccessProfile(accessLevel, req.creci());
+        user.updateAccessProfile(requestedAccessLevel, req.creci());
 
         if (req.password() != null && !req.password().isBlank()) {
             user.changePassword(passwordEncoder.encode(req.password()));

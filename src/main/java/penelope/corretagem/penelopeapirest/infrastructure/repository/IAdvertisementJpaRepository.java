@@ -17,7 +17,9 @@ public interface IAdvertisementJpaRepository extends JpaRepository<Advertisement
         boolean existsByEstateTitleIgnoreCaseAndIdNot(String title, Long id);
 
     // Lista o ultimo anuncio cadastrado
-    Optional<AdvertisementJpaEntity> findTopByOrderByCreatedAtDesc();
+        Optional<AdvertisementJpaEntity> findTopByOrderByCreatedAtDesc();
+
+        Optional<AdvertisementJpaEntity> findTopByActiveTrueOrderByCreatedAtDesc();
 
     // Lista um anuncio pelo ID trazendo todas as relações (Ajuste os nomes das propriedades conforme sua EstateEntity)
     @Query("""
@@ -35,9 +37,16 @@ public interface IAdvertisementJpaRepository extends JpaRepository<Advertisement
     Optional<AdvertisementJpaEntity> findByIdWithAllRelations(@Param("id") Long id);
 
     @Query(value = """
-            SELECT * FROM anuncio 
+            SELECT * FROM anuncio
             WHERE fk_empreendimento = :estateId
             """, nativeQuery = true)
     AdvertisementJpaEntity findByEstateId(@Param("estateId") Long estateId);
+
+    @Query(value = """
+            SELECT * FROM anuncio
+            WHERE fk_empreendimento = :estateId
+              AND ativo = true
+            """, nativeQuery = true)
+    AdvertisementJpaEntity findByEstateIdAndActiveTrue(@Param("estateId") Long estateId);
 
 }

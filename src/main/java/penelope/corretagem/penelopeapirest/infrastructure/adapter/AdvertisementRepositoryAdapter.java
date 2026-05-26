@@ -85,14 +85,19 @@ public class AdvertisementRepositoryAdapter implements IAdvertisementRepository 
     }
 
     @Override
-    public Optional<Advertisement> findTopByOrderByCreatedAtDesc() {
-        return jpaRepository.findTopByOrderByCreatedAtDesc()
-                .map(mapper::toDomain);
+    public Optional<Advertisement> findLatest(boolean includeInactive) {
+        Optional<AdvertisementJpaEntity> entity = includeInactive
+                ? jpaRepository.findTopByOrderByCreatedAtDesc()
+                : jpaRepository.findTopByActiveTrueOrderByCreatedAtDesc();
+
+        return entity.map(mapper::toDomain);
     }
 
     @Override
-    public Advertisement findByEstateId(Long estateId) {
-        var entity = jpaRepository.findByEstateId(estateId);
+    public Advertisement findByEstateId(Long estateId, boolean includeInactive) {
+        var entity = includeInactive
+                ? jpaRepository.findByEstateId(estateId)
+                : jpaRepository.findByEstateIdAndActiveTrue(estateId);
         return mapper.toDomain(entity);
     }
 

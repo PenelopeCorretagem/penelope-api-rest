@@ -5,6 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import penelope.corretagem.penelopeapirest.core.exception.DomainValidationException;
+import penelope.corretagem.penelopeapirest.core.exception.ForbiddenOperationException;
 import penelope.corretagem.penelopeapirest.core.exception.IntegrationException;
 import penelope.corretagem.penelopeapirest.core.exception.InvalidCredentialsException;
 import penelope.corretagem.penelopeapirest.core.exception.InvalidImagePayloadException;
@@ -76,6 +77,18 @@ public class GlobalExceptionHandlerV2 {
         );
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
+    }
+
+    @ExceptionHandler(ForbiddenOperationException.class)
+    public ResponseEntity<StandardErrorResponse> handleForbiddenOperation(ForbiddenOperationException ex) {
+
+        StandardErrorResponse error = new StandardErrorResponse(
+                HttpStatus.FORBIDDEN.value(),
+                ex.getMessage(),
+                LocalDateTime.now()
+        );
+
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(error);
     }
 
     @ExceptionHandler(PasswordResetTokenExpiredException.class)

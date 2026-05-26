@@ -50,9 +50,15 @@ public class AdvertisementController {
     }
 
     @GetMapping
-    public ResponseEntity<List<AdvertisementResponse>> getAll(AdvertisementFilterRequest filter) {
+    public ResponseEntity<List<AdvertisementResponse>> getAll(
+            AdvertisementFilterRequest filter,
+            Authentication authentication,
+            @RequestHeader(value = "Authorization", required = false) String authorizationHeader) {
 
-        var response = getAllAdvertisementsUseCase.execute(filter);
+        var response = getAllAdvertisementsUseCase.execute(
+                filter,
+                resolveCanViewInactive(authentication, authorizationHeader)
+        );
 
         return ResponseEntity.ok(response);
     }
@@ -69,14 +75,24 @@ public class AdvertisementController {
     }
 
     @GetMapping("/latest")
-    public ResponseEntity<AdvertisementResponse> getLatest() {
-        AdvertisementResponse response = getLatestAdvertisementUseCase.execute();
+    public ResponseEntity<AdvertisementResponse> getLatest(
+            Authentication authentication,
+            @RequestHeader(value = "Authorization", required = false) String authorizationHeader) {
+        AdvertisementResponse response = getLatestAdvertisementUseCase.execute(
+                resolveCanViewInactive(authentication, authorizationHeader)
+        );
         return response != null ? ResponseEntity.ok(response) : ResponseEntity.noContent().build();
     }
 
     @GetMapping("/estate/{estateId}")
-    public ResponseEntity<AdvertisementResponse> getByEstateId(@PathVariable Long estateId) {
-        return ResponseEntity.ok(getAdvertisementByEstateIdUseCase.execute(estateId));
+    public ResponseEntity<AdvertisementResponse> getByEstateId(
+            @PathVariable Long estateId,
+            Authentication authentication,
+            @RequestHeader(value = "Authorization", required = false) String authorizationHeader) {
+        return ResponseEntity.ok(getAdvertisementByEstateIdUseCase.execute(
+                estateId,
+                resolveCanViewInactive(authentication, authorizationHeader)
+        ));
     }
 
     @PostMapping

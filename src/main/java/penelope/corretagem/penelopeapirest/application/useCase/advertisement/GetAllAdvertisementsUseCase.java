@@ -16,14 +16,19 @@ public class GetAllAdvertisementsUseCase {
         this.repository = repository;
     }
 
-    public List<AdvertisementResponse> execute(AdvertisementFilterRequest filter) {
+    public List<AdvertisementResponse> execute(AdvertisementFilterRequest filter, boolean canViewInactive) {
+
+        Boolean activeFilter = filter.active();
+        if (!canViewInactive) {
+            activeFilter = Boolean.TRUE;
+        }
 
         var domainFilter = new AdvertisementFilter(
             filter.city(),
             filter.region(),
             filter.type(),
             filter.numberOfRooms(),
-            filter.active(),
+            activeFilter,
             filter.area(),
             filter.title(),
             filter.description(),

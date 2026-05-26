@@ -2,6 +2,7 @@ package penelope.corretagem.penelopeapirest.application.useCase.user;
 
 import org.springframework.security.core.context.SecurityContextHolder;
 import penelope.corretagem.penelopeapirest.application.dto.UserResponse;
+import penelope.corretagem.penelopeapirest.core.exception.ForbiddenOperationException;
 import penelope.corretagem.penelopeapirest.core.exception.ResourceNotFoundException;
 import penelope.corretagem.penelopeapirest.core.user.repository.IUserRepository;
 import penelope.corretagem.penelopeapirest.core.user.valueObject.AccessLevel;
@@ -27,7 +28,7 @@ public class GetUserByIdUseCase {
                         || grantedAuthority.getAuthority().equals("ROLE_" + AccessLevel.CORRETOR.name()));
 
         if (!canViewOtherProfiles && !user.getEmail().equals(currentUserEmail)) {
-            throw new ResourceNotFoundException("Usuário não encontrado");
+            throw new ForbiddenOperationException("Você não tem permissão para visualizar este usuário");
         }
 
         return new UserResponse(

@@ -17,7 +17,7 @@ public interface IAdvertisementRepository {
 
     // Leituras
     Optional<Advertisement> findById(Long id);
-    Optional<Advertisement> findTopByOrderByCreatedAtDesc();
-    Advertisement findByEstateId(Long estateId);
+    Optional<Advertisement> findLatest(boolean includeInactive);
+    Advertisement findByEstateId(Long estateId, boolean includeInactive);
     List<Advertisement> findAll(AdvertisementFilter filter);
 }

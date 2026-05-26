@@ -13,12 +13,12 @@ public class GetAdvertisementByEstateIdUseCase {
         this.repository = repository;
     }
 
-    public AdvertisementResponse execute(Long estateId) {
+    public AdvertisementResponse execute(Long estateId, boolean canViewInactive) {
         if (estateId == null || estateId <= 0) {
             throw new DomainValidationException("ID do empreendimento inválido");
         }
 
-        var advertisement = repository.findByEstateId(estateId);
+        var advertisement = repository.findByEstateId(estateId, canViewInactive);
 
         if (advertisement == null) {
             throw new ResourceNotFoundException("Nenhum anúncio encontrado para o Empreendimento ID: " + estateId);

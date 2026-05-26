@@ -11,8 +11,8 @@ public class GetLatestAdvertisementUseCase {
         this.repository = repository;
     }
 
-    public AdvertisementResponse execute() {
-        return repository.findTopByOrderByCreatedAtDesc()
+    public AdvertisementResponse execute(boolean canViewInactive) {
+        return repository.findLatest(canViewInactive)
                 .map(AdvertisementResponse::fromDomain)
                 .orElse(null);
     }

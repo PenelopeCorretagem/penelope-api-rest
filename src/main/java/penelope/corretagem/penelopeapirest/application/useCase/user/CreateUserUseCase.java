@@ -1,5 +1,6 @@
 package penelope.corretagem.penelopeapirest.application.useCase.user;
 
+import org.springframework.security.core.context.SecurityContextHolder;
 import penelope.corretagem.penelopeapirest.core.gateway.IPasswordEncoderGateway;
 import penelope.corretagem.penelopeapirest.core.exception.DomainValidationException;
 import penelope.corretagem.penelopeapirest.core.user.User;
@@ -37,6 +38,15 @@ public class CreateUserUseCase {
             accessLevel = AccessLevel.fromExternalValue(request.accessLevel());
         } catch (IllegalArgumentException ex) {
             throw new DomainValidationException("Nivel de acesso invalido: " + request.accessLevel());
+        }
+
+        boolean isAdminRequest = hasAuthority("ROLE_ADMINISTRADOR");
+        if (!isAdminRequest && accessLevel != AccessLevel.CLIENTE) {
+            throw new DomainValidationException("Apenas administradores podem criar usuários com este nível de acesso");
+        }
+
+        if (!isAdminRequest) {
+            accessLevel = AccessLevel.CLIENTE;
         }
 
         if (userRepository.findByEmail(request.email()).isPresent()) {
@@ -78,5 +88,11 @@ public class CreateUserUseCase {
                 savedUser.getCpf(), savedUser.getDateBirth(), savedUser.getMonthlyIncome(),
             savedUser.getPhone(), savedUser.getCreci(), savedUser.getAccessLevel().toExternalValue(), savedUser.isActive()
         );
+    }
+
+    private boolean hasAuthority(String authority) {
+        var authentication = SecurityContextHolder.getContext().getAuthentication();
+        return authentication != null && authentication.getAuthorities().stream()
+                .anyMatch(grantedAuthority -> authority.equals(grantedAuthority.getAuthority()));
     }
 }
