@@ -25,10 +25,24 @@ public class CloudinaryImageGatewayAdapter implements IImageStorageGateway {
                     ObjectUtils.asMap("folder", "imoveis")
             );
 
-            return uploadResult.get("secure_url").toString();
+            String secureUrl = uploadResult.get("secure_url").toString();
+            return optimizeDeliveryUrl(secureUrl);
 
         } catch (Exception e) {
             throw new IntegrationException("Falha ao fazer upload da imagem: " + originalFilename, e);
         }
+    }
+
+    private String optimizeDeliveryUrl(String secureUrl) {
+        if (secureUrl == null || secureUrl.isBlank()) {
+            return secureUrl;
+        }
+
+        String marker = "/image/upload/";
+        String optimizedSegment = "/image/upload/f_auto,q_auto/";
+
+        return secureUrl.contains(marker)
+                ? secureUrl.replace(marker, optimizedSegment)
+                : secureUrl;
     }
 }

@@ -1,7 +1,9 @@
 package penelope.corretagem.penelopeapirest.application.useCase.user;
 
+import org.springframework.cache.annotation.Cacheable;
 import penelope.corretagem.penelopeapirest.core.user.repository.IUserRepository;
 import penelope.corretagem.penelopeapirest.application.dto.UserResponse;
+import penelope.corretagem.penelopeapirest.config.CacheNames;
 import penelope.corretagem.penelopeapirest.core.exception.DomainValidationException;
 
 import java.util.List;
@@ -18,6 +20,7 @@ public class GetAllUsersUseCase {
         this.userRepository = userRepository;
     }
 
+    @Cacheable(value = CacheNames.USERS, key = "#page + ':' + #pageSize")
     public List<UserResponse> execute(Integer page, Integer pageSize) {
         int safePage = page == null ? DEFAULT_PAGE : page;
         int safePageSize = pageSize == null ? DEFAULT_PAGE_SIZE : pageSize;

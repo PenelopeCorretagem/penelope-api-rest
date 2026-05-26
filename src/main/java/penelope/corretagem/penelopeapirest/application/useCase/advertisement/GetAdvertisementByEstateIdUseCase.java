@@ -1,7 +1,9 @@
 package penelope.corretagem.penelopeapirest.application.useCase.advertisement;
 
+import org.springframework.cache.annotation.Cacheable;
 import penelope.corretagem.penelopeapirest.core.advertisement.repository.IAdvertisementRepository;
 import penelope.corretagem.penelopeapirest.application.dto.AdvertisementResponse;
+import penelope.corretagem.penelopeapirest.config.CacheNames;
 import penelope.corretagem.penelopeapirest.core.exception.DomainValidationException;
 import penelope.corretagem.penelopeapirest.core.exception.ResourceNotFoundException;
 
@@ -13,6 +15,7 @@ public class GetAdvertisementByEstateIdUseCase {
         this.repository = repository;
     }
 
+    @Cacheable(value = CacheNames.ADVERTISEMENT_BY_ESTATE, key = "#estateId")
     public AdvertisementResponse execute(Long estateId) {
         if (estateId == null || estateId <= 0) {
             throw new DomainValidationException("ID do empreendimento inválido");

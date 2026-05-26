@@ -47,11 +47,7 @@ public class AmenitiesController {
     public ResponseEntity<AmenitiesResponse> update(
             @PathVariable Long id,
             @RequestBody UpdateAmenityRequest request) {
-
-        var updatedDomain = updateAmenityUseCase.execute(id, request);
-
-        var response = AmenitiesResponse.fromDomain(updatedDomain);
-
+        var response = updateAmenityUseCase.execute(id, request);
         return ResponseEntity.ok(response);
     }
 

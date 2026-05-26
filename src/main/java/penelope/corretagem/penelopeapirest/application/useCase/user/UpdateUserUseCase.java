@@ -1,8 +1,12 @@
 package penelope.corretagem.penelopeapirest.application.useCase.user;
 
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.security.core.context.SecurityContextHolder;
 import penelope.corretagem.penelopeapirest.application.dto.UserResponse;
 import penelope.corretagem.penelopeapirest.application.dto.UserUpdateRequest;
+import penelope.corretagem.penelopeapirest.config.CacheNames;
 import penelope.corretagem.penelopeapirest.core.exception.DomainValidationException;
 import penelope.corretagem.penelopeapirest.core.exception.ResourceNotFoundException;
 import penelope.corretagem.penelopeapirest.core.gateway.IPasswordEncoderGateway;
@@ -19,6 +23,11 @@ public class UpdateUserUseCase {
         this.passwordEncoder = passwordEncoder;
     }
 
+        @Caching(evict = {
+            @CacheEvict(value = CacheNames.USERS, allEntries = true)
+        }, put = {
+            @CachePut(value = CacheNames.USER, key = "#id")
+        })
     public UserResponse execute(Long id, UserUpdateRequest req) {
 
         var user = userRepository.findById(id)

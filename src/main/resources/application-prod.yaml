@@ -15,6 +15,10 @@ spring:
       enabled: false
   flyway:
     enabled: true
+    table: api_flyway_schema_history
+    baseline-on-migrate: true
+    baseline-version: 0
+    locations: classpath:db/migration
   jpa:
     show-sql: false
     defer-datasource-initialization: false

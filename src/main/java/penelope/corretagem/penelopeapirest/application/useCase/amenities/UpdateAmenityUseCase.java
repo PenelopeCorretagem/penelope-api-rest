@@ -1,6 +1,11 @@
 package penelope.corretagem.penelopeapirest.application.useCase.amenities;
 
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Caching;
+import penelope.corretagem.penelopeapirest.application.dto.AmenitiesResponse;
 import penelope.corretagem.penelopeapirest.application.dto.UpdateAmenityRequest;
+import penelope.corretagem.penelopeapirest.config.CacheNames;
 import penelope.corretagem.penelopeapirest.core.amenities.Amenities;
 import penelope.corretagem.penelopeapirest.core.amenities.repository.IAmenitiesRepository;
 import penelope.corretagem.penelopeapirest.core.exception.DomainValidationException;
@@ -14,7 +19,12 @@ public class UpdateAmenityUseCase {
         this.repository = repository;
     }
 
-    public Amenities execute(Long id, UpdateAmenityRequest request) {
+        @Caching(evict = {
+            @CacheEvict(value = CacheNames.AMENITIES, allEntries = true)
+        }, put = {
+            @CachePut(value = CacheNames.AMENITY, key = "#id")
+        })
+        public AmenitiesResponse execute(Long id, UpdateAmenityRequest request) {
         if (id == null || id <= 0) {
             throw new DomainValidationException("ID do diferencial inválido");
         }
@@ -36,6 +46,7 @@ public class UpdateAmenityUseCase {
 
         amenity.updateInfo(request.description(), request.icon());
 
-        return repository.save(amenity);
+        Amenities savedAmenity = repository.save(amenity);
+        return AmenitiesResponse.fromDomain(savedAmenity);
     }
 }
