@@ -1,9 +1,7 @@
 package penelope.corretagem.penelopeapirest.application.useCase.user;
 
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.security.core.context.SecurityContextHolder;
 import penelope.corretagem.penelopeapirest.application.dto.UserResponse;
-import penelope.corretagem.penelopeapirest.config.CacheNames;
 import penelope.corretagem.penelopeapirest.core.exception.ResourceNotFoundException;
 import penelope.corretagem.penelopeapirest.core.user.repository.IUserRepository;
 import penelope.corretagem.penelopeapirest.core.user.valueObject.AccessLevel;
@@ -16,7 +14,6 @@ public class GetUserByIdUseCase {
         this.userRepository = userRepository;
     }
 
-    @Cacheable(value = CacheNames.USER, key = "#id")
     public UserResponse execute(Long id) {
         var authentication = SecurityContextHolder.getContext().getAuthentication();
         var currentUserEmail = authentication.getName();

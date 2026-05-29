@@ -1,7 +1,5 @@
 package penelope.corretagem.penelopeapirest.application.useCase.user;
 
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.Caching;
 import penelope.corretagem.penelopeapirest.core.gateway.IPasswordEncoderGateway;
 import penelope.corretagem.penelopeapirest.core.exception.DomainValidationException;
 import penelope.corretagem.penelopeapirest.core.user.User;
@@ -9,7 +7,6 @@ import penelope.corretagem.penelopeapirest.core.user.repository.IUserRepository;
 import penelope.corretagem.penelopeapirest.core.user.valueObject.AccessLevel;
 import penelope.corretagem.penelopeapirest.application.dto.UserRequest;
 import penelope.corretagem.penelopeapirest.application.dto.UserResponse;
-import penelope.corretagem.penelopeapirest.config.CacheNames;
 
 public class CreateUserUseCase {
 
@@ -21,9 +18,6 @@ public class CreateUserUseCase {
         this.passwordEncoder = passwordEncoder;
     }
 
-    @Caching(evict = {
-            @CacheEvict(value = CacheNames.USERS, allEntries = true)
-    })
     public UserResponse execute(UserRequest request) {
 
         if (request == null) {

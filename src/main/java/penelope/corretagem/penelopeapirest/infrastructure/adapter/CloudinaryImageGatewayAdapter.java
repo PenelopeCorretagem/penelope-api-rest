@@ -41,6 +41,10 @@ public class CloudinaryImageGatewayAdapter implements IImageStorageGateway {
         String marker = "/image/upload/";
         String optimizedSegment = "/image/upload/f_auto,q_auto/";
 
+        if (secureUrl.contains(optimizedSegment)) {
+            return secureUrl;
+        }
+
         return secureUrl.contains(marker)
                 ? secureUrl.replace(marker, optimizedSegment)
                 : secureUrl;

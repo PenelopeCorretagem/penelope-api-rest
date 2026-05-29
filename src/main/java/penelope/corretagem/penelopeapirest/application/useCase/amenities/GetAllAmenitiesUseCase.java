@@ -21,7 +21,7 @@ public class GetAllAmenitiesUseCase {
         this.amenitiesRepository = amenitiesRepository;
     }
 
-    @Cacheable(value = CacheNames.AMENITIES, key = "#page + ':' + #pageSize + ':' + #name + ':' + #initial + ':' + #sort")
+    @Cacheable(value = CacheNames.AMENITIES, key = "{ #page == null ? 1 : #page, #pageSize == null ? 10 : #pageSize, #name, #initial, #sort }")
     public PaginatedAmenitiesResponse execute(Integer page, Integer pageSize, String name, String initial, String sort) {
         int safePage = page == null ? DEFAULT_PAGE : page;
         int safePageSize = pageSize == null ? DEFAULT_PAGE_SIZE : pageSize;

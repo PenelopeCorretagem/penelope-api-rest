@@ -1,9 +1,6 @@
 package penelope.corretagem.penelopeapirest.application.useCase.user;
 
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.Caching;
 import org.springframework.security.core.context.SecurityContextHolder;
-import penelope.corretagem.penelopeapirest.config.CacheNames;
 import penelope.corretagem.penelopeapirest.core.user.repository.IUserRepository;
 import penelope.corretagem.penelopeapirest.core.exception.ResourceNotFoundException;
 import penelope.corretagem.penelopeapirest.core.user.valueObject.AccessLevel;
@@ -16,10 +13,6 @@ public class DeleteUserUseCase {
         this.userRepository = userRepository;
     }
 
-    @Caching(evict = {
-            @CacheEvict(value = CacheNames.USER, key = "#id"),
-            @CacheEvict(value = CacheNames.USERS, allEntries = true)
-    })
     public void execute(Long id) {
         var authentication = SecurityContextHolder.getContext().getAuthentication();
         var currentUserEmail = authentication.getName();

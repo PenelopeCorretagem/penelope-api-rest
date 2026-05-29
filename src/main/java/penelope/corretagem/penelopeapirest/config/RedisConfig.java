@@ -55,14 +55,11 @@ public class RedisConfig implements CachingConfigurer {
   @Bean
   public RedisCacheManagerBuilderCustomizer cacheManagerCustomizer() {
     return builder -> builder
-        .withCacheConfiguration(CacheNames.ADVERTISEMENT, ttl(Duration.ofMinutes(30)))
         .withCacheConfiguration(CacheNames.ADVERTISEMENTS, ttl(Duration.ofMinutes(10)))
         .withCacheConfiguration(CacheNames.ADVERTISEMENT_LATEST, ttl(Duration.ofMinutes(5)))
         .withCacheConfiguration(CacheNames.ADVERTISEMENT_BY_ESTATE, ttl(Duration.ofMinutes(10)))
         .withCacheConfiguration(CacheNames.AMENITY, ttl(Duration.ofHours(24)))
-        .withCacheConfiguration(CacheNames.AMENITIES, ttl(Duration.ofHours(12)))
-        .withCacheConfiguration(CacheNames.USER, ttl(Duration.ofMinutes(15)))
-        .withCacheConfiguration(CacheNames.USERS, ttl(Duration.ofMinutes(15)));
+          .withCacheConfiguration(CacheNames.AMENITIES, ttl(Duration.ofHours(12)));
   }
 
   @Override

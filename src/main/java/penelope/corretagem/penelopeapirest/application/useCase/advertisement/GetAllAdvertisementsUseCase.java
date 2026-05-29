@@ -20,7 +20,7 @@ public class GetAllAdvertisementsUseCase {
 
     @Cacheable(
             value = CacheNames.ADVERTISEMENTS,
-            key = "#filter.city + ':' + #filter.region + ':' + #filter.type + ':' + #filter.numberOfRooms + ':' + #filter.active + ':' + #filter.area + ':' + #filter.title + ':' + #filter.description + ':' + #filter.createdAt + ':' + #filter.createdAtMin + ':' + #filter.createdAtMax"
+            key = "{ #filter.city, #filter.region, #filter.type, #filter.numberOfRooms, #filter.active, #filter.area, #filter.title, #filter.description, #filter.createdAt, #filter.createdAtMin, #filter.createdAtMax }"
     )
     public List<AdvertisementResponse> execute(AdvertisementFilterRequest filter) {
 

@@ -15,9 +15,8 @@ public class DeleteAdvertisementUseCase {
 
     @Caching(evict = {
             @CacheEvict(value = CacheNames.ADVERTISEMENTS, allEntries = true),
-            @CacheEvict(value = CacheNames.ADVERTISEMENT_LATEST, allEntries = true),
-            @CacheEvict(value = CacheNames.ADVERTISEMENT_BY_ESTATE, allEntries = true),
-            @CacheEvict(value = CacheNames.ADVERTISEMENT, allEntries = true)
+            @CacheEvict(value = CacheNames.ADVERTISEMENT_LATEST, key = "'latest'"),
+            @CacheEvict(value = CacheNames.ADVERTISEMENT_BY_ESTATE, allEntries = true)
     })
     public void execute(Long id) {
         advertisementRepository.deleteById(id);
