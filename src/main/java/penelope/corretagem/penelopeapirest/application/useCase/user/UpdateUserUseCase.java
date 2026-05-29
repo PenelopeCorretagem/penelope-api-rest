@@ -3,6 +3,7 @@ package penelope.corretagem.penelopeapirest.application.useCase.user;
 import org.springframework.security.core.context.SecurityContextHolder;
 import penelope.corretagem.penelopeapirest.application.dto.UserResponse;
 import penelope.corretagem.penelopeapirest.application.dto.UserUpdateRequest;
+import penelope.corretagem.penelopeapirest.config.CacheNames;
 import penelope.corretagem.penelopeapirest.core.exception.DomainValidationException;
 import penelope.corretagem.penelopeapirest.core.exception.ResourceNotFoundException;
 import penelope.corretagem.penelopeapirest.core.gateway.IPasswordEncoderGateway;

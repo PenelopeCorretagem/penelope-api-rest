@@ -1,8 +1,10 @@
 package penelope.corretagem.penelopeapirest.application.useCase.amenities;
 
+import org.springframework.cache.annotation.Cacheable;
 import penelope.corretagem.penelopeapirest.core.amenities.repository.IAmenitiesRepository;
 import penelope.corretagem.penelopeapirest.application.dto.AmenitiesResponse;
 import penelope.corretagem.penelopeapirest.application.dto.PaginatedAmenitiesResponse;
+import penelope.corretagem.penelopeapirest.config.CacheNames;
 import penelope.corretagem.penelopeapirest.core.exception.DomainValidationException;
 
 import java.util.List;
@@ -19,6 +21,7 @@ public class GetAllAmenitiesUseCase {
         this.amenitiesRepository = amenitiesRepository;
     }
 
+    @Cacheable(value = CacheNames.AMENITIES, key = "{ #page == null ? 1 : #page, #pageSize == null ? 10 : #pageSize, #name, #initial, #sort }")
     public PaginatedAmenitiesResponse execute(Integer page, Integer pageSize, String name, String initial, String sort) {
         int safePage = page == null ? DEFAULT_PAGE : page;
         int safePageSize = pageSize == null ? DEFAULT_PAGE_SIZE : pageSize;
